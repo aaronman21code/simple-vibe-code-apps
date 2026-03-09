@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Future-Proof — A Teen Tech Program by PlebSpace</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafaf9;
+      --surface: #ffffff;
+      --surface2: #f4f4f2;
+      --border: #e5e4e0;
+      --accent: #f97316;
+      --accent2: #ea6c0a;
+      --text: #1a1a18;
+      --muted: #6b7068;
+      --muted2: #a8a59e;
+      --blue: #3b82f6;
+      --blue-bg: #eff6ff;
+      --green: #16a34a;
+      --green-bg: #f0fdf4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(250,250,249,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+    }
+
+    .nav-logo-name {
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .nav-logo-name span { color: var(--accent); }
+
+    .nav-logo-sub {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--muted2);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.55rem 1.25rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+
+    /* LAYOUT */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    section { padding: 5rem 0; }
+    section:nth-child(even) { background: var(--surface2); }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .section-lead {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(249,115,22,0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(249,115,22,0.35);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(249,115,22,0.04);
+    }
+
+    /* BADGE */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(249,115,22,0.3);
+      background: rgba(249,115,22,0.06);
+      padding: 0.35rem 0.85rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    /* HERO */
+    #hero {
+      padding: 8rem 0 5rem;
+      background: var(--bg);
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      max-width: 820px;
+      margin: 0 auto 1.25rem;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 2.25rem;
+      line-height: 1.7;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .hero-trust {
+      font-size: 0.85rem;
+      color: var(--muted2);
+    }
+
+    .hero-trust strong { color: var(--green); }
+
+    .hero-skills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 3.5rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .hero-skill-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.45rem 1rem;
+      border-radius: 100px;
+    }
+
+    /* CHALLENGE */
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .shift-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .shift-card-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .shift-card-label.old { color: var(--muted2); }
+    .shift-card-label.new { color: var(--green); }
+
+    .shift-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .shift-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.95rem;
+    }
+
+    .shift-card.old .shift-list li { color: var(--muted2); text-decoration: line-through; }
+    .shift-card.old .shift-list li .icon { text-decoration: none; }
+    .shift-card.new .shift-list li { color: var(--text); }
+
+    /* PROCESS */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+
+    .process-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+
+    .process-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+
+    .process-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .process-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+    .process-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .process-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.55; }
+
+    /* DOMAINS */
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .domain-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+
+    .domain-card:hover {
+      border-color: rgba(249,115,22,0.4);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+
+    .domain-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .domain-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .domain-card p { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.6; }
+
+    .domain-examples { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+
+    .domain-examples li {
+      font-size: 0.8rem;
+      color: var(--muted2);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .domain-examples li::before { content: "→"; color: var(--accent); font-size: 0.75rem; }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+
+    .skill-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .skill-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .skill-card p { font-size: 0.825rem; color: var(--muted); line-height: 1.55; }
+
+    /* STRUCTURE */
+    .levels-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .level-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .level-header { padding: 1.5rem 2rem; }
+    .level-header.blue { background: var(--blue-bg); border-bottom: 1px solid #dbeafe; }
+    .level-header.orange { background: #fff7ed; border-bottom: 1px solid #fed7aa; }
+
+    .level-number {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+
+    .level-header.blue .level-number { color: var(--blue); }
+    .level-header.orange .level-number { color: var(--accent); }
+    .level-header h3 { font-size: 1.15rem; font-weight: 800; }
+
+    .level-body { padding: 1.5rem 2rem; }
+    .level-body p { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
+
+    .level-projects { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .level-projects li {
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .level-projects li::before { content: "▸"; font-size: 0.7rem; color: var(--muted2); }
+
+    /* RHYTHM */
+    .cycle-steps {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: start;
+      gap: 0.5rem;
+      margin-top: 3rem;
+    }
+
+    .cycle-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .cycle-day {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .cycle-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .cycle-step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .cycle-step p { font-size: 0.825rem; color: var(--muted); line-height: 1.55; }
+
+    .cycle-arrow {
+      font-size: 1.25rem;
+      color: var(--muted2);
+      align-self: center;
+      text-align: center;
+    }
+
+    .showcase-callout {
+      margin-top: 2.5rem;
+      background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
+      border: 1px solid #fed7aa;
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .showcase-callout-icon { font-size: 2rem; flex-shrink: 0; }
+    .showcase-callout h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .showcase-callout p { font-size: 0.875rem; color: var(--muted); }
+
+    /* WHO */
+    .who-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 3rem;
+      align-items: start;
+    }
+
+    .who-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .who-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .who-check {
+      width: 1.25rem;
+      height: 1.25rem;
+      background: var(--green-bg);
+      border: 1.5px solid var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+      font-size: 0.6rem;
+      color: var(--green);
+    }
+
+    .no-exp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--green-bg);
+      border: 1px solid #bbf7d0;
+      color: var(--green);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      margin-top: 2rem;
+    }
+
+    .why-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+
+    .why-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .why-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ABOUT */
+    .about-inner { max-width: 680px; }
+    #about p { font-size: 1rem; color: var(--muted); line-height: 1.8; margin-top: 1rem; }
+
+    /* FAQ */
+    .faq-list {
+      margin-top: 3rem;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+
+    .faq-item.open { border-color: rgba(249,115,22,0.35); }
+
+    .faq-btn {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .faq-chevron {
+      font-size: 0.75rem;
+      color: var(--muted2);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+    .faq-answer {
+      display: none;
+      padding: 1rem 1.5rem 1.25rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-item.open .faq-answer { display: block; }
+
+    /* FINAL CTA */
+    #apply {
+      background: var(--text);
+      text-align: center;
+      padding: 6rem 0;
+    }
+
+    #apply .section-label { color: var(--accent); }
+    #apply .section-title { color: #f0f0ee; max-width: 600px; margin: 0 auto 1rem; }
+    #apply .section-lead { color: rgba(240,240,238,0.55); margin: 0 auto 2.5rem; }
+
+    #apply .btn-secondary {
+      color: rgba(240,240,238,0.8);
+      border-color: rgba(240,240,238,0.2);
+    }
+
+    #apply .btn-secondary:hover {
+      color: #f0f0ee;
+      border-color: rgba(240,240,238,0.5);
+      background: rgba(240,240,238,0.06);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo { font-weight: 700; font-size: 0.9rem; color: rgba(240,240,238,0.6); }
+    .footer-logo span { color: var(--accent); }
+
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: rgba(240,240,238,0.4);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover { color: rgba(240,240,238,0.8); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 0.875rem 1.25rem; }
+      .nav-links { display: none; }
+      section { padding: 3.5rem 0; }
+      #hero { padding: 6rem 0 3.5rem; }
+
+      .challenge-grid,
+      .who-grid,
+      .levels-grid,
+      .domain-grid { grid-template-columns: 1fr; }
+
+      .process-grid,
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .cycle-steps {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cycle-arrow { display: none; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <span class="nav-logo-name">Future<span>-</span>Proof</span>
+      <span class="nav-logo-sub">by PlebSpace</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#learn">Program</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#structure">Structure</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="#apply" class="nav-cta">Apply Now</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <div class="badge"><span class="badge-dot"></span> 8-week cohort program</div>
+      <h1 class="hero-title">
+        Prepare Your Teen for the Future of
+        <em>Technology, AI, and Entrepreneurship</em>
+      </h1>
+      <p class="hero-sub">
+        A hands-on program where teens learn the skills that matter in the modern world — by building real projects.
+      </p>
+      <div class="hero-ctas">
+        <a href="#apply" class="btn-primary">Apply for the next cohort &rarr;</a>
+        <a href="#apply" class="btn-secondary">Join the interest list</a>
+      </div>
+      <p class="hero-trust"><strong>&#10003; No prior coding experience required.</strong>&ensp;Learn by building. Present what you create.</p>
+      <div class="hero-skills">
+        <div class="hero-skill-pill"><span>💻</span> Build apps &amp; tools</div>
+        <div class="hero-skill-pill"><span>🤖</span> Work with AI</div>
+        <div class="hero-skill-pill"><span>🏪</span> Business basics</div>
+        <div class="hero-skill-pill"><span>₿</span> Digital money</div>
+        <div class="hero-skill-pill"><span>🎤</span> Communicate ideas</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE -->
+  <section id="challenge">
+    <div class="container">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">The world is changing faster than education.</h2>
+      <p class="section-lead">
+        AI, software, and digital platforms are reshaping how people work and create opportunities. Yet most schools still focus on the same things.
+      </p>
+      <div class="challenge-grid">
+        <div class="shift-card old">
+          <div class="shift-card-label old">What most schools still teach</div>
+          <ul class="shift-list">
+            <li><span class="icon">📝</span> Memorization</li>
+            <li><span class="icon">📋</span> Exams</li>
+            <li><span class="icon">📚</span> Theory only</li>
+            <li><span class="icon">⏳</span> Passive consumption</li>
+          </ul>
+        </div>
+        <div class="shift-card new">
+          <div class="shift-card-label new">What students are actually missing</div>
+          <ul class="shift-list">
+            <li><span class="icon">🔧</span> Problem solving</li>
+            <li><span class="icon">🛠️</span> Building with technology</li>
+            <li><span class="icon">💡</span> Understanding money &amp; business</li>
+            <li><span class="icon">🎤</span> Communicating ideas</li>
+            <li><span class="icon">🚀</span> Learning independently</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="container">
+      <div class="section-label">A Different Way to Learn</div>
+      <h2 class="section-title">Students learn by building real projects.</h2>
+      <p class="section-lead">
+        Instead of lectures and worksheets, students work on hands-on projects every week — designing, building, testing, and presenting their work.
+      </p>
+      <div class="process-grid">
+        <div class="process-card">
+          <div class="process-num">Step 01</div>
+          <div class="process-icon">📖</div>
+          <h3>Learn a New Concept</h3>
+          <p>Each week starts with a new idea — coding, AI, business, or finance — grounded in real-world context.</p>
+        </div>
+        <div class="process-card">
+          <div class="process-num">Step 02</div>
+          <div class="process-icon">🛠️</div>
+          <h3>Build a Project</h3>
+          <p>Students immediately apply what they learned by creating something tangible they can show and use.</p>
+        </div>
+        <div class="process-card">
+          <div class="process-num">Step 03</div>
+          <div class="process-icon">🎤</div>
+          <h3>Demo What You Made</h3>
+          <p>Every Saturday, students present their work. The habit of finishing and showing builds real confidence.</p>
+        </div>
+        <div class="process-card">
+          <div class="process-num">Step 04</div>
+          <div class="process-icon">📈</div>
+          <h3>Improve &amp; Iterate</h3>
+          <p>Feedback from peers and mentors helps students refine their work and deepen their understanding.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT STUDENTS LEARN -->
+  <section id="learn">
+    <div class="container">
+      <div class="section-label">Curriculum</div>
+      <h2 class="section-title">Four areas shaping the future.</h2>
+      <p class="section-lead">
+        Students explore the key domains that are defining how the world works — and how to build in it.
+      </p>
+      <div class="domain-grid">
+        <div class="domain-card">
+          <div class="domain-icon">💻</div>
+          <h3>Technology</h3>
+          <p>Students learn how apps and digital tools are built. They create their own small apps and interactive projects to see how software actually works.</p>
+          <ul class="domain-examples">
+            <li>Personal website</li>
+            <li>Learning tracker or productivity app</li>
+            <li>Small game or interactive project</li>
+          </ul>
+        </div>
+        <div class="domain-card">
+          <div class="domain-icon">🤖</div>
+          <h3>Artificial Intelligence</h3>
+          <p>Students learn how modern AI tools work and how to use them to build helpful systems that automate tasks.</p>
+          <ul class="domain-examples">
+            <li>Simple AI assistant</li>
+            <li>Automated workflows</li>
+            <li>AI-powered tools for everyday use</li>
+          </ul>
+        </div>
+        <div class="domain-card">
+          <div class="domain-icon">🏪</div>
+          <h3>Business &amp; Entrepreneurship</h3>
+          <p>Students learn how ideas turn into products and services. They explore simple business models and experiment with launching a small idea.</p>
+          <ul class="domain-examples">
+            <li>Business model exploration</li>
+            <li>Mini product or service launch</li>
+            <li>Understanding customers and value</li>
+          </ul>
+        </div>
+        <div class="domain-card">
+          <div class="domain-icon">₿</div>
+          <h3>Money &amp; Digital Finance</h3>
+          <p>Students explore the basics of money and how digital systems like Bitcoin work — and why technology is changing finance.</p>
+          <ul class="domain-examples">
+            <li>How Bitcoin and digital money works</li>
+            <li>Basics of saving and value</li>
+            <li>Technology's role in payments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-label">Skills Students Develop</div>
+      <h2 class="section-title">Abilities that stay valuable no matter what path they choose.</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-icon">🔧</div>
+          <h3>Problem Solving</h3>
+          <p>Break down complex challenges and build solutions step by step.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">💡</div>
+          <h3>Creativity</h3>
+          <p>Experiment with ideas and build projects that reflect their interests.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🎤</div>
+          <h3>Communication</h3>
+          <p>Present work clearly and explain their thinking to an audience.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🧭</div>
+          <h3>Independence</h3>
+          <p>Learn how to explore new tools and technologies on their own.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAM STRUCTURE -->
+  <section id="structure">
+    <div class="container">
+      <div class="section-label">Program Structure</div>
+      <h2 class="section-title">8 weeks of hands-on learning.</h2>
+      <p class="section-lead">
+        The program is divided into two levels — first building the foundation, then applying it in the real world.
+      </p>
+      <div class="levels-grid">
+        <div class="level-card">
+          <div class="level-header blue">
+            <div class="level-number">Level 1 &middot; Weeks 1&ndash;4</div>
+            <h3>Building with Technology</h3>
+          </div>
+          <div class="level-body">
+            <p>Students learn the basics by creating simple apps and digital tools. Each week they build something new and present it.</p>
+            <ul class="level-projects">
+              <li>Personal website</li>
+              <li>Learning tracker</li>
+              <li>Productivity app</li>
+              <li>Small game or interactive project</li>
+            </ul>
+          </div>
+        </div>
+        <div class="level-card">
+          <div class="level-header orange">
+            <div class="level-number">Level 2 &middot; Weeks 5&ndash;8</div>
+            <h3>Applying Technology in the Real World</h3>
+          </div>
+          <div class="level-body">
+            <p>Students expand their skills by exploring AI, business, and finance — bringing everything together in a final project.</p>
+            <ul class="level-projects">
+              <li>AI tools and automation</li>
+              <li>Small business experiments</li>
+              <li>Bitcoin and digital finance</li>
+              <li>Sharing and marketing their ideas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEEKLY RHYTHM -->
+  <section id="rhythm">
+    <div class="container">
+      <div class="section-label">Weekly Rhythm</div>
+      <h2 class="section-title">A consistent loop of learning and building.</h2>
+      <p class="section-lead">
+        Each week follows the same structure so students always know what to expect and can build momentum.
+      </p>
+      <div class="cycle-steps">
+        <div class="cycle-step">
+          <div class="cycle-day">Sunday</div>
+          <div class="cycle-icon">📖</div>
+          <h3>Learn</h3>
+          <p>Students learn a new concept and begin building their project for the week.</p>
+        </div>
+        <div class="cycle-arrow">&rarr;</div>
+        <div class="cycle-step">
+          <div class="cycle-day">Mon &ndash; Fri</div>
+          <div class="cycle-icon">🛠️</div>
+          <h3>Build</h3>
+          <p>Students continue developing their project throughout the week at their own pace.</p>
+        </div>
+        <div class="cycle-arrow">&rarr;</div>
+        <div class="cycle-step">
+          <div class="cycle-day">Saturday</div>
+          <div class="cycle-icon">🎤</div>
+          <h3>Demo</h3>
+          <p>Students present what they built and receive feedback from peers and mentors.</p>
+        </div>
+      </div>
+      <div class="showcase-callout">
+        <div class="showcase-callout-icon">🏆</div>
+        <div>
+          <h3>Final Showcase</h3>
+          <p>At the end of the program, students present their completed projects to parents and the wider PlebSpace community.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO IT'S FOR -->
+  <section id="who">
+    <div class="container">
+      <div class="section-label">Who This Is For</div>
+      <h2 class="section-title">Designed for curious, motivated teens.</h2>
+      <div class="who-grid">
+        <div>
+          <ul class="who-list">
+            <li><span class="who-check">&#10003;</span> Teens who are curious about technology</li>
+            <li><span class="who-check">&#10003;</span> Students who enjoy making things</li>
+            <li><span class="who-check">&#10003;</span> Young people who want to build confidence with new tools</li>
+            <li><span class="who-check">&#10003;</span> Those interested in AI, apps, games, or business</li>
+            <li><span class="who-check">&#10003;</span> Students who want more than passive screen time</li>
+          </ul>
+          <div class="no-exp-badge">&#10003;&ensp;No previous coding experience required</div>
+        </div>
+        <div class="why-card">
+          <h3>Why this matters</h3>
+          <p>Technology is shaping the future of work, learning, and entrepreneurship. Young people who understand how these systems work will have a real advantage.</p>
+          <p style="margin-top: 0.75rem;">This program helps students move from simply <strong>using technology</strong> to <strong>understanding and creating with it</strong> — a shift that opens up a very different set of opportunities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-inner">
+        <div class="section-label">About PlebSpace</div>
+        <h2 class="section-title">A community built for builders.</h2>
+        <p>PlebSpace is a community focused on builders, creators, and independent thinkers. Our programs encourage students to explore technology, ideas, and creativity in a hands-on way.</p>
+        <p>The goal is simple: help young people develop the <strong>skills and confidence to shape their own future</strong> — not just consume what others have built.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+      <div class="faq-list">
+        <div class="faq-item" id="faq-1">
+          <button class="faq-btn" onclick="toggleFaq('faq-1')">
+            Does my child need coding experience?
+            <span class="faq-chevron">&#9660;</span>
+          </button>
+          <div class="faq-answer">
+            No. The program is beginner-friendly and designed for students who are completely new to coding. We start from scratch and build up from there.
+          </div>
+        </div>
+        <div class="faq-item" id="faq-2">
+          <button class="faq-btn" onclick="toggleFaq('faq-2')">
+            What if they get stuck?
+            <span class="faq-chevron">&#9660;</span>
+          </button>
+          <div class="faq-answer">
+            Mentors guide students through challenges and help them learn how to debug and improve their projects. Getting stuck is part of the learning process — we treat it as a skill, not a problem.
+          </div>
+        </div>
+        <div class="faq-item" id="faq-3">
+          <button class="faq-btn" onclick="toggleFaq('faq-3')">
+            How much time does it take each week?
+            <span class="faq-chevron">&#9660;</span>
+          </button>
+          <div class="faq-answer">
+            Students attend a learning session on Sunday, work on their project through the week, and present on Saturday. Total time commitment is flexible but typically a few hours per week.
+          </div>
+        </div>
+        <div class="faq-item" id="faq-4">
+          <button class="faq-btn" onclick="toggleFaq('faq-4')">
+            Do they need a laptop?
+            <span class="faq-chevron">&#9660;</span>
+          </button>
+          <div class="faq-answer">
+            Yes. Students should bring a laptop and charger to every session. Any modern laptop — Mac, Windows, or Chromebook — will work fine.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="apply">
+    <div class="container">
+      <div class="section-label">Get Started</div>
+      <h2 class="section-title">Give your teen a head start in the skills that matter.</h2>
+      <p class="section-lead">
+        Instead of just consuming technology, they can learn how to build with it.
+      </p>
+      <div class="hero-ctas">
+        <a href="#apply" class="btn-primary">Apply for the next cohort &rarr;</a>
+        <a href="#apply" class="btn-secondary">Join the interest list</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">Future<span>-</span>Proof <span style="color:rgba(240,240,238,0.3)">by PlebSpace</span></div>
+        <ul class="footer-links">
+          <li><a href="#learn">Program</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#structure">Structure</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#apply">Apply</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleFaq(id) {
+      const item = document.getElementById(id);
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+  </script>
+
+</body>
+</html>
