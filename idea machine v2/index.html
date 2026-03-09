@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>✦ Vibe Code Idea Machine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script>const _t=localStorage.getItem('gevi-theme');if(_t)document.documentElement.dataset.theme=_t;</script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      background: #fefaff;
+      color: #1e1b4b;
+      min-height: 100vh;
+      padding: 28px 16px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* ── Blobs ──────────────────────────────────────────────────────────────── */
+    .blob {
+      position: fixed;
+      z-index: -1;
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: blob-drift 9s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .blob-1 { width: 280px; height: 280px; background: #e9d5ff; top: -90px; left: -90px; animation-delay: 0s; }
+    .blob-2 { width: 240px; height: 240px; background: #fce7f3; bottom: -70px; right: -70px; animation-delay: -4s; }
+    .blob-3 { width: 200px; height: 200px; background: #fef3c7; top: 45%; right: -60px; animation-delay: -7s; }
+
+    @keyframes blob-drift {
+      0%   { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      100% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+    }
+
+    /* ── Container ──────────────────────────────────────────────────────────── */
+    .container {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────────────── */
+    header { text-align: center; margin-bottom: 28px; width: 100%; }
+
+    h1 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(10px, 4vw, 20px);
+      line-height: 1.9;
+      background: linear-gradient(90deg, #f43f5e, #f97316, #facc15, #22c55e, #3b82f6, #a855f7, #f43f5e);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: rainbow-flow 4s linear infinite;
+    }
+    @keyframes rainbow-flow {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 10px;
+    }
+
+    /* ── Reels ───────────────────────────────────────────────────────────────── */
+    .reels {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .reel-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reel-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(6px, 2vw, 9px);
+      color: #9ca3af;
+      letter-spacing: 0.03em;
+      text-align: center;
+    }
+
+    .slot-reel {
+      width: 100%;
+      min-height: 80px;
+      border: 3px solid;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px 8px;
+      transition: box-shadow 0.2s;
+    }
+
+    .reel-a { border-color: #ec4899; background: #fdf2f8; }
+    .reel-b { border-color: #3b82f6; background: #eff6ff; }
+    .reel-c { border-color: #22c55e; background: #f0fdf4; }
+
+    .reel-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(11px, 3vw, 16px);
+      line-height: 1.3;
+    }
+    .reel-a .reel-text { color: #db2777; }
+    .reel-b .reel-text { color: #2563eb; }
+    .reel-c .reel-text { color: #16a34a; }
+
+    /* Settled: chunky offset shadow */
+    .slot-reel.settled.reel-a { box-shadow: 4px 4px 0 0 #ec4899; }
+    .slot-reel.settled.reel-b { box-shadow: 4px 4px 0 0 #3b82f6; }
+    .slot-reel.settled.reel-c { box-shadow: 4px 4px 0 0 #22c55e; }
+
+    /* Spinning: shake + glow */
+    @keyframes shake-a {
+      0%,100% { transform: translateY(0); box-shadow: none; }
+      40%     { transform: translateY(-2px); box-shadow: 0 0 14px 3px rgba(236,72,153,.3); }
+      80%     { transform: translateY(2px); }
+    }
+    @keyframes shake-b {
+      0%,100% { transform: translateY(0); box-shadow: none; }
+      40%     { transform: translateY(-2px); box-shadow: 0 0 14px 3px rgba(59,130,246,.3); }
+      80%     { transform: translateY(2px); }
+    }
+    @keyframes shake-c {
+      0%,100% { transform: translateY(0); box-shadow: none; }
+      40%     { transform: translateY(-2px); box-shadow: 0 0 14px 3px rgba(34,197,94,.3); }
+      80%     { transform: translateY(2px); }
+    }
+    .reel-a.spinning { animation: shake-a 0.22s ease-in-out infinite; }
+    .reel-b.spinning { animation: shake-b 0.22s ease-in-out infinite; }
+    .reel-c.spinning { animation: shake-c 0.22s ease-in-out infinite; }
+
+    /* ── Spin Button ─────────────────────────────────────────────────────────── */
+    .spin-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(11px, 4vw, 16px);
+      background: #facc15;
+      color: #1e1b4b;
+      border: 4px solid #1e1b4b;
+      border-radius: 14px;
+      padding: 18px 0;
+      width: 100%;
+      max-width: 360px;
+      cursor: pointer;
+      box-shadow: 5px 5px 0 0 #1e1b4b;
+      transition: transform 0.1s, box-shadow 0.1s;
+      margin-bottom: 24px;
+      letter-spacing: 0.03em;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .spin-btn:active:not(:disabled) {
+      transform: translate(3px, 3px);
+      box-shadow: 2px 2px 0 0 #1e1b4b;
+    }
+    .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    @keyframes btn-pop {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.04); }
+    }
+    .spin-btn.result-ready { animation: btn-pop 1.6s ease-in-out infinite; }
+
+    /* ── Result Card ─────────────────────────────────────────────────────────── */
+    .result-card {
+      width: 100%;
+      background: white;
+      border: 3px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 20px 16px;
+      margin-bottom: 24px;
+      box-shadow: 4px 4px 0 0 #e5e7eb;
+    }
+    .result-card.hidden { display: none; }
+
+    .combo-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+    .combo-tag {
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      border: 2px solid;
+    }
+    .tag-a { background: #fdf2f8; border-color: #ec4899; color: #be185d; }
+    .tag-b { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }
+    .tag-c { background: #f0fdf4; border-color: #22c55e; color: #15803d; }
+    .combo-sep { color: #9ca3af; font-weight: 600; font-size: 14px; }
+
+    .result-idea {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.6;
+      color: #1e1b4b;
+      margin-bottom: 12px;
+    }
+
+
+    /* ── Vibe Prompt ─────────────────────────────────────────────────────────── */
+    .prompt-section {
+      background: #f0f7ff;
+      border: 2px dashed #3b82f6;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .prompt-header {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: #2563eb;
+      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+    }
+    .prompt-hint {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .prompt-textarea {
+      width: 100%;
+      min-height: 120px;
+      max-height: 260px;
+      border: 2px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      color: #374151;
+      background: white;
+      resize: vertical;
+      line-height: 1.55;
+      outline: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .prompt-textarea:focus { border-color: #3b82f6; }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────────── */
+    .btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      border: 3px solid #1e1b4b;
+      border-radius: 10px;
+      padding: 13px 20px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      box-shadow: 3px 3px 0 0 #1e1b4b;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 0 #1e1b4b;
+    }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-prompt   { background: #dbeafe; color: #1d4ed8; width: 100%; margin-top: 12px; }
+    .btn-save     { background: #dcfce7; color: #166534; }
+    .btn-copy     { background: #ede9fe; color: #5b21b6; }
+    .btn-generate { background: #fef9c3; color: #854d0e; width: 100%; margin-bottom: 12px; }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+    }
+    .action-row .btn { flex: 1; }
+
+    @keyframes btn-bounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-3px); }
+    }
+    .btn-save.result-ready     { animation: btn-bounce 1.8s ease-in-out infinite; }
+    .btn-copy.result-ready     { animation: btn-bounce 1.8s ease-in-out infinite 0.4s; }
+    .btn-generate.result-ready { animation: btn-bounce 1.8s ease-in-out infinite 0.15s; }
+
+    /* ── Saved Section ───────────────────────────────────────────────────────── */
+    .saved-section { width: 100%; }
+
+    .saved-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      border: 3px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #374151;
+      box-shadow: 3px 3px 0 0 #e5e7eb;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .toggle-arrow { transition: transform 0.2s; display: inline-block; }
+    .saved-toggle.open .toggle-arrow { transform: rotate(180deg); }
+
+    .saved-list {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px 0 4px;
+    }
+    .saved-list.open { display: flex; }
+
+    .saved-empty {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 13px;
+      padding: 20px 16px;
+      line-height: 1.5;
+    }
+
+    .saved-item {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 3px 3px 0 0 #e5e7eb;
+    }
+    .saved-item-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .saved-item-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #d1d5db;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 2px 4px;
+      flex-shrink: 0;
+      transition: color 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .delete-btn:hover { color: #ef4444; }
+    .saved-item-idea { font-size: 13px; color: #374151; line-height: 1.5; margin-bottom: 8px; }
+    .saved-item-meta { font-size: 11px; color: #9ca3af; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .btn-generate-sm {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      background: #fef9c3;
+      color: #854d0e;
+      border: 2px solid #854d0e;
+      border-radius: 6px;
+      padding: 3px 10px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0 0 #854d0e;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s, box-shadow 0.1s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-generate-sm:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 0 #854d0e; }
+    .saved-prompt-area {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .saved-prompt-area .prompt-textarea { min-height: 80px; font-size: 12px; }
+
+    /* ── Footer ──────────────────────────────────────────────────────────────── */
+    footer { margin-top: 40px; text-align: center; font-size: 12px; color: #9ca3af; line-height: 1.6; }
+
+    /* ── Utility ─────────────────────────────────────────────────────────────── */
+    .hidden { display: none !important; }
+
+    /* ── Lock Buttons ───────────────────────────────────────────────────────── */
+    .lock-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      border: 2px solid #d1d5db;
+      border-radius: 8px;
+      padding: 7px 10px;
+      background: white;
+      color: #9ca3af;
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      width: 100%;
+    }
+    .lock-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    #lock-a.locked { background: #fdf2f8; border-color: #ec4899; color: #be185d; box-shadow: 2px 2px 0 0 #ec4899; }
+    #lock-b.locked { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; box-shadow: 2px 2px 0 0 #3b82f6; }
+    #lock-c.locked { background: #f0fdf4; border-color: #22c55e; color: #15803d; box-shadow: 2px 2px 0 0 #22c55e; }
+
+    /* ── Theme Toggle Button ─────────────────────────────────────────────────── */
+    /* ── Toggle Switches (sound + theme) ────────────────────────────────────── */
+    .toggle-switch {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+    }
+    .toggle-switch input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      width: 44px; height: 24px; background: #e5e7eb; border-radius: 999px;
+      position: relative; flex-shrink: 0; border: 2px solid #d1d5db;
+      transition: background 0.22s, border-color 0.22s;
+    }
+    .toggle-switch input:checked + .toggle-track { background: #facc15; border-color: #ca8a04; }
+    .toggle-thumb {
+      position: absolute; width: 16px; height: 16px; background: white; border-radius: 50%;
+      top: 2px; left: 2px; transition: transform 0.22s; box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    }
+    .toggle-switch input:checked + .toggle-track .toggle-thumb { transform: translateX(20px); }
+    .toggle-label { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px; color: #9ca3af; }
+
+    /* ── Dark Mode ───────────────────────────────────────────────────────────── */
+    html[data-theme="dark"] body        { background: #0d0a1a; color: #e2e8f0; }
+    html[data-theme="dark"] .subtitle   { color: #94a3b8; }
+    html[data-theme="dark"] .reel-label { color: #6b7280; }
+
+    html[data-theme="dark"] .blob-1 { background: rgba(139,92,246,.22); }
+    html[data-theme="dark"] .blob-2 { background: rgba(236,72,153,.16); }
+    html[data-theme="dark"] .blob-3 { background: rgba(250,204,21,.1); }
+
+    html[data-theme="dark"] .reel-a { background: #2d0f1e; }
+    html[data-theme="dark"] .reel-b { background: #0c1a38; }
+    html[data-theme="dark"] .reel-c { background: #0a2116; }
+    html[data-theme="dark"] .reel-a .reel-text { color: #f472b6; }
+    html[data-theme="dark"] .reel-b .reel-text { color: #60a5fa; }
+    html[data-theme="dark"] .reel-c .reel-text { color: #4ade80; }
+
+    html[data-theme="dark"] .spin-btn {
+      border-color: #fef08a;
+      box-shadow: 5px 5px 0 0 #7c3aed;
+    }
+    html[data-theme="dark"] .spin-btn:active:not(:disabled) { box-shadow: 2px 2px 0 0 #7c3aed; }
+
+    html[data-theme="dark"] .result-card {
+      background: #1a1628;
+      border-color: #2e2449;
+      box-shadow: 4px 4px 0 0 #2e2449;
+    }
+    html[data-theme="dark"] .result-idea { color: #e2e8f0; }
+    html[data-theme="dark"] .combo-sep   { color: #6b7280; }
+    html[data-theme="dark"] .tag-a { background: #2d0f1e; }
+    html[data-theme="dark"] .tag-b { background: #0c1a38; }
+    html[data-theme="dark"] .tag-c { background: #0a2116; }
+
+    html[data-theme="dark"] .prompt-section  { background: #0c1a38; border-color: #3b82f6; }
+    html[data-theme="dark"] .prompt-hint     { color: #94a3b8; }
+    html[data-theme="dark"] .prompt-textarea {
+      background: #06101f;
+      border-color: #1e3a5f;
+      color: #93c5fd;
+    }
+    html[data-theme="dark"] .prompt-textarea:focus { border-color: #3b82f6; }
+
+    html[data-theme="dark"] .btn {
+      border-color: #e2e8f0;
+      box-shadow: 3px 3px 0 0 #7c3aed;
+    }
+    html[data-theme="dark"] .btn:active:not(:disabled) { box-shadow: 1px 1px 0 0 #7c3aed; }
+
+    html[data-theme="dark"] .saved-toggle {
+      background: #1a1628;
+      border-color: #2e2449;
+      color: #e2e8f0;
+      box-shadow: 3px 3px 0 0 #2e2449;
+    }
+    html[data-theme="dark"] .saved-item {
+      background: #1a1628;
+      border-color: #2e2449;
+      box-shadow: 3px 3px 0 0 #2e2449;
+    }
+    html[data-theme="dark"] .saved-item-idea { color: #cbd5e1; }
+    html[data-theme="dark"] .saved-item-meta { color: #6b7280; }
+    html[data-theme="dark"] .delete-btn       { color: #4b5563; }
+    html[data-theme="dark"] .delete-btn:hover { color: #ef4444; }
+    html[data-theme="dark"] .saved-prompt-area { border-top-color: #2e2449; }
+
+    html[data-theme="dark"] .lock-btn {
+      background: #1a1628;
+      border-color: #374151;
+      color: #6b7280;
+    }
+
+    html[data-theme="dark"] footer { color: #6b7280; }
+    html[data-theme="dark"] .toggle-track { background: #374151; border-color: #4b5563; }
+    html[data-theme="dark"] .toggle-switch input:checked + .toggle-track { background: #facc15; border-color: #ca8a04; }
+    html[data-theme="dark"] .toggle-label { color: #6b7280; }
+
+    /* ── Vibe Meter ──────────────────────────────────────────────────────────── */
+    .vibe-meter-wrap { width: 100%; margin-bottom: 16px; }
+    .vibe-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .vibe-label { font-family: 'Press Start 2P', monospace; font-size: 7px; color: #9ca3af; letter-spacing: 0.03em; }
+    .vibe-status { font-size: 13px; font-weight: 700; }
+    .vibe-track { height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; border: 1px solid #d1d5db; }
+    .vibe-fill { height: 100%; border-radius: 999px; width: 100%; transition: width 0.4s ease; }
+    .vibe-fill.vibe-lit  { background: linear-gradient(90deg, #22c55e, #facc15); }
+    .vibe-fill.vibe-good { background: #facc15; }
+    .vibe-fill.vibe-low  { background: #f97316; }
+    .vibe-fill.vibe-dead { background: #ef4444; animation: vibe-pulse 0.8s ease-in-out infinite; }
+    @keyframes vibe-pulse { 0%,100%{ opacity:1; } 50%{ opacity:0.35; } }
+    @keyframes vibe-shimmer { 0%{filter:brightness(1)} 50%{filter:brightness(1.6)} 100%{filter:brightness(1)} }
+    .vibe-fill.boosting { animation: vibe-shimmer 0.45s ease 3; }
+    .vibe-boost-flash { text-align: center; font-family: 'Press Start 2P', monospace; font-size: 8px; color: #f97316; margin-top: 5px; animation: boost-pop 1.3s ease forwards; }
+    @keyframes boost-pop { 0%{opacity:0;transform:scale(0.8) translateY(2px)} 15%{opacity:1;transform:scale(1.1) translateY(0)} 75%{opacity:1} 100%{opacity:0;transform:scale(1)} }
+    @keyframes idle-wiggle { 0%,100%{transform:rotate(0deg)} 25%{transform:rotate(-1.5deg)} 75%{transform:rotate(1.5deg)} }
+    .spin-btn.idle { animation: idle-wiggle 0.7s ease-in-out infinite !important; }
+
+    /* ── Spin Counter ────────────────────────────────────────────────────────── */
+    .spin-counter { font-family: 'Press Start 2P', monospace; font-size: 8px; color: #9ca3af; margin-top: -16px; margin-bottom: 20px; letter-spacing: 0.02em; text-align: center; }
+
+    /* ── Custom Entries ──────────────────────────────────────────────────────── */
+    .custom-section { width: 100%; margin-bottom: 14px; }
+    .custom-toggle {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px;
+      background: transparent; border: 2px dashed #d1d5db; border-radius: 8px;
+      padding: 8px 14px; cursor: pointer; color: #9ca3af; width: 100%;
+      transition: border-color 0.15s, color 0.15s, border-radius 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-toggle:hover { border-color: #9ca3af; color: #6b7280; }
+    .custom-toggle.open { border-radius: 8px 8px 0 0; border-style: solid; border-color: #e5e7eb; border-bottom: none; }
+    .custom-panel {
+      background: white; border: 2px solid #e5e7eb; border-top: none;
+      border-radius: 0 0 10px 10px; padding: 14px; flex-direction: column; gap: 12px;
+    }
+    .custom-panel:not(.hidden) { display: flex; }
+    .custom-tabs { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 4px; }
+    .custom-tab {
+      flex: 1; font-family: 'Press Start 2P', monospace; font-size: 6px;
+      background: none; border: none; border-bottom: 3px solid transparent;
+      padding: 8px 4px; cursor: pointer; color: #9ca3af; letter-spacing: 0.03em;
+      transition: color 0.15s, border-color 0.15s; margin-bottom: -2px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-tab:hover { color: #6b7280; }
+    .custom-tab-panel { display: flex; flex-direction: column; gap: 8px; }
+    .custom-tab-panel.hidden { display: none !important; }
+    .custom-input-row { display: flex; gap: 6px; }
+    .custom-input {
+      flex: 1; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;
+      border: 2px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; outline: none;
+      color: #374151; background: #f9fafb; -webkit-tap-highlight-color: transparent;
+    }
+    .btn-add {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px;
+      color: white; border-radius: 8px; border: 2px solid;
+      padding: 8px 14px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+      white-space: nowrap; transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .btn-add:active { transform: translate(1px,1px); }
+    .custom-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .custom-chip {
+      display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px 3px 12px;
+      border: 2px solid; border-radius: 999px; font-size: 12px; font-weight: 700;
+    }
+    .chip-del { background: none; border: none; cursor: pointer; font-size: 11px; padding: 0; line-height: 1; opacity: 0.7; }
+    .chip-del:hover { opacity: 1; }
+    @keyframes chip-enter { 0%{opacity:0;transform:scale(0.4) rotate(-8deg)} 60%{transform:scale(1.15) rotate(3deg)} 80%{transform:scale(0.95) rotate(-1deg)} 100%{opacity:1;transform:scale(1) rotate(0deg)} }
+    .custom-chip.entering { animation: chip-enter 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+    /* WHO — pink */
+    .custom-tab[data-tab="who"].active   { color: #ec4899; border-bottom-color: #ec4899; }
+    #ctab-who .custom-input:focus        { border-color: #ec4899; }
+    #ctab-who .btn-add                   { background: #ec4899; border-color: #be185d; box-shadow: 2px 2px 0 0 #be185d; }
+    #ctab-who .btn-add:active            { box-shadow: 1px 1px 0 0 #be185d; }
+    #ctab-who .custom-chip               { background: #fdf2f8; border-color: #ec4899; color: #be185d; }
+    #ctab-who .chip-del                  { color: #be185d; }
+
+    /* WANTS TO — blue */
+    .custom-tab[data-tab="wantsto"].active { color: #3b82f6; border-bottom-color: #3b82f6; }
+    #ctab-wantsto .custom-input:focus      { border-color: #3b82f6; }
+    #ctab-wantsto .btn-add                 { background: #3b82f6; border-color: #1d4ed8; box-shadow: 2px 2px 0 0 #1d4ed8; }
+    #ctab-wantsto .btn-add:active          { box-shadow: 1px 1px 0 0 #1d4ed8; }
+    #ctab-wantsto .custom-chip             { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }
+    #ctab-wantsto .chip-del                { color: #1d4ed8; }
+
+    /* USING — green */
+    .custom-tab[data-tab="using"].active { color: #22c55e; border-bottom-color: #22c55e; }
+    #ctab-using .custom-input:focus      { border-color: #22c55e; }
+    #ctab-using .btn-add                 { background: #22c55e; border-color: #15803d; box-shadow: 2px 2px 0 0 #15803d; }
+    #ctab-using .btn-add:active          { box-shadow: 1px 1px 0 0 #15803d; }
+    #ctab-using .custom-chip             { background: #f0fdf4; border-color: #22c55e; color: #15803d; }
+    #ctab-using .chip-del                { color: #15803d; }
+
+    /* ── Share Button ────────────────────────────────────────────────────────── */
+    .btn-share { background: #fce7f3; color: #be185d; }
+    .btn-share.result-ready { animation: btn-bounce 1.8s ease-in-out infinite 0.6s; }
+
+    /* ── Footer Controls ─────────────────────────────────────────────────────── */
+    .footer-controls { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
+
+    /* ── Export Button ───────────────────────────────────────────────────────── */
+    .saved-header-row { display: flex; align-items: stretch; gap: 8px; width: 100%; }
+    .saved-header-row .saved-toggle { flex: 1; }
+    .btn-export {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px;
+      background: transparent; border: 3px solid #e5e7eb; border-radius: 14px;
+      padding: 10px 12px; cursor: pointer; color: #9ca3af; white-space: nowrap;
+      transition: border-color 0.15s, color 0.15s; -webkit-tap-highlight-color: transparent;
+      box-shadow: 3px 3px 0 0 #e5e7eb;
+    }
+    .btn-export:hover { border-color: #9ca3af; color: #6b7280; }
+
+    /* ── Dark Mode additions ─────────────────────────────────────────────────── */
+    html[data-theme="dark"] .vibe-track { background: #2e2449; border-color: #2e2449; }
+    html[data-theme="dark"] .vibe-label { color: #4b5563; }
+    html[data-theme="dark"] .spin-counter { color: #4b5563; }
+    html[data-theme="dark"] .custom-toggle { border-color: #374151; color: #6b7280; }
+    html[data-theme="dark"] .custom-toggle:hover { border-color: #6b7280; color: #9ca3af; }
+    html[data-theme="dark"] .custom-toggle.open { border-color: #2e2449; }
+    html[data-theme="dark"] .custom-panel { background: #1a1628; border-color: #2e2449; }
+    html[data-theme="dark"] .custom-tabs { border-bottom-color: #2e2449; }
+    html[data-theme="dark"] .custom-tab { color: #4b5563; }
+    html[data-theme="dark"] .custom-tab:hover { color: #6b7280; }
+    html[data-theme="dark"] .custom-input { background: #0d0a1a; border-color: #374151; color: #e2e8f0; }
+    /* WHO dark */
+    html[data-theme="dark"] .custom-tab[data-tab="who"].active   { color: #f472b6; border-bottom-color: #f472b6; }
+    html[data-theme="dark"] #ctab-who .custom-input:focus        { border-color: #ec4899; }
+    html[data-theme="dark"] #ctab-who .custom-chip               { background: #2d0f1e; border-color: #ec4899; color: #f472b6; }
+    /* WANTS TO dark */
+    html[data-theme="dark"] .custom-tab[data-tab="wantsto"].active { color: #60a5fa; border-bottom-color: #60a5fa; }
+    html[data-theme="dark"] #ctab-wantsto .custom-input:focus      { border-color: #3b82f6; }
+    html[data-theme="dark"] #ctab-wantsto .custom-chip             { background: #0c1a38; border-color: #3b82f6; color: #60a5fa; }
+    /* USING dark */
+    html[data-theme="dark"] .custom-tab[data-tab="using"].active { color: #4ade80; border-bottom-color: #4ade80; }
+    html[data-theme="dark"] #ctab-using .custom-input:focus      { border-color: #22c55e; }
+    html[data-theme="dark"] #ctab-using .custom-chip             { background: #0a2116; border-color: #22c55e; color: #4ade80; }
+    html[data-theme="dark"] .btn-export { border-color: #2e2449; color: #6b7280; box-shadow: 3px 3px 0 0 #2e2449; }
+    html[data-theme="dark"] .btn-export:hover { border-color: #4b5563; color: #94a3b8; }
+    html[data-theme="dark"] .btn-share { background: #2d0f1e; }
+
+    /* ── Desktop tweaks ──────────────────────────────────────────────────────── */
+    @media (min-width: 540px) {
+      body { padding: 40px 24px 80px; }
+      .blob-1 { width: 360px; height: 360px; top: -110px; left: -110px; }
+      .blob-2 { width: 300px; height: 300px; bottom: -90px; right: -90px; }
+      .slot-reel { min-height: 100px; padding: 16px 12px; border-width: 4px; }
+      .reels { gap: 12px; }
+      .result-card { padding: 28px 24px; }
+      .result-idea { font-size: 18px; }
+      .spin-btn { padding: 20px 0; }
+      .action-row { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="container">
+  <header>
+    <h1>✦ VIBE CODE IDEA MACHINE ✦</h1>
+    <p class="subtitle">spin to find your next weekend project</p>
+  </header>
+
+  <!-- Reels -->
+  <section class="reels">
+    <div class="reel-col">
+      <div class="reel-label">WHO</div>
+      <div class="slot-reel reel-a" id="reel-a">
+        <div class="reel-text" id="text-a">???</div>
+      </div>
+      <button class="lock-btn" id="lock-a" disabled>🔓 Lock</button>
+    </div>
+    <div class="reel-col">
+      <div class="reel-label">WANTS TO</div>
+      <div class="slot-reel reel-b" id="reel-b">
+        <div class="reel-text" id="text-b">???</div>
+      </div>
+      <button class="lock-btn" id="lock-b" disabled>🔓 Lock</button>
+    </div>
+    <div class="reel-col">
+      <div class="reel-label">USING</div>
+      <div class="slot-reel reel-c" id="reel-c">
+        <div class="reel-text" id="text-c">???</div>
+      </div>
+      <button class="lock-btn" id="lock-c" disabled>🔓 Lock</button>
+    </div>
+  </section>
+
+  <!-- Custom slot entries -->
+  <div class="custom-section" id="custom-section">
+    <button class="custom-toggle" id="custom-toggle">＋ Add Your Own Entries</button>
+    <div class="custom-panel hidden" id="custom-panel">
+      <div class="custom-tabs">
+        <button class="custom-tab active" data-tab="who">WHO</button>
+        <button class="custom-tab" data-tab="wantsto">WANTS TO</button>
+        <button class="custom-tab" data-tab="using">USING</button>
+      </div>
+      <div class="custom-tab-panel" id="ctab-who">
+        <div class="custom-input-row">
+          <input type="text" class="custom-input" id="custom-who-input" placeholder="e.g. dog owners" maxlength="30" />
+          <button class="btn-add" id="add-who-btn">Add</button>
+        </div>
+        <div class="custom-chips" id="custom-who-chips"></div>
+      </div>
+      <div class="custom-tab-panel hidden" id="ctab-wantsto">
+        <div class="custom-input-row">
+          <input type="text" class="custom-input" id="custom-wantsto-input" placeholder="e.g. learn to draw" maxlength="50" />
+          <button class="btn-add" id="add-wantsto-btn">Add</button>
+        </div>
+        <div class="custom-chips" id="custom-wantsto-chips"></div>
+      </div>
+      <div class="custom-tab-panel hidden" id="ctab-using">
+        <div class="custom-input-row">
+          <input type="text" class="custom-input" id="custom-using-input" placeholder="e.g. virtual pet" maxlength="30" />
+          <button class="btn-add" id="add-using-btn">Add</button>
+        </div>
+        <div class="custom-chips" id="custom-using-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vibe meter -->
+  <div class="vibe-meter-wrap" id="vibe-wrap">
+    <div class="vibe-meta">
+      <span class="vibe-label">⚡ DOPAMINE METER</span>
+      <span class="vibe-status" id="vibe-status">🔥 Lit</span>
+    </div>
+    <div class="vibe-track">
+      <div class="vibe-fill vibe-lit" id="vibe-fill"></div>
+    </div>
+    <div class="vibe-boost-flash hidden" id="vibe-boost-flash">⚡ VIBE BOOST!</div>
+  </div>
+
+  <button class="spin-btn" id="spin-btn">🎰 SPIN IT</button>
+  <div class="spin-counter" id="spin-counter">0 spins</div>
+
+  <!-- Result card (hidden until after first spin) -->
+  <div class="result-card hidden" id="result-card">
+    <div class="combo-tags" id="result-combo"></div>
+    <p class="result-idea" id="result-text"></p>
+    <button class="btn btn-generate" id="generate-prompt-btn" disabled>🤖 Generate Vibe Code Prompt</button>
+
+    <div class="prompt-section hidden" id="prompt-section">
+      <div class="prompt-header">🤖 VIBE CODE PROMPT</div>
+      <p class="prompt-hint">Copy this into Claude or Cursor to start building:</p>
+      <textarea class="prompt-textarea" id="prompt-textarea" readonly></textarea>
+      <button class="btn btn-prompt" id="copy-prompt-btn">📋 Copy Prompt</button>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-save" id="save-btn" disabled>💾 Save</button>
+      <button class="btn btn-copy" id="copy-btn" disabled>📎 Copy Idea</button>
+      <button class="btn btn-share" id="share-btn" disabled>🔗 Share</button>
+    </div>
+  </div>
+
+  <!-- Saved ideas -->
+  <div class="saved-section">
+    <div class="saved-header-row">
+      <button class="saved-toggle open" id="saved-toggle">
+        <span id="saved-count-label">Saved Ideas</span>
+        <span class="toggle-arrow">▾</span>
+      </button>
+      <button class="btn-export hidden" id="export-btn" title="Download saved ideas">⬇ Export</button>
+    </div>
+    <div class="saved-list open" id="saved-list">
+      <div class="saved-empty" id="saved-empty">No saved ideas yet. Spin to start! ✦</div>
+    </div>
+  </div>
+
+  <footer>
+    <p>built for teen vibe coders ✦ paste the prompt into Claude and start building</p>
+    <div class="footer-controls">
+      <label class="toggle-switch">
+        <input type="checkbox" id="sound-toggle" />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="toggle-label">🔊 Sound</span>
+      </label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="theme-toggle" />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="toggle-label">🌙 Dark</span>
+      </label>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // ── Data ──────────────────────────────────────────────────────────────────
+
+  const USERS = [
+    'students', 'gamers', 'streamers', 'art kids', 'friend groups',
+    'sports teams', 'music fans', 'TikTok creators', 'Discord server owners',
+    'study groups', 'side hustlers', 'band members', 'sneakerheads',
+    'K-pop stans', 'anime fans', 'cosplayers', 'skaters', 'book clubs',
+    'hackathon beginners', 'aspiring YouTubers',
+    'podcast listeners', 'digital artists', 'chess club members', 'debate team members',
+    'film lovers', 'tabletop RPG players', 'language learners', 'volunteer groups',
+    'online gamers', 'gym beginners', 'nature lovers', 'journalism students',
+    'esports fans', 'cooking enthusiasts', 'DIY crafters', 'theater kids',
+    'pet owners', 'aspiring musicians', 'road trip planners', 'camp friends'
+  ];
+
+  const PROBLEMS = [
+    'organize their study notes', 'track their gaming sessions', 'plan hangouts with friends',
+    'share playlists with their crew', 'split costs with friends', 'stay on top of deadlines',
+    'discover new music together', 'manage their schedule', 'build their online portfolio',
+    'track their fitness goals', 'save up for something big', 'express their creativity',
+    'coordinate their team', 'rate and review things they love', 'remember meaningful moments',
+    'vote on group decisions', 'keep a private journal', 'set and hit daily goals',
+    'find people with shared interests', 'celebrate wins with their friends',
+    'practice a new skill every day', 'share progress on a big project', 'stay in touch with long-distance friends',
+    'decide what to watch or play next', 'pick a restaurant or activity as a group',
+    'track their reading list', 'plan a group trip or event', 'collect and organize their ideas',
+    'reflect on their week', 'document what they are learning', 'stay accountable to a habit',
+    'cheer each other on during a challenge', 'rate and rank their favorite things',
+    'build a portfolio of their work', 'share quick updates with their group',
+    'turn a big goal into small steps', 'motivate each other to keep going',
+    'track screen time or phone usage', 'organize a tournament or competition',
+    'send each other micro-challenges'
+  ];
+
+  // Each mechanic: difficulty level, one-liner template, vibe code prompt generator
+  const MECHANICS = {
+    'streak tracker': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} build a daily streak by taking one action to ${p} — miss a day and the counter resets to zero.`,
+      prompt: (u, p) => `Build a streak tracker web app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- A large streak counter showing consecutive days checked in\n- A check-in button usable only once per day (store the last check-in date)\n- A motivating message that changes based on streak length\n- Automatic reset if a day is missed\nStyle it with bright bold colors, big numbers, and a fun vibe.`
+    },
+    'friend poll': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} settle group decisions about ${p} with a quick poll — everyone votes and the majority wins, no debates.`,
+      prompt: (u, p) => `Build a friend poll app in a single HTML file for ${u} deciding how to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Create a poll with a question and up to 4 answer options\n- Each person types their name and picks an option to vote\n- A live bar chart showing vote counts\n- A clear winner announcement when voting closes\nMake it colorful, simple, and fun.`
+    },
+    'countdown timer': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that counts down to a deadline so ${u} feel the pressure to ${p} before time runs out.`,
+      prompt: (u, p) => `Build a countdown timer app in a single HTML file for ${u} who need to ${p} by a deadline. Use vanilla JavaScript. Features:\n- Set a custom event name and a target end date and time\n- Display days, hours, minutes, and seconds counting down live\n- A motivating message when the countdown hits zero\n- A reset button to set a new countdown\nMake the numbers huge, dramatic, and exciting.`
+    },
+    'mood board': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} pin emoji, colors, and short quotes onto a digital board to capture the vibe of ${p}.`,
+      prompt: (u, p) => `Build a mood board app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Click anywhere on the board to add a sticky card with a short text note and an emoji\n- Drag cards to reposition them\n- Click to edit a card, press X to delete it\n- Save the board layout to localStorage\nMake it fun and creative with pastel sticky-note colors.`
+    },
+    'leaderboard': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that ranks ${u} by how much progress they make at ${p} — top of the board gets bragging rights.`,
+      prompt: (u, p) => `Build a leaderboard app in a single HTML file for ${u} competing to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Add player names with starting scores\n- Large + and - buttons to change each score\n- Auto-sort by score, highest first, with rank numbers\n- Emoji trophies for 1st, 2nd, 3rd place\n- Reset button, save state to localStorage\nStyle it like a bold colorful game show scoreboard.`
+    },
+    'time capsule': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} write a message about their plans to ${p}, lock it away, and only read it again in 30 days.`,
+      prompt: (u, p) => `Build a time capsule app in a single HTML file for ${u} setting intentions to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Write a message and set a future unlock date\n- Lock the message so text is hidden until that date\n- Show a live countdown to the unlock date\n- Reveal the full message on the unlock date with a celebration animation\nMake it feel mysterious and special.`
+    },
+    'daily check-in': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that asks ${u} one quick question each day about ${p} and builds a personal log over time.`,
+      prompt: (u, p) => `Build a daily check-in app in a single HTML file for ${u} focused on ${p}. Use vanilla JavaScript and localStorage. Features:\n- Show one question per day from a rotating list of 10+ prompts relevant to the theme\n- A text box to write an answer, submitted with today's date\n- A scrollable log of past answers in reverse order\n- Only one check-in allowed per calendar day\nMake it clean, friendly, and encouraging.`
+    },
+    'quick quiz': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that fires rapid-fire questions at ${u} to test how well they know ${p} — score at the end.`,
+      prompt: (u, p) => `Build a multiple-choice quiz app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript. Features:\n- At least 8 questions shown one at a time with 4 answer options each\n- Instantly highlight correct (green) or wrong (red) on click\n- Track score throughout and show a final results screen\n- A restart button to play again\nMake it fast-paced, energetic, and visually exciting.`
+    },
+    'bracket tournament': {
+      difficulty: 'oneweek',
+      template: (u, p) => `An app where ${u} run a knockout tournament to find the best approach to ${p} — options battle head-to-head until one wins.`,
+      prompt: (u, p) => `Build a bracket tournament app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Enter 4 or 8 items to compete in the bracket\n- Auto-generate a single-elimination bracket displayed visually\n- Click to pick a winner in each matchup and advance them automatically\n- Show a champion celebration screen at the end\n- Save bracket state to localStorage\nMake it look like a real tournament bracket.`
+    },
+    'shared wishlist': {
+      difficulty: 'oneweek',
+      template: (u, p) => `An app where ${u} add what they want to ${p} to a shared list — everyone can see, react to, and claim items.`,
+      prompt: (u, p) => `Build a shared wishlist app in a single HTML file for ${u} coordinating to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Add items with a name, emoji icon, and optional short note\n- Mark items as claimed with your name (one claim per item)\n- Add emoji reactions to any item\n- Delete items, save everything to localStorage\nStyle it with colorful cards, fun emoji, and an upbeat vibe.`
+    },
+    'achievement badge': {
+      difficulty: 'oneweek',
+      template: (u, p) => `An app that rewards ${u} with badges and trophies as they hit milestones on their way to ${p}.`,
+      prompt: (u, p) => `Build an achievement badge app in a single HTML file for ${u} working toward ${p}. Use vanilla JavaScript and localStorage. Features:\n- At least 8 achievements with names, emoji icons, and unlock conditions\n- Show locked badges as greyed out with a hint of what they require\n- Play a fun celebration animation when a badge unlocks\n- Track all progress in localStorage\nMake it look and feel like a real game achievement screen.`
+    },
+    'reaction log': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} log each attempt to ${p} with an emoji reaction — see patterns in what actually works.`,
+      prompt: (u, p) => `Build a reaction logger app in a single HTML file for ${u} tracking progress on ${p}. Use vanilla JavaScript and localStorage. Features:\n- Log entries with a short text note and an emoji chosen from a palette of 5 options\n- Show the log in reverse-chronological order with dates\n- A summary count showing which emoji appears most\n- Filter the log by emoji type\nMake it emoji-heavy and colorful.`
+    },
+    'spin-the-wheel': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that randomly picks an option for ${u} when they cannot decide how to ${p} — spin and commit.`,
+      prompt: (u, p) => `Build a spin-the-wheel app in a single HTML file for ${u} who cannot decide how to ${p}. Use vanilla JavaScript and the Canvas API. Features:\n- Input a list of at least 3 options to put on the wheel\n- Draw a colorful pie-slice wheel on Canvas, each segment a different bright color\n- Click a Spin button to animate the wheel smoothly decelerating to a random winner\n- Announce the winning option with a fun message\nMake it look exciting with bold colors and energetic animation.`
+    },
+    'collab board': {
+      difficulty: 'oneweek',
+      template: (u, p) => `An app where ${u} post sticky notes together on a shared board to brainstorm how to ${p}.`,
+      prompt: (u, p) => `Build a collaborative sticky-note board in a single HTML file for ${u} brainstorming how to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Double-click anywhere on the board to add a sticky note with custom text\n- Each note gets a random pastel background color\n- Drag notes to reposition them on the board\n- Click to edit a note in place, X button to delete it\n- Save the full board layout to localStorage\nMake it look like a real colorful sticky-note wall.`
+    },
+    'daily challenge': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that drops a fresh micro-challenge every day to push ${u} one step closer to ${p}.`,
+      prompt: (u, p) => `Build a daily challenge app in a single HTML file for ${u} working on ${p}. Use vanilla JavaScript and localStorage. Features:\n- An array of at least 15 unique challenges relevant to the theme\n- Auto-select a new challenge each day based on the current date\n- A checkbox to mark the challenge complete\n- A streak counter for consecutive days completed\n- Save all progress to localStorage\nMake it bold, motivating, and visually fun.`
+    },
+    'random partner': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that randomly pairs ${u} together so they can ${p} with someone new every week.`,
+      prompt: (u, p) => `Build a random partner pairing app in a single HTML file for ${u} who want to ${p} together. Use vanilla JavaScript. Features:\n- Enter a list of names\n- Click to randomly shuffle and create pairs (handle odd numbers with a group of 3)\n- Display pairings in a fun, clear visual layout\n- A re-shuffle button to generate new pairs\n- A copy-to-clipboard button to share the pairings\nMake it feel fun and celebratory.`
+    },
+    'score card': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} keep a running score of how well they and their friends are doing at ${p}.`,
+      prompt: (u, p) => `Build a score card app in a single HTML file for ${u} tracking progress on ${p}. Use vanilla JavaScript and localStorage. Features:\n- Add player names to a scoreboard\n- Large + and - buttons to adjust scores\n- Auto-highlight the current leader\n- A log of recent score changes\n- Reset button, save state to localStorage\nStyle it like a retro arcade scoreboard with bold colors and big numbers.`
+    },
+    'secret santa': {
+      difficulty: 'oneweek',
+      template: (u, p) => `An app that secretly assigns each ${u} one person to help ${p} for — they work in secret and everyone reveals at the end.`,
+      prompt: (u, p) => `Build a secret santa assigner app in a single HTML file for ${u} helping each other ${p}. Use vanilla JavaScript and localStorage. Features:\n- Add a list of participant names (minimum 3)\n- Click assign to randomly match each person to a different person (no self-assignments, no duplicates)\n- Each participant reveals only their own assignment by typing their name\n- Save assignments to localStorage so they persist\nMake it festive, fun, and full of suspense.`
+    },
+    'theme of the week': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that gives ${u} a fresh new theme every Monday to guide how they ${p} for the next 7 days.`,
+      prompt: (u, p) => `Build a theme-of-the-week app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- An array of at least 12 themed weekly prompts, each with a name, emoji, and description\n- Auto-select a new theme each week based on the current week number\n- A daily checklist for the week's challenge\n- Save completed checklist items to localStorage\nMake it bold, colorful, and visually engaging.`
+    },
+    'memory wall': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} post cards of their best moments while trying to ${p} — a growing digital scrapbook.`,
+      prompt: (u, p) => `Build a memory wall app in a single HTML file for ${u} capturing moments from ${p}. Use vanilla JavaScript and localStorage. Features:\n- Add memory cards with a title, date, short note, and a chosen emoji\n- Display cards in a grid layout\n- Tap a card to expand and read the full note\n- An X button on each card to delete it\n- Save all cards to localStorage\nMake it feel like a colorful digital scrapbook.`
+    },
+    'habit tracker': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} tick off a habit every day related to ${p} and watch their consistency chart grow over time.`,
+      prompt: (u, p) => `Build a habit tracker app in a single HTML file for ${u} building a habit around ${p}. Use vanilla JavaScript and localStorage. Features:\n- Define a habit name and daily goal\n- A daily check-off button (one per day)\n- A visual calendar grid showing checked vs missed days\n- A current and best streak counter\n- Save all data to localStorage\nMake it colorful, motivating, and easy to use.`
+    },
+    'random dare': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that challenges ${u} with a random dare each session to push them to ${p} in a fun, unexpected way.`,
+      prompt: (u, p) => `Build a random dare generator app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript. Features:\n- An array of at least 15 creative dares or mini-challenges related to the theme\n- A big "Draw a Dare" button that randomly picks and displays one\n- A timer option so users can race to complete it\n- A "Skip" button and a history of dares already drawn\nMake it fun, energetic, and bold with big text and bright colors.`
+    },
+    'group scoreboard': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where a whole group of ${u} earn points together as they ${p} — one shared score, everyone wins or loses together.`,
+      prompt: (u, p) => `Build a group scoreboard app in a single HTML file for ${u} who want to ${p} together. Use vanilla JavaScript and localStorage. Features:\n- A single shared score that any member can increment\n- Each point entry includes who added it and a short note\n- A live log of all contributions in reverse order\n- A goal target that triggers a celebration when reached\nMake it feel like a team sport scoreboard.`
+    },
+    'swap challenge': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} swap their usual approach and try a completely different way to ${p} for one week.`,
+      prompt: (u, p) => `Build a swap challenge app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- On launch, present two different approaches to the goal and let the user pick which to swap to\n- A 7-day checklist tracking daily progress on the new approach\n- A reflection box at the end of the week asking what changed\n- Save progress to localStorage\nMake it bold and thought-provoking.`
+    },
+    'power hour': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that locks ${u} into a focused 60-minute session to make real progress on ${p} — no distractions allowed.`,
+      prompt: (u, p) => `Build a power hour timer app in a single HTML file for ${u} focused on ${p}. Use vanilla JavaScript. Features:\n- A 60-minute countdown with a start and pause button\n- A distraction log where users can type distracting thoughts to clear their mind\n- A mini task list to define 1-3 goals before starting\n- A completion screen with a summary of what was accomplished\nMake it intense, focused, and visually dramatic.`
+    },
+    'public pledge': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} post a public pledge to ${p} by a set date — their commitment is visible for all to see.`,
+      prompt: (u, p) => `Build a public pledge app in a single HTML file for ${u} committing to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Write a pledge statement and set a deadline date\n- Display the pledge on a "wall" visible to anyone who opens the page\n- A countdown to the deadline\n- A button to mark the pledge as complete, with a celebration, or broken, with a shame message\nMake it feel official and high-stakes.`
+    },
+    'mini quest': {
+      difficulty: 'oneweek',
+      template: (u, p) => `An app that turns ${p} into a 5-step quest for ${u} — complete each stage to unlock the next.`,
+      prompt: (u, p) => `Build a mini quest app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- A 5-stage quest where each stage has a name, description, and a completion button\n- Stages unlock one by one as the previous one is completed\n- A progress bar showing how far through the quest the user is\n- A final celebration screen when all 5 stages are done\n- Save progress to localStorage\nMake it look like a game quest log.`
+    },
+    'hot take wall': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} post anonymous hot takes about ${p} and others vote agree or disagree.`,
+      prompt: (u, p) => `Build a hot take wall app in a single HTML file for ${u} sharing opinions about ${p}. Use vanilla JavaScript and localStorage. Features:\n- Submit a short anonymous hot take (one sentence max)\n- Display all takes on a wall with agree and disagree vote buttons\n- Sort takes by most controversial (closest agree/disagree ratio) or most agreed\n- Save all takes and votes to localStorage\nMake it look bold and opinionated with bright colors.`
+    },
+    'bingo card': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that gives ${u} a bingo card full of mini-challenges to ${p} — mark them off as you go.`,
+      prompt: (u, p) => `Build a bingo card app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- A 5x5 grid of challenge squares relevant to the theme\n- Click a square to mark it as done (highlight it)\n- Auto-detect when a row, column, or diagonal is complete and celebrate\n- A "New Card" button to shuffle and generate a fresh grid\n- Save progress to localStorage\nMake it colorful and game-like.`
+    },
+    'photo challenge': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that gives ${u} a new photo prompt each day related to ${p} — submit a description and log your shots.`,
+      prompt: (u, p) => `Build a daily photo challenge app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- A new photo prompt shown each day based on the date (from an array of 30+ prompts)\n- A text box to write a description of the photo they took (no actual upload needed)\n- A gallery log showing past submissions with date and prompt\n- A streak counter for consecutive days participated\n- Save all data to localStorage\nMake it creative and visually fun.`
+    },
+    'word of the day': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that gives ${u} one new word each day that inspires them to ${p} in a fresh way.`,
+      prompt: (u, p) => `Build a word-of-the-day app in a single HTML file for ${u} who want to ${p}. Use vanilla JavaScript and localStorage. Features:\n- An array of 30+ themed words, each with a definition and a usage example\n- One word revealed per day based on the date\n- A button to mark the word as used in context today\n- A log of past words and whether they were used\n- Save data to localStorage\nMake it feel like a daily ritual with clean, elegant design.`
+    },
+    'flip a coin': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app that helps ${u} make quick decisions about ${p} with a coin flip — commit to whatever it lands on.`,
+      prompt: (u, p) => `Build a decision-making coin flip app in a single HTML file for ${u} deciding how to ${p}. Use vanilla JavaScript. Features:\n- Two sides of the coin labeled with custom options the user types in\n- A big animated flip button with a CSS coin spin animation\n- A dramatic reveal of which side won\n- A history log of past flips and outcomes\n- A tally of how many times each side has won\nMake it visually dramatic with a big animated coin.`
+    },
+    'rate my day': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} give their day a score each evening based on how well they managed to ${p}.`,
+      prompt: (u, p) => `Build a rate-my-day journaling app in a single HTML file for ${u} reflecting on ${p}. Use vanilla JavaScript and localStorage. Features:\n- A 1-10 slider to rate the day\n- A short text field to write one highlight and one thing to improve\n- Save each entry with the date\n- A chart or list showing the past 7 days of ratings\n- A simple average score display\nMake it feel like a friendly evening ritual.`
+    },
+    'group raffle': {
+      difficulty: 'weekend',
+      template: (u, p) => `An app where ${u} enter a raffle each time they take an action to ${p} — one random winner picked at the end.`,
+      prompt: (u, p) => `Build a group raffle app in a single HTML file for ${u} motivated to ${p}. Use vanilla JavaScript and localStorage. Features:\n- Add participant names to a raffle pool\n- Each person can earn extra entries by checking in (tracked per day)\n- A dramatic draw button that randomly picks a winner from all entries\n- Animate the winner reveal with a visual spinner or name flasher\n- Save entries to localStorage\nMake it exciting and high-energy.`
+    }
+  };
+
+  const MECHANIC_KEYS = Object.keys(MECHANICS);
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let currentCombo = null;
+  let recentCombos = [];
+  let isSpinning = false;
+  let savedIdeas = [];
+  let lockedReel = null; // null | 'a' | 'b' | 'c'
+  let spinCount = 0;
+  let vibe = 100;
+  let isMuted = localStorage.getItem('gevi-muted') === 'true';
+  let customWho = [];
+  let customWantsTo = [];
+  let customUsing = [];
+
+  function loadSaved() {
+    try { savedIdeas = JSON.parse(localStorage.getItem('gevi-saves') || '[]'); }
+    catch (_) { savedIdeas = []; }
+  }
+
+  function persistSaved() {
+    try { localStorage.setItem('gevi-saves', JSON.stringify(savedIdeas)); } catch (_) {}
+  }
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function pickCombo() {
+    let attempts = 0, combo;
+    do {
+      combo = [pick(USERS), pick(PROBLEMS), pick(MECHANIC_KEYS)];
+      attempts++;
+    } while (attempts < 6 && recentCombos.includes(combo.join('|')));
+    return combo;
+  }
+
+  // ── DOM refs ──────────────────────────────────────────────────────────────
+  const reelA         = document.getElementById('reel-a');
+  const reelB         = document.getElementById('reel-b');
+  const reelC         = document.getElementById('reel-c');
+  const textA         = document.getElementById('text-a');
+  const textB         = document.getElementById('text-b');
+  const textC         = document.getElementById('text-c');
+  const spinBtn       = document.getElementById('spin-btn');
+  const resultCard    = document.getElementById('result-card');
+  const resultCombo   = document.getElementById('result-combo');
+  const resultText    = document.getElementById('result-text');
+  const promptTA      = document.getElementById('prompt-textarea');
+  const copyPromptBtn     = document.getElementById('copy-prompt-btn');
+  const generatePromptBtn = document.getElementById('generate-prompt-btn');
+  const promptSection     = document.getElementById('prompt-section');
+  const saveBtn           = document.getElementById('save-btn');
+  const copyBtn       = document.getElementById('copy-btn');
+  const lockA         = document.getElementById('lock-a');
+  const lockB         = document.getElementById('lock-b');
+  const lockC         = document.getElementById('lock-c');
+  const shareBtn      = document.getElementById('share-btn');
+  const savedToggle   = document.getElementById('saved-toggle');
+  const savedList     = document.getElementById('saved-list');
+  const savedCountLbl = document.getElementById('saved-count-label');
+  const savedEmpty    = document.getElementById('saved-empty');
+  const exportBtn     = document.getElementById('export-btn');
+  const spinCounter   = document.getElementById('spin-counter');
+  const vibeFill      = document.getElementById('vibe-fill');
+  const vibeStatus    = document.getElementById('vibe-status');
+  const vibeBoostFlash = document.getElementById('vibe-boost-flash');
+  const customWhoInput      = document.getElementById('custom-who-input');
+  const customWantsToInput  = document.getElementById('custom-wantsto-input');
+  const customUsingInput    = document.getElementById('custom-using-input');
+  const customWhoChips      = document.getElementById('custom-who-chips');
+  const customWantsToChips  = document.getElementById('custom-wantsto-chips');
+  const customUsingChips    = document.getElementById('custom-using-chips');
+
+  // ── Audio ─────────────────────────────────────────────────────────────────
+  let audioCtx = null;
+  function getCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function playTick(freq) {
+    if (isMuted) return;
+    try {
+      const ctx = getCtx();
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'square'; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.04);
+    } catch (_) {}
+  }
+
+  function playClunk(reelIdx) {
+    if (isMuted) return;
+    try {
+      const ctx = getCtx();
+      const freqs = [300, 230, 175];
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freqs[reelIdx] * 2, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(freqs[reelIdx], ctx.currentTime + 0.07);
+      gain.gain.setValueAtTime(0.28, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.18);
+    } catch (_) {}
+  }
+
+  function playWin() {
+    if (isMuted) return;
+    try {
+      const ctx = getCtx();
+      // Bubbly high-pitched pop arpeggio
+      [880, 1047, 1319, 1568, 2093].forEach((freq, i) => {
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'triangle'; osc.frequency.value = freq;
+        const t = ctx.currentTime + i * 0.09;
+        gain.gain.setValueAtTime(0.11, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+        osc.start(t); osc.stop(t + 0.22);
+      });
+    } catch (_) {}
+  }
+
+  function playSave() {
+    if (isMuted) return;
+    try {
+      const ctx = getCtx();
+      [523, 659, 784].forEach((freq, i) => { // C5 E5 G5
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'triangle'; osc.frequency.value = freq;
+        const t = ctx.currentTime + i * 0.07;
+        gain.gain.setValueAtTime(0.14, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        osc.start(t); osc.stop(t + 0.18);
+      });
+    } catch (_) {}
+  }
+
+  function playCopy() {
+    if (isMuted) return;
+    try {
+      const ctx = getCtx();
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine'; osc.frequency.value = 880; // A5
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.12);
+    } catch (_) {}
+  }
+
+  // ── Reel animation ────────────────────────────────────────────────────────
+  function animateReel(textEl, reelEl, source, finalValue, stopAfter, tickFreq, reelIdx) {
+    return new Promise(resolve => {
+      reelEl.classList.add('spinning');
+      reelEl.classList.remove('settled');
+      const startTime = Date.now();
+      function tick() {
+        const elapsed = Date.now() - startTime;
+        if (elapsed >= stopAfter) {
+          textEl.textContent = finalValue;
+          reelEl.classList.remove('spinning');
+          reelEl.classList.add('settled');
+          playClunk(reelIdx);
+          try { navigator.vibrate && navigator.vibrate(18); } catch (_) {}
+          resolve();
+          return;
+        }
+        textEl.textContent = pick(source);
+        playTick(tickFreq);
+        const progress = elapsed / stopAfter;
+        setTimeout(tick, 55 + progress * progress * 180);
+      }
+      tick();
+    });
+  }
+
+  // ── Vibe Meter ────────────────────────────────────────────────────────────
+  function updateVibeMeter() {
+    vibeFill.style.width = vibe + '%';
+    vibeFill.classList.remove('vibe-lit', 'vibe-good', 'vibe-low', 'vibe-dead');
+    let statusText;
+    if (vibe > 75)      { vibeFill.classList.add('vibe-lit');  statusText = '🔥 Lit'; }
+    else if (vibe > 50) { vibeFill.classList.add('vibe-good'); statusText = '⚡ Vibing'; }
+    else if (vibe > 25) { vibeFill.classList.add('vibe-low');  statusText = '😴 Fading'; }
+    else                { vibeFill.classList.add('vibe-dead'); statusText = '💀 Dead'; }
+    vibeStatus.textContent = statusText;
+    if (vibe <= 0) {
+      spinBtn.classList.remove('result-ready');
+      spinBtn.classList.add('idle');
+    } else {
+      spinBtn.classList.remove('idle');
+    }
+  }
+
+  function showBoostFlash() {
+    vibeBoostFlash.classList.remove('hidden');
+    vibeFill.classList.add('boosting');
+    setTimeout(() => {
+      vibeBoostFlash.classList.add('hidden');
+      vibeFill.classList.remove('boosting');
+    }, 1300);
+  }
+
+  function boostVibe(amount, flash) {
+    vibe = Math.min(100, vibe + amount);
+    updateVibeMeter();
+    if (flash) showBoostFlash();
+  }
+
+  function drainVibe() {
+    if (isSpinning) return;
+    vibe = Math.max(0, vibe - Math.max(0.15, vibe * 0.02));
+    updateVibeMeter();
+  }
+
+  setInterval(drainVibe, 1000);
+  updateVibeMeter();
+
+  // ── Custom Entries ────────────────────────────────────────────────────────
+  function loadCustom() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('gevi-custom') || '{}');
+      customWho     = saved.who      || [];
+      customWantsTo = saved.wantsto  || [];
+      customUsing   = saved.using    || [];
+    } catch (_) { customWho = []; customWantsTo = []; customUsing = []; }
+    customWho.forEach(w => { if (!USERS.includes(w)) USERS.push(w); });
+    customWantsTo.forEach(p => { if (!PROBLEMS.includes(p)) PROBLEMS.push(p); });
+    customUsing.forEach(u => {
+      if (!MECHANIC_KEYS.includes(u)) {
+        MECHANIC_KEYS.push(u);
+        MECHANICS[u] = {
+          difficulty: 'weekend',
+          template: (usr, p) => `An app where ${usr} use a ${u} to ${p}.`,
+          prompt:   (usr, p) => `Build a ${u} web app for ${usr} who want to ${p}. Single HTML file, vanilla JS, localStorage for persistence. Make it look fun and colorful.`
+        };
+      }
+    });
+  }
+
+  function saveCustom() {
+    try { localStorage.setItem('gevi-custom', JSON.stringify({ who: customWho, wantsto: customWantsTo, using: customUsing })); } catch (_) {}
+  }
+
+  function renderChips(arr, container, type) {
+    container.innerHTML = '';
+    arr.forEach((val, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'custom-chip';
+      chip.innerHTML = `${val}<button class="chip-del" aria-label="Remove">×</button>`;
+      chip.querySelector('.chip-del').addEventListener('click', () => {
+        arr.splice(i, 1);
+        if (type === 'who') {
+          const idx = USERS.indexOf(val);
+          if (idx > -1) USERS.splice(idx, 1);
+        } else if (type === 'wantsto') {
+          const idx = PROBLEMS.indexOf(val);
+          if (idx > -1) PROBLEMS.splice(idx, 1);
+        } else {
+          const idx = MECHANIC_KEYS.indexOf(val);
+          if (idx > -1) MECHANIC_KEYS.splice(idx, 1);
+          delete MECHANICS[val];
+        }
+        saveCustom();
+        renderChips(arr, container, type);
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function addCustomEntry(input, arr, container, type) {
+    const val = input.value.trim().toLowerCase();
+    if (!val || arr.includes(val)) { input.value = ''; return; }
+    arr.push(val);
+    if (type === 'who') {
+      USERS.push(val);
+    } else if (type === 'wantsto') {
+      PROBLEMS.push(val);
+    } else {
+      MECHANIC_KEYS.push(val);
+      MECHANICS[val] = {
+        difficulty: 'weekend',
+        template: (u, p) => `An app where ${u} use a ${val} to ${p}.`,
+        prompt:   (u, p) => `Build a ${val} web app for ${u} who want to ${p}. Single HTML file, vanilla JS, localStorage for persistence. Make it look fun and colorful.`
+      };
+    }
+    saveCustom();
+    renderChips(arr, container, type);
+    input.value = '';
+    // Animate newest chip
+    const chips = container.querySelectorAll('.custom-chip');
+    if (chips.length) {
+      const newest = chips[chips.length - 1];
+      newest.classList.add('entering');
+      newest.addEventListener('animationend', () => newest.classList.remove('entering'), { once: true });
+    }
+    // Close drawer after short delay so user sees the chip pop in
+    setTimeout(() => {
+      customPanel.classList.add('hidden');
+      customToggleBtn.classList.remove('open');
+    }, 600);
+  }
+
+  // ── Share as Link ─────────────────────────────────────────────────────────
+  function shareIdea() {
+    if (!currentCombo) return;
+    const params = new URLSearchParams({
+      who: currentCombo.user,
+      problem: currentCombo.problem,
+      mechanic: currentCombo.mechanic
+    });
+    const url = `${location.origin}${location.pathname}#${params}`;
+    writeToClipboard(url, shareBtn);
+  }
+
+  function loadFromHash() {
+    if (!location.hash) return;
+    try {
+      const params = new URLSearchParams(location.hash.slice(1));
+      const who = params.get('who'), problem = params.get('problem'), mechanic = params.get('mechanic');
+      if (!who || !problem || !mechanic || !MECHANICS[mechanic]) return;
+      textA.textContent = who;    reelA.classList.add('settled');
+      textB.textContent = problem; reelB.classList.add('settled');
+      textC.textContent = mechanic; reelC.classList.add('settled');
+      const mechData = MECHANICS[mechanic];
+      currentCombo = { user: who, problem, mechanic, idea: mechData.template(who, problem), prompt: mechData.prompt(who, problem), difficulty: mechData.difficulty };
+      resultCombo.innerHTML = `
+        <span class="combo-tag tag-a">${who}</span>
+        <span class="combo-sep">+</span>
+        <span class="combo-tag tag-b">${problem}</span>
+        <span class="combo-sep">+</span>
+        <span class="combo-tag tag-c">${mechanic}</span>
+      `;
+      resultText.textContent = currentCombo.idea;
+      resultCard.classList.remove('hidden');
+      [saveBtn, copyBtn, shareBtn, generatePromptBtn, lockA, lockB, lockC].forEach(b => { b.disabled = false; });
+    } catch (_) {}
+  }
+
+  // ── Export ────────────────────────────────────────────────────────────────
+  function exportIdeas() {
+    if (!savedIdeas.length) return;
+    const lines = ['VIBE CODE IDEA MACHINE — Saved Ideas', '='.repeat(40), ''];
+    savedIdeas.forEach((e, i) => {
+      lines.push(`${i + 1}. ${e.user} + ${e.problem} + ${e.mechanic}`);
+      lines.push(`   ${e.idea}`);
+      lines.push(`   Saved: ${relativeTime(e.ts)}`);
+      lines.push('');
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'vibe-ideas.txt'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // ── Lock logic ────────────────────────────────────────────────────────────
+  function handleLock(id) {
+    lockedReel = (lockedReel === id) ? null : id;
+    updateLockUI();
+  }
+
+  function updateLockUI() {
+    [['a', lockA], ['b', lockB], ['c', lockC]].forEach(([id, btn]) => {
+      const on = lockedReel === id;
+      btn.classList.toggle('locked', on);
+      btn.textContent = on ? '🔒 Locked!' : '🔓 Lock';
+    });
+  }
+
+  function setLockBtnsDisabled(disabled) {
+    lockA.disabled = disabled;
+    lockB.disabled = disabled;
+    lockC.disabled = disabled;
+  }
+
+  // ── Spin ──────────────────────────────────────────────────────────────────
+  async function spin() {
+    if (isSpinning) return;
+    isSpinning = true;
+    try { if (audioCtx) await audioCtx.resume(); } catch (_) {}
+
+    spinBtn.disabled = true;
+    spinBtn.classList.remove('result-ready', 'idle');
+    saveBtn.disabled = true;
+    saveBtn.classList.remove('result-ready');
+    copyBtn.disabled = true;
+    copyBtn.classList.remove('result-ready');
+    shareBtn.disabled = true;
+    shareBtn.classList.remove('result-ready');
+    generatePromptBtn.disabled = true;
+    generatePromptBtn.classList.remove('result-ready');
+    generatePromptBtn.innerHTML = '🤖 Generate Vibe Code Prompt';
+    promptSection.classList.add('hidden');
+    setLockBtnsDisabled(true);
+    boostVibe(15);
+
+    const [rA, rB, rC] = pickCombo();
+    const user     = lockedReel === 'a' ? textA.textContent : rA;
+    const problem  = lockedReel === 'b' ? textB.textContent : rB;
+    const mechanic = lockedReel === 'c' ? textC.textContent : rC;
+
+    const anims = [];
+    if (lockedReel !== 'a') anims.push(animateReel(textA, reelA, USERS,         user,     1300, 900, 0));
+    if (lockedReel !== 'b') anims.push(animateReel(textB, reelB, PROBLEMS,      problem,  2000, 680, 1));
+    if (lockedReel !== 'c') anims.push(animateReel(textC, reelC, MECHANIC_KEYS, mechanic, 2800, 510, 2));
+    await Promise.all(anims);
+
+    playWin();
+    try { navigator.vibrate && navigator.vibrate([25, 40, 25]); } catch (_) {}
+
+    spinCount++;
+    spinCounter.textContent = spinCount === 1 ? '1 spin' : `${spinCount} spins`;
+
+    const key = [user, problem, mechanic].join('|');
+    recentCombos.push(key);
+    if (recentCombos.length > 5) recentCombos.shift();
+
+    const mechData = MECHANICS[mechanic];
+    const idea       = mechData.template(user, problem);
+    const prompt     = mechData.prompt(user, problem);
+    const difficulty = mechData.difficulty;
+
+    currentCombo = { user, problem, mechanic, idea, prompt, difficulty };
+
+    // Populate result card
+    resultCombo.innerHTML = `
+      <span class="combo-tag tag-a">${user}</span>
+      <span class="combo-sep">+</span>
+      <span class="combo-tag tag-b">${problem}</span>
+      <span class="combo-sep">+</span>
+      <span class="combo-tag tag-c">${mechanic}</span>
+    `;
+    resultText.textContent = idea;
+
+    resultCard.classList.remove('hidden');
+
+    // Scroll result into view on mobile
+    resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    spinBtn.disabled = false;
+    spinBtn.classList.add('result-ready');
+    saveBtn.disabled = false;
+    saveBtn.classList.add('result-ready');
+    copyBtn.disabled = false;
+    copyBtn.classList.add('result-ready');
+    shareBtn.disabled = false;
+    shareBtn.classList.add('result-ready');
+    generatePromptBtn.disabled = false;
+    generatePromptBtn.classList.add('result-ready');
+    setLockBtnsDisabled(false);
+    isSpinning = false;
+  }
+
+  // ── Save ──────────────────────────────────────────────────────────────────
+  function saveIdea() {
+    if (!currentCombo) return;
+    const entry = {
+      id: (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36),
+      user: currentCombo.user,
+      problem: currentCombo.problem,
+      mechanic: currentCombo.mechanic,
+      idea: currentCombo.idea,
+      difficulty: currentCombo.difficulty,
+      ts: Date.now()
+    };
+    savedIdeas.unshift(entry);
+    persistSaved();
+    renderSaved();
+    flashBtn(saveBtn, '✅ Saved!');
+    playSave();
+    boostVibe(40, true);
+  }
+
+  function deleteIdea(id) {
+    savedIdeas = savedIdeas.filter(x => x.id !== id);
+    persistSaved();
+    renderSaved();
+  }
+
+  function relativeTime(ts) {
+    const diff = Date.now() - ts;
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return `${m}m ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h}h ago`;
+    return `${Math.floor(h / 24)}d ago`;
+  }
+
+  function renderSaved() {
+    const count = savedIdeas.length;
+    savedCountLbl.textContent = count > 0 ? `Saved Ideas (${count})` : 'Saved Ideas';
+    Array.from(savedList.querySelectorAll('.saved-item')).forEach(el => el.remove());
+
+    exportBtn.classList.toggle('hidden', count === 0);
+    if (count === 0) {
+      savedEmpty.style.display = '';
+    } else {
+      savedEmpty.style.display = 'none';
+      savedIdeas.forEach(entry => {
+        const item = document.createElement('div');
+        item.className = 'saved-item';
+        item.innerHTML = `
+          <div class="saved-item-top">
+            <div class="saved-item-tags">
+              <span class="combo-tag tag-a">${entry.user}</span>
+              <span class="combo-sep">+</span>
+              <span class="combo-tag tag-b">${entry.problem}</span>
+              <span class="combo-sep">+</span>
+              <span class="combo-tag tag-c">${entry.mechanic}</span>
+            </div>
+            <button class="delete-btn" title="Delete" aria-label="Delete idea">✕</button>
+          </div>
+          <div class="saved-item-idea">${entry.idea}</div>
+          <div class="saved-item-meta">
+            <span>${relativeTime(entry.ts)}</span>
+            <button class="btn-generate-sm saved-gen-btn">🤖 Prompt</button>
+          </div>
+          <div class="saved-prompt-area hidden">
+            <textarea class="prompt-textarea saved-prompt-ta" readonly></textarea>
+          </div>
+        `;
+        item.querySelector('.delete-btn').addEventListener('click', () => deleteIdea(entry.id));
+
+        const genBtn = item.querySelector('.saved-gen-btn');
+        const promptArea = item.querySelector('.saved-prompt-area');
+        const promptTa = item.querySelector('.saved-prompt-ta');
+        genBtn.addEventListener('click', async () => {
+          const mechData = MECHANICS[entry.mechanic];
+          if (!mechData) return;
+          genBtn.disabled = true;
+          promptTa.value = '';
+          promptArea.classList.remove('hidden');
+          promptArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+          let dotCount = 1;
+          genBtn.innerHTML = '🧠 Thinking.';
+          const dotsInterval = setInterval(() => {
+            dotCount = (dotCount % 3) + 1;
+            genBtn.innerHTML = '🧠 Thinking' + '.'.repeat(dotCount);
+          }, 380);
+          let cursorOn = true;
+          const cursorInterval = setInterval(() => {
+            promptTa.value = cursorOn ? '▌' : '';
+            cursorOn = !cursorOn;
+          }, 500);
+
+          await new Promise(r => setTimeout(r, 2000));
+          clearInterval(dotsInterval);
+          clearInterval(cursorInterval);
+          promptTa.value = '';
+
+          genBtn.innerHTML = '⚡ Writing...';
+          await typewriterEffect(promptTa, mechData.prompt(entry.user, entry.problem));
+          genBtn.innerHTML = '✅ Ready!';
+          genBtn.disabled = false;
+        });
+
+        savedList.appendChild(item);
+      });
+    }
+  }
+
+  // ── Copy ──────────────────────────────────────────────────────────────────
+  function copyIdea() {
+    if (!currentCombo) return;
+    const text = `✦ Vibe Code Idea Machine\n${currentCombo.user} + ${currentCombo.problem} + ${currentCombo.mechanic}\n→ ${currentCombo.idea}`;
+    writeToClipboard(text, copyBtn);
+  }
+
+  function copyPrompt() {
+    if (!currentCombo) return;
+    writeToClipboard(currentCombo.prompt, copyPromptBtn);
+  }
+
+  function writeToClipboard(text, btn) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => { flashBtn(btn, '✅ Copied!'); playCopy(); })
+        .catch(() => fallbackCopy(text, btn));
+    } else {
+      fallbackCopy(text, btn);
+    }
+  }
+
+  function fallbackCopy(text, btn) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try { document.execCommand('copy'); flashBtn(btn, '✅ Copied!'); playCopy(); }
+    catch (_) { flashBtn(btn, '⚠️ Failed'); }
+    document.body.removeChild(ta);
+  }
+
+  function flashBtn(btn, msg) {
+    const orig = btn.innerHTML;
+    btn.innerHTML = msg;
+    setTimeout(() => { btn.innerHTML = orig; }, 1500);
+  }
+
+  // ── Saved toggle ──────────────────────────────────────────────────────────
+  savedToggle.addEventListener('click', () => {
+    const open = savedList.classList.toggle('open');
+    savedToggle.classList.toggle('open', open);
+  });
+
+  // ── Keyboard ──────────────────────────────────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if ((e.key === ' ' || e.key === 'Enter') && e.target === spinBtn) return;
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!isSpinning) spin(); }
+    if ((e.key === 's' || e.key === 'S') && currentCombo && !saveBtn.disabled) saveIdea();
+    if ((e.key === 'c' || e.key === 'C') && currentCombo && !copyBtn.disabled) copyIdea();
+  });
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  spinBtn.addEventListener('click', spin);
+  saveBtn.addEventListener('click', saveIdea);
+  copyBtn.addEventListener('click', copyIdea);
+  copyPromptBtn.addEventListener('click', copyPrompt);
+  async function typewriterEffect(textarea, text) {
+    textarea.value = '';
+    let i = 0;
+    while (i < text.length) {
+      // Reveal 2–5 chars at a time for a natural streaming feel
+      const chunk = Math.floor(2 + Math.random() * 4);
+      textarea.value += text.slice(i, i + chunk);
+      textarea.scrollTop = textarea.scrollHeight;
+      i += chunk;
+      // Variable delay; longer pauses at punctuation and newlines
+      const prev = text[i - 1] || '';
+      let delay = 16 + Math.random() * 22;
+      if (prev === '.' || prev === ':') delay += 110;
+      else if (prev === ',' || prev === '\n') delay += 55;
+      await new Promise(r => setTimeout(r, delay));
+    }
+    textarea.scrollTop = textarea.scrollHeight;
+  }
+
+  generatePromptBtn.addEventListener('click', async () => {
+    if (!currentCombo) return;
+    generatePromptBtn.classList.remove('result-ready');
+    generatePromptBtn.disabled = true;
+
+    // Show section immediately with empty textarea
+    promptTA.value = '';
+    promptSection.classList.remove('hidden');
+    promptSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Animate dots in the button: "Thinking." → ".." → "..."
+    let dotCount = 1;
+    generatePromptBtn.innerHTML = '🧠 Thinking.';
+    const dotsInterval = setInterval(() => {
+      dotCount = (dotCount % 3) + 1;
+      generatePromptBtn.innerHTML = '🧠 Thinking' + '.'.repeat(dotCount);
+    }, 380);
+
+    // Blink a cursor in the textarea while thinking
+    let cursorOn = true;
+    const cursorInterval = setInterval(() => {
+      promptTA.value = cursorOn ? '▌' : '';
+      cursorOn = !cursorOn;
+    }, 500);
+
+    // Thinking delay — ~2 seconds
+    await new Promise(r => setTimeout(r, 2000));
+
+    clearInterval(dotsInterval);
+    clearInterval(cursorInterval);
+    promptTA.value = '';
+
+    generatePromptBtn.innerHTML = '⚡ Writing...';
+    await typewriterEffect(promptTA, currentCombo.prompt);
+    generatePromptBtn.innerHTML = '✅ Prompt Ready!';
+    boostVibe(25, true);
+  });
+  lockA.addEventListener('click', () => handleLock('a'));
+  lockB.addEventListener('click', () => handleLock('b'));
+  lockC.addEventListener('click', () => handleLock('c'));
+  shareBtn.addEventListener('click', shareIdea);
+  exportBtn.addEventListener('click', exportIdeas);
+
+  // ── Sound toggle ──────────────────────────────────────────────────────────
+  const soundToggle = document.getElementById('sound-toggle');
+  soundToggle.checked = !isMuted;
+  soundToggle.addEventListener('change', () => {
+    isMuted = !soundToggle.checked;
+    localStorage.setItem('gevi-muted', isMuted);
+  });
+
+  // ── Custom entries ────────────────────────────────────────────────────────
+  const customToggleBtn = document.getElementById('custom-toggle');
+  const customPanel = document.getElementById('custom-panel');
+  customToggleBtn.addEventListener('click', () => {
+    const open = customPanel.classList.toggle('hidden');
+    customToggleBtn.classList.toggle('open', !open);
+  });
+  document.getElementById('add-who-btn').addEventListener('click', () =>
+    addCustomEntry(customWhoInput, customWho, customWhoChips, 'who'));
+  document.getElementById('add-wantsto-btn').addEventListener('click', () =>
+    addCustomEntry(customWantsToInput, customWantsTo, customWantsToChips, 'wantsto'));
+  document.getElementById('add-using-btn').addEventListener('click', () =>
+    addCustomEntry(customUsingInput, customUsing, customUsingChips, 'using'));
+  customWhoInput.addEventListener('keydown', e => { if (e.key === 'Enter') addCustomEntry(customWhoInput, customWho, customWhoChips, 'who'); });
+  customWantsToInput.addEventListener('keydown', e => { if (e.key === 'Enter') addCustomEntry(customWantsToInput, customWantsTo, customWantsToChips, 'wantsto'); });
+  customUsingInput.addEventListener('keydown', e => { if (e.key === 'Enter') addCustomEntry(customUsingInput, customUsing, customUsingChips, 'using'); });
+
+  // Tab switching
+  document.querySelectorAll('.custom-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.custom-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.custom-tab-panel').forEach(p => p.classList.add('hidden'));
+      tab.classList.add('active');
+      document.getElementById('ctab-' + tab.dataset.tab).classList.remove('hidden');
+    });
+  });
+
+  loadCustom();
+  renderChips(customWho, customWhoChips, 'who');
+  renderChips(customWantsTo, customWantsToChips, 'wantsto');
+  renderChips(customUsing, customUsingChips, 'using');
+  loadSaved();
+  renderSaved();
+  loadFromHash();
+
+  // ── Theme toggle ──────────────────────────────────────────────────────────
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.checked = document.documentElement.dataset.theme === 'dark';
+  themeToggle.addEventListener('change', () => {
+    const next = themeToggle.checked ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('gevi-theme', next);
+  });
+</script>
+
+</body>
+</html>
