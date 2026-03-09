@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>egglab</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #FAFAF7;
+  --card: #ffffff;
+  --accent: #F59E0B;
+  --accent-light: #FEF3C7;
+  --accent-dark: #D97706;
+  --text: #1C1917;
+  --text-muted: #78716C;
+  --border: #E7E5E4;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
+
+/* ===== Layout ===== */
+.app-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ===== Header ===== */
+.app-header {
+  padding: 28px 0 8px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.app-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.app-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.sound-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 11px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  min-height: 36px;
+}
+.sound-btn:hover { border-color: var(--accent); color: var(--text); }
+.sound-btn.active { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-light); }
+
+/* ===== Cards ===== */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+/* ===== Timer Card ===== */
+.done-banner {
+  text-align: center;
+  background: var(--accent-light);
+  border-radius: var(--radius-sm);
+  padding: 9px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  display: none;
+}
+.done-banner.visible { display: block; }
+
+#timer-display {
+  font-size: clamp(4.5rem, 20vw, 6.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin: 6px 0 12px;
+  color: var(--text);
+  transition: color 0.3s;
+}
+#timer-display.done { color: var(--accent); }
+
+.duration-label {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.quick-btn {
+  flex-shrink: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  min-width: 44px;
+  min-height: 38px;
+}
+.quick-btn:hover:not(:disabled) { background: var(--accent-light); border-color: var(--accent); }
+.quick-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 0 3px var(--accent-light);
+  transition: box-shadow 0.15s;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+input[type="range"]:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.timer-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 22px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-primary:active { transform: scale(0.97); }
+.btn-primary:hover { background: var(--accent-dark); }
+
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-secondary:hover { background: #F5F3F0; border-color: #C7C3BE; }
+
+/* ===== Status Section ===== */
+#best-run-card { border-left: 3px solid var(--accent); }
+
+.best-run-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 6px;
+}
+
+.best-run-time {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.best-run-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.tag {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.status-badge {
+  border-radius: 100px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-badge.too-runny { background: #DBEAFE; color: #1D4ED8; }
+.status-badge.close      { background: #FEF9C3; color: #854D0E; }
+.status-badge.perfect    { background: var(--accent-light); color: var(--accent-dark); }
+.status-badge.too-firm   { background: #FEE2E2; color: #B91C1C; }
+
+#next-move-card { padding: 16px 20px; }
+
+.next-move-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.next-move-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.next-move-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* ===== History Section ===== */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+.filter-tabs { display: flex; gap: 5px; }
+
+.filter-tab {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-tab.active { background: var(--accent); border-color: var(--accent); color: white; font-weight: 600; }
+.filter-tab:hover:not(.active) { border-color: var(--accent); color: var(--text); }
+
+.history-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.empty-icon { font-size: 2rem; margin-bottom: 8px; }
+
+/* Run Entry */
+.run-entry {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.run-summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.run-number { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); min-width: 28px; }
+.run-duration { font-size: 0.85rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; min-width: 38px; }
+
+.run-badges { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; min-width: 0; overflow: hidden; }
+
+.run-time { font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+
+.run-expand { font-size: 0.7rem; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
+.run-entry.expanded .run-expand { transform: rotate(180deg); }
+
+.run-details {
+  display: none;
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+}
+.run-entry.expanded .run-details { display: block; }
+
+.run-detail-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; margin-bottom: 8px; }
+
+.run-notes {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.run-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
+
+.run-delete-btn {
+  background: none;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.run-delete-btn:hover { background: #FEF2F2; }
+
+/* History footer */
+.history-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-sm {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 14px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 36px;
+}
+.btn-sm:hover { border-color: var(--accent); color: var(--text); background: var(--accent-light); }
+.btn-sm.danger { color: #B91C1C; border-color: #FECACA; }
+.btn-sm.danger:hover { background: #FEF2F2; border-color: #FCA5A5; }
+
+/* ===== Export dropdown ===== */
+.export-dropdown { position: relative; }
+.export-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  min-width: 110px;
+  z-index: 30;
+  overflow: hidden;
+  display: none;
+}
+.export-menu.open { display: block; }
+.export-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 9px 14px;
+  font-size: 0.8rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.export-item:hover { background: var(--accent-light); }
+
+/* ===== Setup filter row ===== */
+.filter-row-2 {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.setup-filter-chip {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.setup-filter-chip:hover { border-color: var(--text-muted); color: var(--text); }
+.setup-filter-chip.active {
+  background: var(--text-muted);
+  border-color: var(--text-muted);
+  color: white;
+  font-weight: 600;
+}
+
+/* ===== Apply suggestion button ===== */
+.apply-btn {
+  display: inline-block;
+  margin-top: 10px;
+  background: var(--accent-light);
+  border: 1.5px solid var(--accent);
+  color: var(--accent-dark);
+  border-radius: var(--radius-sm);
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.apply-btn:hover { background: var(--accent); color: white; }
+
+/* ===== Repeatability badge ===== */
+.rep-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 100px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.rep-badge.confirmed   { background: #D1FAE5; color: #065F46; }
+.rep-badge.unconfirmed { background: var(--accent-light); color: var(--accent-dark); }
+
+/* ===== Best run star in history ===== */
+.best-star {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  color: var(--accent-dark);
+  border-radius: 100px;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ===== Scrim ===== */
+#scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+#scrim.visible { opacity: 1; pointer-events: all; }
+
+/* ===== Bottom Sheet ===== */
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  z-index: 20;
+  padding: 16px 20px 40px;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height: 92vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.bottom-sheet.open { transform: translateY(0); }
+
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 18px;
+}
+
+.sheet-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.sheet-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 22px; }
+
+.field-group { margin-bottom: 18px; }
+
+.field-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.required { color: var(--accent); }
+
+.chip-group { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.chip {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text);
+  font-weight: 500;
+}
+.chip:hover { border-color: var(--accent); background: var(--accent-light); }
+.chip.selected { background: var(--accent); border-color: var(--accent); color: white; font-weight: 600; }
+.chip[data-value="too runny"].selected { background: #2563EB; border-color: #2563EB; }
+.chip[data-value="close"].selected     { background: #D97706; border-color: #D97706; }
+.chip[data-value="perfect"].selected   { background: #059669; border-color: #059669; }
+.chip[data-value="too firm"].selected  { background: #DC2626; border-color: #DC2626; }
+
+.field-error { font-size: 0.75rem; color: #DC2626; margin-top: 6px; display: none; }
+.field-error.visible { display: block; }
+
+/* Setup toggle */
+.setup-toggle {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 14px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.setup-details { display: none; }
+.setup-details.open { display: block; }
+
+/* Notes */
+.notes-input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+  min-height: 72px;
+}
+.notes-input:focus { border-color: var(--accent); }
+.notes-input::placeholder { color: var(--text-muted); }
+
+.char-count { text-align: right; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+
+/* Sheet actions */
+.sheet-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 22px; }
+
+.btn-save {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 13px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 48px;
+  transition: background 0.15s;
+}
+.btn-save:hover { background: var(--accent-dark); }
+.btn-save:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+
+.btn-rerun {
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text);
+  min-height: 44px;
+  transition: all 0.15s;
+}
+.btn-rerun:hover { border-color: var(--accent); background: var(--accent-light); }
+
+.btn-discard {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 8px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-align: center;
+}
+.btn-discard:hover { color: var(--text); }
+
+/* ===== Profile Dropdown ===== */
+.profile-dropdown { position: relative; margin-top: 8px; display: inline-block; }
+.profile-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s;
+}
+.profile-btn:hover, .profile-btn.open { border-color: var(--accent); color: var(--text); background: var(--accent-light); }
+.profile-chevron { font-size: 0.6rem; }
+.profile-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  min-width: 180px;
+  z-index: 40;
+  overflow: hidden;
+  display: none;
+}
+.profile-menu.open { display: block; }
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  font-size: 0.82rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.1s;
+  justify-content: space-between;
+}
+.profile-item:hover { background: var(--bg); }
+.profile-item.active-profile { font-weight: 600; color: var(--accent-dark); }
+.profile-item-name { flex: 1; }
+.profile-action {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background 0.1s, color 0.1s;
+  line-height: 1;
+}
+.profile-action:hover     { background: var(--border); color: var(--text); }
+.profile-action.del:hover { background: #FEE2E2; color: #DC2626; }
+.profile-divider { height: 1px; background: var(--border); margin: 4px 0; }
+.profile-add-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 9px 14px;
+  font-size: 0.82rem;
+  color: var(--accent-dark);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.1s;
+}
+.profile-add-btn:hover { background: var(--accent-light); }
+
+/* ===== Timeline ===== */
+#timeline-section .card { padding: 16px 20px; }
+.timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.timeline-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+.legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.timeline-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ===== Responsive ===== */
+@media (max-width: 380px) {
+  .app-wrapper { padding: 0 12px; }
+  .card { padding: 16px; }
+  .bottom-sheet { padding: 16px 14px 36px; }
+  .chip { padding: 6px 11px; font-size: 0.8rem; }
+}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+
+  <!-- Header -->
+  <header class="app-header">
+    <div>
+      <div class="app-title">egglab</div>
+      <div class="app-subtitle">dial in your perfect soft-boiled egg</div>
+      <div class="profile-dropdown" id="profile-dropdown">
+        <button class="profile-btn" id="profile-btn">
+          <span id="profile-name">my setup</span>
+          <span class="profile-chevron">▾</span>
+        </button>
+        <div class="profile-menu" id="profile-menu"></div>
+      </div>
+    </div>
+    <button class="sound-btn active" id="sound-btn">
+      <span id="sound-icon">🔔</span>
+      <span id="sound-label">sound on</span>
+    </button>
+  </header>
+
+  <!-- Section 1: Timer Card -->
+  <section class="card" id="timer-card">
+    <div class="done-banner" id="done-banner">done! ✓</div>
+    <div id="timer-display">07:30</div>
+    <div class="duration-label" id="duration-label">selected: 7:30</div>
+    <div class="slider-row">
+      <button class="quick-btn" id="btn-minus">−15s</button>
+      <input type="range" id="duration-slider" min="300" max="720" step="15" value="450">
+      <button class="quick-btn" id="btn-plus">+15s</button>
+    </div>
+    <div class="timer-controls">
+      <button class="btn-primary"   id="btn-start">start test</button>
+      <button class="btn-secondary" id="btn-pause"  style="display:none">pause</button>
+      <button class="btn-primary"   id="btn-resume" style="display:none">resume</button>
+      <button class="btn-secondary" id="btn-reset">reset</button>
+    </div>
+  </section>
+
+  <!-- Section 2: Status -->
+  <section id="status-section">
+    <div class="card" id="best-run-card" style="display:none">
+      <div class="best-run-label">★ best known result</div>
+      <div class="best-run-time" id="best-run-time"></div>
+      <div class="best-run-meta" id="best-run-meta"></div>
+      <button class="btn-secondary" id="btn-run-again"
+        style="font-size:0.85rem;padding:8px 14px;min-height:38px">↩ run this again</button>
+    </div>
+    <div class="card" id="next-move-card" style="display:none">
+      <div class="next-move-label">next move</div>
+      <div class="next-move-text" id="next-move-text"></div>
+      <div class="next-move-sub"  id="next-move-sub"></div>
+      <button class="apply-btn" id="next-move-apply" style="display:none">→ set timer</button>
+    </div>
+  </section>
+
+  <!-- Timeline Graph -->
+  <section id="timeline-section" style="display:none">
+    <div class="card">
+      <div class="timeline-header">
+        <div class="section-title" style="margin-bottom:0">calibration timeline</div>
+        <div class="timeline-legend">
+          <span class="legend-dot" style="background:#2563EB"></span>too runny
+          <span class="legend-dot" style="background:#D97706"></span>close
+          <span class="legend-dot" style="background:#059669"></span>perfect
+          <span class="legend-dot" style="background:#DC2626"></span>too firm
+        </div>
+      </div>
+      <div class="timeline-wrap">
+        <svg id="timeline-svg" width="100%" height="80" style="overflow:visible;display:block"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: History -->
+  <section id="history-section">
+    <div class="section-header">
+      <div class="section-title">trial history</div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">all</button>
+        <button class="filter-tab" data-filter="perfect">perfect</button>
+        <button class="filter-tab" data-filter="close">close</button>
+      </div>
+    </div>
+    <div class="filter-row-2" id="filter-row-2" style="display:none">
+      <button class="setup-filter-chip" data-setup="fridge cold">fridge cold</button>
+      <button class="setup-filter-chip" data-setup="room temp">room temp</button>
+      <button class="setup-filter-chip" data-setup="1">1 egg</button>
+      <button class="setup-filter-chip" data-setup="2">2 eggs</button>
+    </div>
+    <div id="history-list"></div>
+    <div class="history-footer" id="history-footer" style="display:none">
+      <div class="export-dropdown">
+        <button class="btn-sm" id="btn-export-toggle">export ▾</button>
+        <div class="export-menu" id="export-menu">
+          <button class="export-item" id="btn-export-json">json</button>
+          <button class="export-item" id="btn-export-txt">txt</button>
+          <button class="export-item" id="btn-export-csv">csv</button>
+        </div>
+      </div>
+      <button class="btn-sm danger" id="btn-clear">clear all</button>
+    </div>
+  </section>
+
+</div><!-- /app-wrapper -->
+
+<!-- Scrim -->
+<div id="scrim"></div>
+
+<!-- Bottom Sheet -->
+<div class="bottom-sheet" id="bottom-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">how did it go?</div>
+  <div class="sheet-subtitle" id="sheet-subtitle">log this run</div>
+
+  <!-- Result Status (required) -->
+  <div class="field-group">
+    <div class="field-label">result <span class="required">*</span></div>
+    <div class="chip-group" id="result-status-group">
+      <button class="chip" data-value="too runny">too runny</button>
+      <button class="chip" data-value="close">close</button>
+      <button class="chip" data-value="perfect">perfect</button>
+      <button class="chip" data-value="too firm">too firm</button>
+    </div>
+    <div class="field-error" id="result-error">please select a result before saving</div>
+  </div>
+
+  <!-- Yolk Texture -->
+  <div class="field-group">
+    <div class="field-label">yolk texture</div>
+    <div class="chip-group" id="yolk-texture-group">
+      <button class="chip" data-value="liquid">liquid</button>
+      <button class="chip" data-value="runny">runny</button>
+      <button class="chip" data-value="jammy">jammy</button>
+      <button class="chip" data-value="medium">medium</button>
+      <button class="chip" data-value="hard">hard</button>
+    </div>
+  </div>
+
+  <!-- Whites -->
+  <div class="field-group">
+    <div class="field-label">whites</div>
+    <div class="chip-group" id="whites-group">
+      <button class="chip" data-value="underdone">underdone</button>
+      <button class="chip" data-value="set">set</button>
+      <button class="chip" data-value="firm">firm</button>
+    </div>
+  </div>
+
+  <!-- Setup Details (collapsible) -->
+  <button class="setup-toggle" id="setup-toggle">▸ setup details (optional)</button>
+  <div class="setup-details" id="setup-details">
+
+    <div class="field-group">
+      <div class="field-label">egg count</div>
+      <div class="chip-group" id="egg-count-group">
+        <button class="chip" data-value="1">1</button>
+        <button class="chip" data-value="2">2</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">egg temp</div>
+      <div class="chip-group" id="egg-temp-group">
+        <button class="chip" data-value="fridge cold">fridge cold</button>
+        <button class="chip" data-value="room temp">room temp</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">container</div>
+      <div class="chip-group" id="container-group">
+        <button class="chip" data-value="thermos">thermos</button>
+        <button class="chip" data-value="mug">mug</button>
+        <button class="chip" data-value="bowl">bowl</button>
+        <button class="chip" data-value="other">other</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">thermos preheated?</div>
+      <div class="chip-group" id="preheated-group">
+        <button class="chip" data-value="yes">yes</button>
+        <button class="chip" data-value="no">no</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">lid closed?</div>
+      <div class="chip-group" id="lid-closed-group">
+        <button class="chip" data-value="yes">yes</button>
+        <button class="chip" data-value="no">no</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">water state</div>
+      <div class="chip-group" id="water-state-group">
+        <button class="chip" data-value="just boiled">just boiled</button>
+        <button class="chip" data-value="rested briefly">rested briefly</button>
+        <button class="chip" data-value="unsure">unsure</button>
+      </div>
+    </div>
+
+  </div><!-- /setup-details -->
+
+  <!-- Notes -->
+  <div class="field-group">
+    <div class="field-label">notes</div>
+    <textarea class="notes-input" id="notes-input"
+      placeholder="any notes? (optional)" maxlength="300" rows="3"></textarea>
+    <div class="char-count"><span id="char-count">0</span> / 300</div>
+  </div>
+
+  <!-- Actions -->
+  <div class="sheet-actions">
+    <button class="btn-save"    id="btn-save-run">save run</button>
+    <button class="btn-rerun"   id="btn-rerun">rerun same timer</button>
+    <button class="btn-discard" id="btn-discard">discard</button>
+  </div>
+</div><!-- /bottom-sheet -->
+
+<script>
+// ============================================================
+// STORAGE KEYS
+// ============================================================
+const SK = {
+  data:        'egglab_data',
+  sound:       'egglab_sound',
+  timerState:  'egglab_timer_state',
+};
+
+// ============================================================
+// STATE
+// ============================================================
+const state = {
+  durationSeconds:      450,
+  runs:                 [],
+  soundEnabled:         true,
+  historyFilter:        'all',
+  setupFilter:          null,
+  expandedRuns:         new Set(),
+  // profiles
+  profiles:             [],
+  activeProfileId:      null,
+  // timer
+  timerRunning:         false,
+  timerPaused:          false,
+  timerDone:            false,
+  timerInterval:        null,
+  startedAt:            null,
+  elapsedAtPause:       0,
+  // for logging
+  pendingDurationSecs:  450,
+};
+
+// ============================================================
+// UTILS
+// ============================================================
+function fmtTime(totalSeconds) {
+  const s = Math.max(0, Math.round(totalSeconds));
+  return `${String(Math.floor(s / 60)).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
+}
+
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString(undefined, { month:'short', day:'numeric' })
+    + ' ' + d.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+// ============================================================
+// PERSISTENCE (profile-aware)
+// ============================================================
+function getActiveProfile() {
+  return state.profiles.find(p => p.id === state.activeProfileId) || null;
+}
+
+function saveData() {
+  const profile = getActiveProfile();
+  if (profile) { profile.runs = state.runs; profile.duration = state.durationSeconds; }
+  try {
+    localStorage.setItem(SK.data, JSON.stringify({
+      activeProfileId: state.activeProfileId,
+      profiles:        state.profiles,
+    }));
+  } catch(e) {}
+}
+
+function saveRuns()  { saveData(); }
+function savePrefs() {
+  try { localStorage.setItem(SK.sound, String(state.soundEnabled)); } catch(e) {}
+  saveData();
+}
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(SK.data);
+    if (raw) {
+      const d = JSON.parse(raw);
+      if (d && Array.isArray(d.profiles) && d.profiles.length) {
+        state.profiles        = d.profiles;
+        state.activeProfileId = d.activeProfileId || d.profiles[0].id;
+        const p = getActiveProfile() || d.profiles[0];
+        state.activeProfileId = p.id;
+        state.runs            = Array.isArray(p.runs) ? p.runs : [];
+        state.durationSeconds = (p.duration >= 300 && p.duration <= 720) ? p.duration : 450;
+        return;
+      }
+    }
+    // Migrate old single-profile format
+    const oldRuns = localStorage.getItem('egglab_runs');
+    const oldDur  = localStorage.getItem('egglab_duration');
+    const def = { id: uid(), name: 'my setup', runs: [], duration: 450, createdAt: new Date().toISOString() };
+    if (oldRuns) { try { const p = JSON.parse(oldRuns); if (Array.isArray(p)) def.runs = p; } catch(e) {} }
+    if (oldDur)  { const n = parseInt(oldDur,10); if (n>=300&&n<=720) def.duration = n; }
+    try { localStorage.removeItem('egglab_runs'); localStorage.removeItem('egglab_duration'); } catch(e) {}
+    state.profiles        = [def];
+    state.activeProfileId = def.id;
+    state.runs            = def.runs;
+    state.durationSeconds = def.duration;
+    saveData();
+  } catch(e) {
+    const fb = { id: uid(), name: 'my setup', runs: [], duration: 450, createdAt: new Date().toISOString() };
+    state.profiles = [fb]; state.activeProfileId = fb.id; state.runs = []; state.durationSeconds = 450;
+  }
+}
+
+function loadPrefs() {
+  try {
+    const s = localStorage.getItem(SK.sound);
+    if (s !== null) state.soundEnabled = s !== 'false';
+  } catch(e) {}
+}
+
+// ============================================================
+// PROFILE MANAGEMENT
+// ============================================================
+function createProfile(name) {
+  const p = { id: uid(), name: (name||'new setup').trim(), runs: [], duration: 450, createdAt: new Date().toISOString() };
+  state.profiles.push(p);
+  switchProfile(p.id);
+}
+
+function switchProfile(id) {
+  const profile = state.profiles.find(p => p.id === id);
+  if (!profile) return;
+  const cur = getActiveProfile();
+  if (cur) { cur.runs = state.runs; cur.duration = state.durationSeconds; }
+  state.activeProfileId = id;
+  state.runs            = Array.isArray(profile.runs) ? profile.runs : [];
+  state.durationSeconds = (profile.duration>=300 && profile.duration<=720) ? profile.duration : 450;
+  state.expandedRuns.clear();
+  state.historyFilter = 'all';
+  state.setupFilter   = null;
+  document.querySelectorAll('.setup-filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.filter==='all'));
+  saveData();
+  resetTimer();
+  setDuration(state.durationSeconds);
+  renderAll();
+}
+
+function renameProfile(id, newName) {
+  const profile = state.profiles.find(p => p.id === id);
+  if (profile && newName.trim()) { profile.name = newName.trim(); saveData(); renderProfileDropdown(); }
+}
+
+function deleteProfile(id) {
+  if (state.profiles.length <= 1) { alert('you need at least one setup.'); return; }
+  const idx = state.profiles.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  state.profiles.splice(idx, 1);
+  if (state.activeProfileId === id) switchProfile(state.profiles[0].id);
+  else { saveData(); renderProfileDropdown(); }
+}
+
+function renderAll() {
+  renderProfileDropdown();
+  renderBestRunCard();
+  renderNextMove(null);
+  renderTimeline();
+  renderHistory();
+  document.getElementById('history-footer').style.display = state.runs.length ? '' : 'none';
+}
+
+// ============================================================
+// PROFILE DROPDOWN UI
+// ============================================================
+function renderProfileDropdown() {
+  const active = getActiveProfile();
+  document.getElementById('profile-name').textContent = active ? active.name : 'my setup';
+}
+
+function openProfileDropdown() {
+  const menu = document.getElementById('profile-menu');
+  const btn  = document.getElementById('profile-btn');
+  menu.innerHTML = state.profiles.map(p => {
+    const isActive = p.id === state.activeProfileId;
+    return `<div class="profile-item${isActive?' active-profile':''}" data-id="${p.id}">
+      <span class="profile-item-name">${isActive ? '✓ ' : ''}${p.name}</span>
+      ${isActive
+        ? `<button class="profile-action" data-action="rename" data-id="${p.id}" title="rename">✎</button>`
+        : `<button class="profile-action del" data-action="delete" data-id="${p.id}" title="delete">×</button>`}
+    </div>`;
+  }).join('') + `<div class="profile-divider"></div><button class="profile-add-btn" id="btn-add-profile">+ new setup</button>`;
+
+  menu.querySelectorAll('.profile-item-name').forEach(el => {
+    el.addEventListener('click', () => { switchProfile(el.closest('[data-id]').dataset.id); closeProfileDropdown(); });
+  });
+  menu.querySelectorAll('[data-action="rename"]').forEach(b => {
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      const pr = state.profiles.find(p => p.id === b.dataset.id);
+      const n  = prompt('rename setup:', pr?.name || '');
+      if (n !== null) renameProfile(b.dataset.id, n);
+      closeProfileDropdown();
+    });
+  });
+  menu.querySelectorAll('[data-action="delete"]').forEach(b => {
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      const pr = state.profiles.find(p => p.id === b.dataset.id);
+      if (confirm(`delete "${pr?.name}"? this cannot be undone.`)) deleteProfile(b.dataset.id);
+      closeProfileDropdown();
+    });
+  });
+  document.getElementById('btn-add-profile').addEventListener('click', () => {
+    const n = prompt('name this setup:');
+    if (n !== null) createProfile(n || 'new setup');
+    closeProfileDropdown();
+  });
+  menu.classList.add('open');
+  btn.classList.add('open');
+}
+
+function closeProfileDropdown() {
+  document.getElementById('profile-menu').classList.remove('open');
+  document.getElementById('profile-btn').classList.remove('open');
+}
+
+function toggleProfileDropdown() {
+  document.getElementById('profile-menu').classList.contains('open')
+    ? closeProfileDropdown()
+    : openProfileDropdown();
+}
+
+// ============================================================
+// TIMELINE GRAPH
+// ============================================================
+function renderTimeline() {
+  const section = document.getElementById('timeline-section');
+  if (!state.runs.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  const svgEl = document.getElementById('timeline-svg');
+  const W = Math.max(280, (svgEl.parentElement?.clientWidth || 380));
+  svgEl.setAttribute('width', W);
+  svgEl.setAttribute('viewBox', `0 0 ${W} 80`);
+
+  const PAD  = 22, MIN_S = 300, MAX_S = 720;
+  const toX  = s => PAD + ((s - MIN_S) / (MAX_S - MIN_S)) * (W - PAD * 2);
+  const COLS = { 'too runny':'#2563EB', 'close':'#D97706', 'perfect':'#059669', 'too firm':'#DC2626' };
+
+  let svg = `<line x1="${PAD}" y1="46" x2="${W-PAD}" y2="46" stroke="#E7E5E4" stroke-width="2" stroke-linecap="round"/>`;
+  for (let s = 300; s <= 720; s += 60) {
+    const x = toX(s);
+    svg += `<line x1="${x}" y1="41" x2="${x}" y2="51" stroke="#D1CBC5" stroke-width="1.5"/>`;
+    svg += `<text x="${x}" y="66" text-anchor="middle" font-size="9" fill="#A8A29E">${Math.floor(s/60)}m</text>`;
+  }
+  const byDur = {};
+  state.runs.forEach(r => { (byDur[r.durationSeconds] = byDur[r.durationSeconds]||[]).push(r); });
+  const bestId = getBestRun()?.id;
+  Object.entries(byDur).forEach(([sec, runs]) => {
+    const x = toX(+sec);
+    runs.forEach((r, i) => {
+      const cy  = 46 - i * 13;
+      const col = COLS[r.resultStatus] || '#A8A29E';
+      if (r.id === bestId) svg += `<circle cx="${x}" cy="${cy}" r="9" fill="none" stroke="${col}" stroke-width="2" opacity="0.5"/>`;
+      svg += `<circle cx="${x}" cy="${cy}" r="${r.id===bestId?6:5}" fill="${col}" opacity="0.9"><title>#${r.trialNumber}: ${r.durationLabel} — ${r.resultStatus}${r.yolkTexture?` (${r.yolkTexture})`:''}</title></circle>`;
+    });
+  });
+  svgEl.innerHTML = svg;
+}
+
+function saveTimerState() {
+  if (!state.timerRunning && !state.timerPaused) {
+    try { localStorage.removeItem(SK.timerState); } catch(e) {}
+    return;
+  }
+  try {
+    localStorage.setItem(SK.timerState, JSON.stringify({
+      durationMs:    state.durationSeconds * 1000,
+      elapsedAtSave: state.elapsedAtPause + (state.startedAt ? Date.now() - state.startedAt : 0),
+      isPaused:      state.timerPaused,
+      savedAt:       Date.now(),
+    }));
+  } catch(e) {}
+}
+
+function clearTimerState() {
+  try { localStorage.removeItem(SK.timerState); } catch(e) {}
+}
+
+function loadTimerState() {
+  try {
+    const raw = localStorage.getItem(SK.timerState);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (!d || !d.durationMs) return;
+
+    const elapsedMs = d.isPaused
+      ? d.elapsedAtSave
+      : d.elapsedAtSave + (Date.now() - d.savedAt);
+
+    const remaining = d.durationMs - elapsedMs;
+
+    state.durationSeconds    = Math.round(d.durationMs / 1000);
+    state.pendingDurationSecs = state.durationSeconds;
+
+    if (remaining <= 0) {
+      // Timer expired while page was closed — show done state but don't open sheet
+      clearTimerState();
+      state.timerDone = true;
+    } else if (d.isPaused) {
+      state.elapsedAtPause = elapsedMs;
+      state.timerPaused    = true;
+    } else {
+      state.elapsedAtPause = elapsedMs;
+      state.startedAt      = Date.now();
+      state.timerRunning   = true;
+    }
+  } catch(e) { clearTimerState(); }
+}
+
+// ============================================================
+// SOUND
+// ============================================================
+function playBeep() {
+  if (!state.soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.28, 0.56].forEach(offset => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.3, ctx.currentTime + offset);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + offset + 0.22);
+      osc.start(ctx.currentTime + offset);
+      osc.stop(ctx.currentTime  + offset + 0.22);
+    });
+  } catch(e) {}
+}
+
+// ============================================================
+// TIMER
+// ============================================================
+function getRemainingMs() {
+  const elapsed = state.elapsedAtPause
+    + (state.startedAt ? Date.now() - state.startedAt : 0);
+  return Math.max(0, state.durationSeconds * 1000 - elapsed);
+}
+
+function tick() {
+  const rem = getRemainingMs();
+  setTimerDisplay(rem / 1000);
+  if (rem <= 0) {
+    clearInterval(state.timerInterval);
+    state.timerInterval = null;
+    state.timerRunning  = false;
+    state.timerDone     = true;
+    clearTimerState();
+    onComplete();
+  } else {
+    // Persist state roughly every second
+    if (Math.round(rem / 1000) % 5 === 0) saveTimerState();
+  }
+}
+
+function startTimer() {
+  if (state.timerDone) resetTimer();
+  state.elapsedAtPause     = 0;
+  state.startedAt          = Date.now();
+  state.timerRunning       = true;
+  state.timerPaused        = false;
+  state.pendingDurationSecs = state.durationSeconds;
+  startInterval();
+  savePrefs();
+  saveTimerState();
+  refreshTimerUI();
+}
+
+function pauseTimer() {
+  if (!state.timerRunning) return;
+  state.elapsedAtPause += Date.now() - state.startedAt;
+  state.startedAt = null;
+  clearInterval(state.timerInterval);
+  state.timerInterval = null;
+  state.timerRunning  = false;
+  state.timerPaused   = true;
+  saveTimerState();
+  refreshTimerUI();
+}
+
+function resumeTimer() {
+  if (!state.timerPaused) return;
+  state.startedAt    = Date.now();
+  state.timerRunning = true;
+  state.timerPaused  = false;
+  startInterval();
+  saveTimerState();
+  refreshTimerUI();
+}
+
+function resetTimer() {
+  clearInterval(state.timerInterval);
+  state.timerInterval  = null;
+  state.timerRunning   = false;
+  state.timerPaused    = false;
+  state.timerDone      = false;
+  state.startedAt      = null;
+  state.elapsedAtPause = 0;
+  clearTimerState();
+  setTimerDisplay(state.durationSeconds);
+  refreshTimerUI();
+}
+
+function startInterval() {
+  clearInterval(state.timerInterval);
+  state.timerInterval = setInterval(tick, 100);
+}
+
+function onComplete() {
+  playBeep();
+  refreshTimerUI();
+  setTimerDisplay(0);
+  setTimeout(() => openSheet(), 600);
+}
+
+function setTimerDisplay(seconds) {
+  const el = document.getElementById('timer-display');
+  el.textContent = fmtTime(seconds);
+  el.className   = state.timerDone ? 'done' : '';
+  document.getElementById('done-banner').classList.toggle('visible', state.timerDone);
+}
+
+function refreshTimerUI() {
+  const { timerRunning: run, timerPaused: paused, timerDone: done } = state;
+  document.getElementById('btn-start').style.display  = (!run && !paused && !done) ? '' : 'none';
+  document.getElementById('btn-pause').style.display  = run    ? '' : 'none';
+  document.getElementById('btn-resume').style.display = paused ? '' : 'none';
+  const locked = run || paused || done;
+  document.getElementById('duration-slider').disabled = locked;
+  document.getElementById('btn-minus').disabled        = locked;
+  document.getElementById('btn-plus').disabled         = locked;
+}
+
+// ============================================================
+// DURATION
+// ============================================================
+function setDuration(secs) {
+  state.durationSeconds = Math.max(300, Math.min(720, secs));
+  document.getElementById('duration-slider').value = state.durationSeconds;
+  document.getElementById('duration-label').textContent = `selected: ${fmtTime(state.durationSeconds)}`;
+  if (!state.timerRunning && !state.timerPaused && !state.timerDone) {
+    setTimerDisplay(state.durationSeconds);
+  }
+  savePrefs();
+}
+
+// ============================================================
+// RECOMMENDATION LOGIC
+// ============================================================
+function getRecommendation(resultStatus, yolkTexture, durationSecs) {
+  let delta = 0, text = '', sub = '';
+  if (resultStatus === 'too runny') {
+    delta = 30;
+    sub   = 'increase by 30 seconds';
+  } else if (resultStatus === 'too firm') {
+    delta = -30;
+    sub   = 'reduce by 30 seconds';
+  } else if (resultStatus === 'close') {
+    if (['liquid','runny'].includes(yolkTexture)) {
+      delta = 15; sub = 'close — increase by 15 seconds';
+    } else if (['medium','hard'].includes(yolkTexture)) {
+      delta = -15; sub = 'close — reduce by 15 seconds';
+    } else {
+      delta = 15; sub = 'close — try a small tweak';
+    }
+  } else if (resultStatus === 'perfect') {
+    delta = 0;
+    sub   = 'repeat once more for consistency';
+  }
+  const nextSecs = Math.max(300, Math.min(720, durationSecs + delta));
+  if (resultStatus === 'perfect') {
+    text = 'sweet spot candidate ✓';
+  } else {
+    text = `try ${fmtTime(nextSecs)}`;
+  }
+  return { text, sub, nextSecs };
+}
+
+// ============================================================
+// BEST RUN
+// ============================================================
+function getBestRun() {
+  const p = state.runs.filter(r => r.resultStatus === 'perfect');
+  return p.length ? p[p.length - 1] : null;
+}
+
+function getRepeatability(best) {
+  if (!best) return null;
+  const n = state.runs.filter(r =>
+    r.resultStatus === 'perfect' && r.durationSeconds === best.durationSeconds
+  ).length;
+  return { count: n, confirmed: n >= 2 };
+}
+
+function renderBestRunCard() {
+  const best = getBestRun();
+  const card = document.getElementById('best-run-card');
+  if (!best) { card.style.display = 'none'; return; }
+  card.style.display = '';
+  document.getElementById('best-run-time').textContent = best.durationLabel;
+
+  const meta = document.getElementById('best-run-meta');
+  meta.innerHTML = '';
+
+  // Repeatability badge
+  const rep = getRepeatability(best);
+  if (rep) {
+    const rb = document.createElement('span');
+    rb.className = `rep-badge ${rep.confirmed ? 'confirmed' : 'unconfirmed'}`;
+    rb.textContent = rep.confirmed ? `✓ confirmed ×${rep.count}` : 'unconfirmed — run again';
+    meta.appendChild(rb);
+  }
+
+  const tags = [];
+  if (best.container)   tags.push(best.container);
+  if (best.eggTemp)     tags.push(best.eggTemp);
+  if (best.yolkTexture) tags.push(best.yolkTexture + ' yolk');
+  tags.push(fmtDate(best.timestamp));
+  tags.forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'tag';
+    s.textContent = t;
+    meta.appendChild(s);
+  });
+
+  document.getElementById('btn-run-again').onclick = () => {
+    setDuration(best.durationSeconds);
+    resetTimer();
+  };
+}
+
+function renderNextMove(run) {
+  const card = document.getElementById('next-move-card');
+  if (!run) { card.style.display = 'none'; return; }
+  const rec = getRecommendation(run.resultStatus, run.yolkTexture, run.durationSeconds);
+  card.style.display = '';
+  document.getElementById('next-move-text').textContent = rec.text;
+  document.getElementById('next-move-sub').textContent  = rec.sub;
+
+  const applyBtn = document.getElementById('next-move-apply');
+  if (run.resultStatus !== 'perfect' && rec.nextSecs !== run.durationSeconds) {
+    applyBtn.textContent = `→ set timer to ${fmtTime(rec.nextSecs)}`;
+    applyBtn.style.display = '';
+    applyBtn.onclick = () => { setDuration(rec.nextSecs); };
+  } else {
+    applyBtn.style.display = 'none';
+  }
+}
+
+// ============================================================
+// SAVE RUN
+// ============================================================
+function saveRun(form) {
+  const trialNumber = state.runs.length + 1;
+  const rec = getRecommendation(form.resultStatus, form.yolkTexture, state.pendingDurationSecs);
+  const run = {
+    id:                uid(),
+    trialNumber,
+    durationSeconds:   state.pendingDurationSecs,
+    durationLabel:     fmtTime(state.pendingDurationSecs),
+    timestamp:         new Date().toISOString(),
+    eggCount:          form.eggCount,
+    eggTemp:           form.eggTemp,
+    container:         form.container,
+    preheated:         form.preheated != null ? form.preheated === 'yes' : null,
+    lidClosed:         form.lidClosed  != null ? form.lidClosed  === 'yes' : null,
+    waterState:        form.waterState,
+    resultStatus:      form.resultStatus,
+    yolkTexture:       form.yolkTexture,
+    whites:            form.whites,
+    notes:             form.notes || null,
+    suggestedNextSecs: rec.nextSecs,
+    isBestRun:         form.resultStatus === 'perfect',
+  };
+  state.runs.push(run);
+  saveRuns();
+  renderBestRunCard();
+  renderNextMove(run);
+  renderTimeline();
+  renderHistory();
+  document.getElementById('history-footer').style.display = '';
+}
+
+// ============================================================
+// HISTORY
+// ============================================================
+function badgeClass(status) {
+  return { 'too runny':'too-runny', close:'close', perfect:'perfect', 'too firm':'too-firm' }[status] || '';
+}
+
+function renderHistory() {
+  const list   = document.getElementById('history-list');
+  const filter = state.historyFilter;
+  let runs = [...state.runs].reverse();
+  if (filter === 'perfect') runs = runs.filter(r => r.resultStatus === 'perfect');
+  if (filter === 'close')   runs = runs.filter(r => r.resultStatus === 'close');
+
+  // Setup filter (egg temp or egg count)
+  if (state.setupFilter) {
+    const sf = state.setupFilter;
+    if (sf === '1' || sf === '2') {
+      runs = runs.filter(r => r.eggCount === parseInt(sf, 10));
+    } else {
+      runs = runs.filter(r => r.eggTemp === sf);
+    }
+  }
+
+  // Show setup filter row only when there are runs with those fields
+  const hasSetupData = state.runs.some(r => r.eggTemp || r.eggCount);
+  document.getElementById('filter-row-2').style.display = hasSetupData ? '' : 'none';
+
+  if (!runs.length) {
+    const msg = state.runs.length === 0
+      ? '<div class="empty-icon">🥚</div><div>no trials yet. start your first test above.</div>'
+      : `<div>no matching runs.</div>`;
+    list.innerHTML = `<div class="history-empty">${msg}</div>`;
+    return;
+  }
+
+  list.innerHTML = runs.map(r => buildRunHTML(r)).join('');
+
+  list.querySelectorAll('.run-summary').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.closest('.run-entry').dataset.id;
+      if (state.expandedRuns.has(id)) state.expandedRuns.delete(id);
+      else state.expandedRuns.add(id);
+      el.closest('.run-entry').classList.toggle('expanded', state.expandedRuns.has(id));
+    });
+  });
+
+  list.querySelectorAll('.run-delete-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      deleteRun(btn.dataset.id);
+    });
+  });
+}
+
+function buildRunHTML(run) {
+  const exp      = state.expandedRuns.has(run.id);
+  const bc       = badgeClass(run.resultStatus);
+  const isBest   = getBestRun()?.id === run.id;
+  const notes    = run.notes || '';
+  const notesPreview = notes.length > 55 ? notes.slice(0, 52) + '…' : notes;
+
+  const detailTags = [];
+  if (run.eggCount)           detailTags.push(`${run.eggCount} egg${run.eggCount > 1 ? 's' : ''}`);
+  if (run.eggTemp)            detailTags.push(run.eggTemp);
+  if (run.container)          detailTags.push(run.container);
+  if (run.preheated !== null) detailTags.push(run.preheated  ? 'preheated'  : 'not preheated');
+  if (run.lidClosed !== null) detailTags.push(run.lidClosed  ? 'lid closed' : 'lid open');
+  if (run.waterState)         detailTags.push(run.waterState);
+  if (run.whites)             detailTags.push(`whites: ${run.whites}`);
+
+  return `
+  <div class="run-entry${exp ? ' expanded' : ''}" data-id="${run.id}">
+    <div class="run-summary">
+      <div class="run-number">#${run.trialNumber}</div>
+      <div class="run-duration">${run.durationLabel}</div>
+      <div class="run-badges">
+        <span class="status-badge ${bc}">${run.resultStatus}</span>
+        ${isBest ? `<span class="best-star">★ best</span>` : ''}
+        ${run.yolkTexture ? `<span class="tag">${run.yolkTexture}</span>` : ''}
+        ${!exp && notesPreview ? `<span class="tag" style="color:var(--text-muted);font-style:italic;overflow:hidden;text-overflow:ellipsis;max-width:120px;white-space:nowrap">${notesPreview}</span>` : ''}
+      </div>
+      <div class="run-time">${fmtDate(run.timestamp)}</div>
+      <div class="run-expand">▾</div>
+    </div>
+    <div class="run-details">
+      ${detailTags.length ? `<div class="run-detail-tags">${detailTags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+      ${notes ? `<div class="run-notes">"${notes}"</div>` : ''}
+      <div class="run-actions">
+        <button class="run-delete-btn" data-id="${run.id}">delete run</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function deleteRun(id) {
+  const idx = state.runs.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  state.runs.splice(idx, 1);
+  state.runs.forEach((r, i) => r.trialNumber = i + 1);
+  state.expandedRuns.delete(id);
+  saveRuns();
+  renderBestRunCard();
+  renderTimeline();
+  renderHistory();
+  if (!state.runs.length) document.getElementById('history-footer').style.display = 'none';
+}
+
+// ============================================================
+// BOTTOM SHEET
+// ============================================================
+function openSheet() {
+  resetSheetForm();
+  document.getElementById('sheet-subtitle').textContent =
+    `trial #${state.runs.length + 1} — ${fmtTime(state.pendingDurationSecs)}`;
+  document.getElementById('bottom-sheet').classList.add('open');
+  document.getElementById('scrim').classList.add('visible');
+}
+
+function closeSheet() {
+  document.getElementById('bottom-sheet').classList.remove('open');
+  document.getElementById('scrim').classList.remove('visible');
+}
+
+function resetSheetForm() {
+  document.querySelectorAll('#bottom-sheet .chip').forEach(c => c.classList.remove('selected'));
+  document.getElementById('notes-input').value = '';
+  document.getElementById('char-count').textContent = '0';
+  document.getElementById('result-error').classList.remove('visible');
+  document.getElementById('setup-details').classList.remove('open');
+  document.getElementById('setup-toggle').textContent = '▸ setup details (optional)';
+}
+
+function readForm() {
+  function sel(groupId) {
+    const c = document.querySelector(`#${groupId} .chip.selected`);
+    return c ? c.dataset.value : null;
+  }
+  const eggCountVal = sel('egg-count-group');
+  return {
+    resultStatus: sel('result-status-group'),
+    yolkTexture:  sel('yolk-texture-group'),
+    whites:       sel('whites-group'),
+    eggCount:     eggCountVal ? parseInt(eggCountVal, 10) : null,
+    eggTemp:      sel('egg-temp-group'),
+    container:    sel('container-group'),
+    preheated:    sel('preheated-group'),
+    lidClosed:    sel('lid-closed-group'),
+    waterState:   sel('water-state-group'),
+    notes:        document.getElementById('notes-input').value.trim(),
+  };
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+function exportJSON() {
+  if (!state.runs.length) return;
+  const date = new Date().toISOString().slice(0, 10);
+  dl(new Blob([JSON.stringify(state.runs, null, 2)], { type:'application/json' }),
+    `egglab-log-${date}.json`);
+}
+
+function exportTXT() {
+  if (!state.runs.length) return;
+  const date = new Date().toISOString().slice(0, 10);
+  const lines = [`EGGLAB EXPERIMENT LOG — ${date}`, '='.repeat(40), ''];
+  state.runs.forEach(r => {
+    lines.push(`Trial #${r.trialNumber}`);
+    lines.push(`  Duration  : ${r.durationLabel}`);
+    lines.push(`  Date      : ${fmtDate(r.timestamp)}`);
+    lines.push(`  Result    : ${r.resultStatus}`);
+    if (r.yolkTexture) lines.push(`  Yolk      : ${r.yolkTexture}`);
+    if (r.whites)      lines.push(`  Whites    : ${r.whites}`);
+    if (r.eggCount)    lines.push(`  Eggs      : ${r.eggCount}`);
+    if (r.eggTemp)     lines.push(`  Egg temp  : ${r.eggTemp}`);
+    if (r.container)   lines.push(`  Container : ${r.container}`);
+    if (r.preheated  !== null) lines.push(`  Preheated : ${r.preheated  ? 'yes' : 'no'}`);
+    if (r.lidClosed  !== null) lines.push(`  Lid       : ${r.lidClosed  ? 'closed' : 'open'}`);
+    if (r.waterState)  lines.push(`  Water     : ${r.waterState}`);
+    if (r.notes)       lines.push(`  Notes     : ${r.notes}`);
+    lines.push('');
+  });
+  const best = getBestRun();
+  if (best) {
+    lines.push('='.repeat(40));
+    lines.push(`Best result: ${best.durationLabel} (trial #${best.trialNumber})`);
+  }
+  dl(new Blob([lines.join('\n')], { type:'text/plain' }), `egglab-log-${date}.txt`);
+}
+
+function exportCSV() {
+  if (!state.runs.length) return;
+  const date = new Date().toISOString().slice(0, 10);
+  const headers = ['trial','duration','date','result','yolk','whites','eggs','egg_temp',
+    'container','preheated','lid_closed','water_state','notes'];
+  const rows = state.runs.map(r => [
+    r.trialNumber, r.durationLabel, fmtDate(r.timestamp), r.resultStatus,
+    r.yolkTexture ?? '', r.whites ?? '', r.eggCount ?? '',
+    r.eggTemp ?? '', r.container ?? '',
+    r.preheated  !== null ? (r.preheated  ? 'yes' : 'no') : '',
+    r.lidClosed  !== null ? (r.lidClosed  ? 'yes' : 'no') : '',
+    r.waterState ?? '', (r.notes ?? '').replace(/"/g, '""'),
+  ].map(v => `"${v}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  dl(new Blob([csv], { type:'text/csv' }), `egglab-log-${date}.csv`);
+}
+
+function dl(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// SOUND BUTTON
+// ============================================================
+function updateSoundBtn() {
+  const on = state.soundEnabled;
+  document.getElementById('sound-icon').textContent  = on ? '🔔' : '🔕';
+  document.getElementById('sound-label').textContent = on ? 'sound on' : 'sound off';
+  document.getElementById('sound-btn').classList.toggle('active', on);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  loadData();
+  loadPrefs();
+  loadTimerState();
+
+  document.getElementById('duration-slider').value = state.durationSeconds;
+  setDuration(state.durationSeconds);
+  updateSoundBtn();
+  renderAll();
+
+  // Restore timer state
+  if (state.timerRunning) {
+    startInterval();
+    setTimerDisplay(getRemainingMs() / 1000);
+  } else if (state.timerPaused) {
+    setTimerDisplay(getRemainingMs() / 1000);
+  } else if (state.timerDone) {
+    setTimerDisplay(0);
+  }
+  refreshTimerUI();
+
+  bindEvents();
+}
+
+function bindEvents() {
+  // Timer controls
+  document.getElementById('btn-start') .addEventListener('click', startTimer);
+  document.getElementById('btn-pause') .addEventListener('click', pauseTimer);
+  document.getElementById('btn-resume').addEventListener('click', resumeTimer);
+  document.getElementById('btn-reset') .addEventListener('click', resetTimer);
+
+  // Duration
+  document.getElementById('duration-slider').addEventListener('input', e =>
+    setDuration(parseInt(e.target.value, 10)));
+  document.getElementById('btn-minus').addEventListener('click', () =>
+    setDuration(state.durationSeconds - 15));
+  document.getElementById('btn-plus').addEventListener('click', () =>
+    setDuration(state.durationSeconds + 15));
+
+  // Sound
+  document.getElementById('sound-btn').addEventListener('click', () => {
+    state.soundEnabled = !state.soundEnabled;
+    savePrefs();
+    updateSoundBtn();
+  });
+
+  // Filters
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      state.historyFilter = tab.dataset.filter;
+      document.querySelectorAll('.filter-tab').forEach(t =>
+        t.classList.toggle('active', t === tab));
+      renderHistory();
+    });
+  });
+
+  // Profile dropdown
+  document.getElementById('profile-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    toggleProfileDropdown();
+  });
+  document.getElementById('profile-menu').addEventListener('click', e => e.stopPropagation());
+
+  // Export dropdown
+  const exportToggle = document.getElementById('btn-export-toggle');
+  const exportMenu   = document.getElementById('export-menu');
+  exportToggle.addEventListener('click', e => {
+    e.stopPropagation();
+    exportMenu.classList.toggle('open');
+  });
+  document.addEventListener('click', () => { exportMenu.classList.remove('open'); closeProfileDropdown(); });
+  exportMenu.addEventListener('click', e => e.stopPropagation());
+  document.getElementById('btn-export-json').addEventListener('click', () => { exportJSON(); exportMenu.classList.remove('open'); });
+  document.getElementById('btn-export-txt') .addEventListener('click', () => { exportTXT();  exportMenu.classList.remove('open'); });
+  document.getElementById('btn-export-csv') .addEventListener('click', () => { exportCSV();  exportMenu.classList.remove('open'); });
+
+  // Setup filter chips (toggle)
+  document.querySelectorAll('.setup-filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const val = chip.dataset.setup;
+      if (state.setupFilter === val) {
+        state.setupFilter = null;
+        document.querySelectorAll('.setup-filter-chip').forEach(c => c.classList.remove('active'));
+      } else {
+        state.setupFilter = val;
+        document.querySelectorAll('.setup-filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      }
+      renderHistory();
+    });
+  });
+
+  // Clear history
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    if (confirm('clear all trial history? this cannot be undone.')) {
+      state.runs = [];
+      state.expandedRuns.clear();
+      state.setupFilter = null;
+      document.querySelectorAll('.setup-filter-chip').forEach(c => c.classList.remove('active'));
+      saveRuns();
+      renderBestRunCard();
+      renderNextMove(null);
+      renderHistory();
+      document.getElementById('history-footer').style.display = 'none';
+    }
+  });
+
+  // Sheet chip groups — single-select per group
+  document.querySelectorAll('#bottom-sheet .chip-group').forEach(group => {
+    group.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        group.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        if (group.id === 'result-status-group') {
+          document.getElementById('result-error').classList.remove('visible');
+        }
+      });
+    });
+  });
+
+  // Setup toggle
+  document.getElementById('setup-toggle').addEventListener('click', () => {
+    const det = document.getElementById('setup-details');
+    det.classList.toggle('open');
+    document.getElementById('setup-toggle').textContent = det.classList.contains('open')
+      ? '▾ setup details (optional)'
+      : '▸ setup details (optional)';
+  });
+
+  // Notes char count
+  document.getElementById('notes-input').addEventListener('input', e => {
+    document.getElementById('char-count').textContent = e.target.value.length;
+  });
+
+  // Save
+  document.getElementById('btn-save-run').addEventListener('click', () => {
+    const form = readForm();
+    if (!form.resultStatus) {
+      document.getElementById('result-error').classList.add('visible');
+      return;
+    }
+    saveRun(form);
+    closeSheet();
+    resetTimer();
+  });
+
+  // Rerun same timer
+  document.getElementById('btn-rerun').addEventListener('click', () => {
+    const dur = state.pendingDurationSecs;
+    closeSheet();
+    setDuration(dur);
+    resetTimer();
+    startTimer();
+  });
+
+  // Discard
+  document.getElementById('btn-discard').addEventListener('click', () => {
+    closeSheet();
+    resetTimer();
+  });
+
+  // Scrim closes sheet
+  document.getElementById('scrim').addEventListener('click', () => {
+    closeSheet();
+    resetTimer();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
