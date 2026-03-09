@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Beach Footy Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #fef3e2;
+  --surface: #ffffff;
+  --border:  #f0d8b0;
+  --warm:    #f4a261;
+  --ocean:   #3a7ca5;
+  --text:    #3d2b1f;
+  --text-md: #7a5c40;
+  --text-lt: #b89060;
+  --great-c: #1a9c42;
+  --good-c:  #6aaa1d;
+  --okay-c:  #e09400;
+  --poor-c:  #d93025;
+  --dark-c:  #7a6858;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  padding-bottom: 3rem;
+}
+
+/* ── APP HEADER ──────────────────────── */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1.1rem 1rem 0.9rem;
+  text-align: center;
+  font-family: 'Pacifico', cursive;
+  font-size: 1.85rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.wrap {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ── DATE SLIDER ─────────────────────── */
+.date-nav {
+  padding: 0.85rem 0 0;
+  user-select: none;
+}
+.date-display {
+  text-align: center;
+  margin-bottom: 0.6rem;
+}
+.date-display .dd-main {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+.date-display .dd-sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-lt);
+  margin-top: 0.1rem;
+}
+.date-ticks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1px;
+  margin-top: 0.3rem;
+}
+.date-ticks span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-lt);
+  text-align: center;
+  flex: 1;
+}
+.date-ticks span.on { color: var(--warm); }
+
+/* ── HERO ────────────────────────────── */
+.hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem 1.25rem 1rem;
+  margin-top: 0.85rem;
+  text-align: center;
+}
+.hero-score {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.s-great { color: var(--great-c); }
+.s-good  { color: var(--good-c);  }
+.s-okay  { color: var(--okay-c);  }
+.s-poor  { color: var(--poor-c);  }
+.s-dark  { color: var(--dark-c);  }
+.s-none  { color: var(--text-lt); font-size: 1.1rem; font-weight: 600; letter-spacing: 0; }
+.hero-time   { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; min-height: 1.4rem; }
+.hero-detail { font-size: 0.74rem; color: var(--text-lt); line-height: 1.5; min-height: 1rem; }
+.hero-detail b { color: var(--ocean); font-weight: 600; }
+
+/* ── TIMELINE CARD ───────────────────── */
+.tl-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+}
+
+/* dual bar container */
+.dual-bar {
+  position: relative;
+  height: 82px;
+  cursor: crosshair;
+  overflow: visible;
+}
+
+/* individual bars */
+.b-tide, .b-sun {
+  position: absolute;
+  left: 0; right: 0;
+  height: 36px;
+  border-radius: 10px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.b-tide { top: 5px; }
+.b-sun  { top: 46px; }
+
+.b-fill {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* emoji labels outside the bars */
+.bars-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+.bar-emoji-col {
+  flex-shrink: 0;
+  width: 26px;
+  height: 82px;
+  position: relative;
+}
+.bar-emoji {
+  position: absolute;
+  width: 26px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.bar-emoji.tide { top: 5px; }
+.bar-emoji.sun  { top: 46px; }
+.dual-bar { flex: 1; }
+
+/* night overlay on sun bar — purple */
+.b-night {
+  position: absolute;
+  top: 0; height: 100%;
+  background: rgba(60, 15, 100, 0.5);
+  pointer-events: none;
+  z-index: 3;
+}
+.b-night.am { border-radius: 10px 3px 3px 10px; left: 0; }
+.b-night.pm { border-radius: 3px 10px 10px 3px; right: 0; }
+
+/* shared slot */
+.tl-slot {
+  position: absolute;
+  top: 5px;
+  height: 77px;
+  border-radius: 9px;
+  cursor: grab;
+  touch-action: none;
+  background: rgba(255,255,255,0.55);
+  border: 2px solid rgba(255,255,255,0.88);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.18);
+  border-left-width: 5px;
+  z-index: 10;
+  transition: border-color 0.1s;
+}
+.tl-slot.drag { cursor: grabbing; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+
+/* markers */
+.bar-mk {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 1.5px;
+  pointer-events: none;
+  z-index: 6;
+}
+.mk-lt  { background: rgba(61,43,31,0.38); }
+.mk-now { background: rgba(255,255,255,0.9); filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+.mk-lbl {
+  position: absolute;
+  font-size: 0.58rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  left: 50%;
+  pointer-events: none;
+}
+.mk-lt  .mk-lbl { bottom: -14px; color: var(--text-lt); }
+.mk-now .mk-lbl { top:    -14px; color: var(--text-md); }
+
+/* hint */
+.bar-hint {
+  position: absolute;
+  top: 5px; height: 77px;
+  left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ticks below */
+.bar-ticks {
+  position: relative;
+  height: 1.3rem;
+  margin-top: 0.6rem;
+}
+.bar-ticks span {
+  position: absolute;
+  font-size: 0.6rem;
+  color: var(--text-lt);
+  transform: translateX(-50%);
+  top: 0;
+}
+
+
+/* ── RANGE SLIDERS ───────────────────── */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--border);
+  outline: none;
+  cursor: pointer;
+  display: block;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--warm);
+  border: 3px solid white;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.22);
+  cursor: grab;
+}
+input[type=range]:active::-webkit-slider-thumb { cursor: grabbing; }
+input[type=range]::-moz-range-thumb {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--warm);
+  border: 3px solid white;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.22);
+  cursor: grab;
+}
+
+/* ── DURATION ────────────────────────── */
+.dur-wrap { margin-top: 0.9rem; }
+.dur-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.55rem;
+}
+.dur-lbl {
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--text-lt);
+}
+.dur-val {
+  font-size: 0.82rem; font-weight: 800;
+  color: var(--ocean);
+}
+#dur-slider::-webkit-slider-thumb { background: var(--ocean); }
+#dur-slider::-moz-range-thumb     { background: var(--ocean); }
+
+/* ── BEACH SECTION ───────────────────── */
+.beach-section { margin-top: 0.9rem; }
+.beach-lbl {
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--text-lt); margin-bottom: 0.4rem;
+}
+.beach-pills {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.bpill {
+  padding: 0.32rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.78rem; font-weight: 600;
+  background: var(--surface); color: var(--text-lt);
+  border: 1.5px solid var(--border);
+  cursor: pointer; transition: all 0.13s; user-select: none;
+}
+.bpill.on { background: var(--ocean); color: white; border-color: var(--ocean); }
+.bpill:active { opacity: 0.7; }
+
+/* ── SHARE ───────────────────────────── */
+.share-wrap { margin-top: 0.9rem; }
+.share-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 0.9rem 1rem;
+  font-size: 0.82rem; line-height: 1.65;
+  color: var(--text-md); white-space: pre-wrap;
+  font-family: inherit; min-height: 80px;
+  margin-bottom: 0.6rem; word-break: break-word;
+}
+.copy-btn {
+  width: 100%; padding: 0.88rem;
+  background: var(--ocean); color: white;
+  border: none; border-radius: 14px;
+  font-size: 0.9rem; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+  transition: opacity 0.12s, background 0.2s;
+}
+.copy-btn:active { opacity: 0.8; }
+.copy-btn.done   { background: var(--great-c); }
+
+.gap { height: 0.85rem; }
+</style>
+</head>
+<body>
+
+<div class="app-header">Beach Footy Planner</div>
+
+<div class="wrap">
+
+  <!-- Date selector -->
+  <div class="date-nav" id="date-nav">
+    <div class="date-display" id="date-display"></div>
+    <input type="range" id="date-slider" min="0" max="6" step="1" value="0">
+    <div class="date-ticks" id="date-ticks"></div>
+  </div>
+
+  <!-- Hero score -->
+  <div class="hero">
+    <div class="hero-score" id="hero-score"></div>
+    <div class="hero-time"   id="hero-time"></div>
+    <div class="hero-detail" id="hero-detail"></div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="tl-card">
+    <div class="bars-wrapper">
+      <div class="bar-emoji-col">
+        <div class="bar-emoji tide">🌊</div>
+        <div class="bar-emoji sun">☀️</div>
+      </div>
+      <div class="dual-bar" id="dual-bar">
+        <!-- Tide bar -->
+        <div class="b-tide" id="b-tide">
+          <div class="b-fill" id="tide-fill"></div>
+        </div>
+        <!-- Sun bar -->
+        <div class="b-sun" id="b-sun">
+          <div class="b-fill" id="sun-fill"></div>
+          <div class="b-night am" id="night-am" style="display:none"></div>
+          <div class="b-night pm" id="night-pm" style="display:none"></div>
+        </div>
+        <!-- Draggable slot -->
+        <div class="tl-slot" id="tl-slot" style="display:none"></div>
+        <!-- Hint -->
+        <div class="bar-hint" id="bar-hint">Tap to place your game</div>
+        <!-- Markers -->
+        <div class="bar-mk mk-lt"  id="mk-lt"  style="display:none"><span class="mk-lbl">LT</span></div>
+        <div class="bar-mk mk-now" id="mk-now" style="display:none"><span class="mk-lbl">NOW</span></div>
+      </div>
+    </div>
+    <div class="bar-ticks" id="bar-ticks"></div>
+  </div>
+
+  <!-- Duration -->
+  <div class="dur-wrap">
+    <div class="dur-header">
+      <span class="dur-lbl">Game duration</span>
+      <span class="dur-val" id="dur-val">1h 30m</span>
+    </div>
+    <input type="range" id="dur-slider" min="30" max="180" step="15" value="90">
+  </div>
+
+  <!-- Beach selector -->
+  <div class="beach-section">
+    <div class="beach-lbl">Beach</div>
+    <div class="beach-pills" id="beach-pills"></div>
+  </div>
+
+  <div class="gap"></div>
+
+  <!-- Share -->
+  <div class="share-wrap">
+    <div class="share-box" id="share-box"></div>
+    <button class="copy-btn" id="copy-btn" onclick="copyMsg()">📋 Copy for WhatsApp</button>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════
+
+const BEACHES = [
+  { id:'benaulim',  name:'Benaulim',  base:5*60+30 },
+  { id:'colva',     name:'Colva',     base:5*60+52 },
+  { id:'calangute', name:'Calangute', base:6*60+37 },
+  { id:'baga',      name:'Baga',      base:6*60+54 },
+  { id:'anjuna',    name:'Anjuna',    base:7*60+11 },
+  { id:'palolem',   name:'Palolem',   base:5*60+43 },
+];
+
+const TL0  = 5*60;    // 5 AM
+const TL1  = 22*60;   // 10 PM
+const TL   = TL1 - TL0;
+const SNAP = 15;
+const TWILIGHT_MINS = 45;
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+
+let S = {
+  beach: BEACHES[0].id,
+  date:  today(),
+  start: null,
+  dur:   90,
+  lt:    null,
+};
+
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function dateFromOffset(n) {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return d.toISOString().split('T')[0];
+}
+
+function offsetFromDate(ds) {
+  const todayMs = new Date(today() + 'T00:00:00').getTime();
+  const selMs   = new Date(ds   + 'T00:00:00').getTime();
+  return Math.round((selMs - todayMs) / 86400000);
+}
+
+// ═══════════════════════════════════════
+// TIDE
+// ═══════════════════════════════════════
+
+function simLT(b, ds) {
+  const ref  = new Date('2026-01-01T00:00:00');
+  const sel  = new Date(ds + 'T00:00:00');
+  const days = Math.floor((sel - ref) / 86400000);
+  const base = ((b.base + days*50) % 1440 + 1440) % 1440;
+  const t1=base, t2=(base+745)%1440;
+  const aft=[t1,t2].find(t=>t>=12*60&&t<=20*60);
+  if (aft!==undefined) return aft;
+  const p=16*60;
+  return Math.abs(t1-p)<=Math.abs(t2-p)?t1:t2;
+}
+
+// ═══════════════════════════════════════
+// SUN TIMES  (Goa: 15.5°N, solar noon ~12:38 IST)
+// ═══════════════════════════════════════
+
+function sunTimes(ds) {
+  const d    = new Date(ds+'T12:00:00');
+  const jan1 = new Date(d.getFullYear(),0,1);
+  const doy  = Math.round((d-jan1)/86400000)+1;
+  const lat  = 15.5*Math.PI/180;
+  const decl = 23.45*Math.PI/180 * Math.sin(2*Math.PI*(doy-81)/365);
+  const cosH = -Math.tan(lat)*Math.tan(decl);
+  const H    = Math.acos(Math.max(-1,Math.min(1,cosH)));
+  const half = H*180/Math.PI/15*60;
+  const noon = 12*60+38;
+  return { rise:Math.round(noon-half), set:Math.round(noon+half) };
+}
+
+// ═══════════════════════════════════════
+// SCORING
+// ═══════════════════════════════════════
+
+const SCORES = [
+  { text:'Dark',  cls:'s-dark',  border:'#a09080', emoji:'🌙' },
+  { text:'Poor',  cls:'s-poor',  border:'#d93025', emoji:'❌' },
+  { text:'Okay',  cls:'s-okay',  border:'#e09400', emoji:'⚠️' },
+  { text:'Good',  cls:'s-good',  border:'#6aaa1d', emoji:'✅' },
+  { text:'Great', cls:'s-great', border:'#1a9c42', emoji:'🔥' },
+];
+
+function calcScore(gs, dur, lt, sun) {
+  if (gs===null||lt===null) return null;
+  const mid=gs+dur/2, ge=gs+dur;
+  const twEnd=sun.set+TWILIGHT_MINS;
+  if (ge<=sun.rise||gs>=twEnd) return SCORES[0];
+  const td=Math.abs(mid-lt);
+  const tideTier = td<=60?4:td<=120?3:td<=180?2:1;
+  const sd=Math.abs(mid-sun.set);
+  const sunTier  = sd<=60?4:sd<=120?3:sd<=180?2:1;
+  let tier = Math.round((tideTier+sunTier)/2);
+  if (gs<sun.rise||ge>twEnd) tier=Math.max(1,tier-1);
+  return SCORES[Math.max(1,Math.min(4,tier))];
+}
+
+// ═══════════════════════════════════════
+// GRADIENT COLOURS
+// ═══════════════════════════════════════
+
+function tideRGB(dist) {
+  if (dist<=60)  return [0,  200, 100];
+  if (dist<=120) return [148,215,  0];
+  if (dist<=180) return [255,195, 50];
+  return                [225, 65, 55];
+}
+
+function lerp(c1,c2,t) {
+  return [0,1,2].map(i=>Math.round(c1[i]+(c2[i]-c1[i])*Math.max(0,Math.min(1,t))));
+}
+
+// Night = rich purple [55, 10, 110]
+function sunRGB(min, sun) {
+  const NIGHT = [55, 10, 110];
+  const d = min - sun.set;
+  const twEnd = TWILIGHT_MINS;
+
+  if (d > twEnd+60)  return NIGHT;
+  if (d > twEnd) {
+    const t=(d-twEnd)/60;
+    return lerp([90, 25, 130], NIGHT, t);            // post-twilight → deep purple
+  }
+  if (d >= 0) {
+    const t=d/twEnd;
+    return lerp([225,75,15],[90,25,130],t);           // sunset → twilight end (purple)
+  }
+  if (d >= -90) {
+    const t=1-(-d)/90;
+    return lerp([255,165,55],[225,75,15],t);          // golden hour → sunset
+  }
+  if (d >= -240) {
+    const t=1-(-d-90)/150;
+    return lerp([255,210,100],[255,165,55],t);        // afternoon → golden hour
+  }
+  if (d >= -450) {
+    const t=1-(-d-240)/210;
+    return lerp([255,242,165],[255,210,100],t);       // harsh midday → afternoon
+  }
+  if (min >= sun.rise) {
+    const t=Math.min(1,(min-sun.rise)/120);
+    return lerp([210,130,60],[255,242,165],t);        // dawn → morning
+  }
+  if (min >= sun.rise-20) {
+    const t=(min-(sun.rise-20))/20;
+    return lerp([75, 20, 120],[210,130,60],t);         // pre-dawn purple → glow
+  }
+  return NIGHT;
+}
+
+// ═══════════════════════════════════════
+// FORMAT
+// ═══════════════════════════════════════
+
+function fmt(m) {
+  m = Math.round(((m%1440)+1440)%1440);
+  const h=Math.floor(m/60), mn=m%60;
+  return `${h%12||12}:${String(mn).padStart(2,'0')} ${h>=12?'PM':'AM'}`;
+}
+function durLabel(m) {
+  if (m < 60)  return `${m}m`;
+  if (m % 60 === 0) return `${m/60}h`;
+  return `${Math.floor(m/60)}h ${m%60}m`;
+}
+function pct(m)    { return Math.max(0,Math.min(100,(m-TL0)/TL*100)); }
+function snapMs(m) { return Math.max(TL0,Math.min(TL1-S.dur,Math.round(m/SNAP)*SNAP)); }
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+
+function render() {
+  const b=BEACHES.find(x=>x.id===S.beach);
+  S.lt=b?simLT(b,S.date):null;
+  const sun=sunTimes(S.date);
+  rDays(); rHero(sun); rTimeline(sun); rDurSlider(); rBeach(); rShare(sun);
+}
+
+function rDays() {
+  const d = new Date(S.date + 'T12:00:00');
+  const isToday = S.date === today();
+  const dayName = d.toLocaleDateString('en-IN', { weekday: 'long' });
+  const dateStr = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+  document.getElementById('date-display').innerHTML =
+    `<div class="dd-main">${isToday ? 'Today' : dayName}</div>
+     <div class="dd-sub">${dateStr}</div>`;
+
+  const offset = offsetFromDate(S.date);
+  document.getElementById('date-slider').value = offset;
+
+  // Tick labels — short day name for each of the 7 days
+  document.getElementById('date-ticks').innerHTML =
+    Array.from({length:7},(_,i)=>{
+      const ds = dateFromOffset(i);
+      const dd = new Date(ds+'T12:00:00');
+      const lbl = i===0 ? 'Today' : dd.toLocaleDateString('en-IN',{weekday:'short'}).slice(0,2);
+      return `<span class="${ds===S.date?'on':''}">${lbl}</span>`;
+    }).join('');
+}
+
+function rHero(sun) {
+  const sc=document.getElementById('hero-score');
+  const st=document.getElementById('hero-time');
+  const sd=document.getElementById('hero-detail');
+  const lt=S.lt;
+  if (lt===null) {
+    sc.className='hero-score s-none'; sc.textContent='Select a beach';
+    st.textContent=''; sd.textContent=''; return;
+  }
+  if (S.start===null) {
+    sc.className='hero-score s-none'; sc.textContent='Place your game';
+    st.textContent='Tap the timeline to set a time';
+    sd.innerHTML=`Best tide window: <b>${fmt(lt-120)} – ${fmt(lt+120)}</b>`; return;
+  }
+  const p=calcScore(S.start,S.dur,lt,sun);
+  sc.className=`hero-score ${p.cls}`; sc.textContent=p.text;
+  st.textContent=`${fmt(S.start)} – ${fmt(S.start+S.dur)}`;
+  sd.innerHTML=`Best tide: <b>${fmt(lt-120)}–${fmt(lt+120)}</b> · Sunset: <b>${fmt(sun.set)}</b>`;
+}
+
+function buildGradient(fn, argFn) {
+  const stops=[];
+  for (let m=TL0;m<=TL1;m+=10) {
+    const [r,g,b]=fn(argFn(m));
+    stops.push(`rgb(${r},${g},${b}) ${pct(m).toFixed(1)}%`);
+  }
+  return `linear-gradient(to right,${stops.join(',')})`;
+}
+
+function rTimeline(sun) {
+  const lt=S.lt;
+
+  // Tide gradient
+  const tideFill=document.getElementById('tide-fill');
+  if (lt!==null) {
+    tideFill.style.background=buildGradient(tideRGB, m=>Math.abs(m-lt));
+  } else {
+    tideFill.style.background='linear-gradient(to right,#c8b898,#d4c8a8,#c8b898)';
+  }
+
+  // Sun gradient
+  const sunFill=document.getElementById('sun-fill');
+  const sunStops=[];
+  for (let m=TL0;m<=TL1;m+=10) {
+    const [r,g,b]=sunRGB(m,sun);
+    sunStops.push(`rgb(${r},${g},${b}) ${pct(m).toFixed(1)}%`);
+  }
+  sunFill.style.background=`linear-gradient(to right,${sunStops.join(',')})`;
+
+  // Night overlays on sun bar
+  const am=document.getElementById('night-am');
+  const pm=document.getElementById('night-pm');
+  if (sun.rise>TL0) {
+    am.style.width=pct(sun.rise).toFixed(2)+'%'; am.style.display='block';
+  } else am.style.display='none';
+  if (sun.set+TWILIGHT_MINS<TL1) {
+    const l=pct(sun.set+TWILIGHT_MINS);
+    pm.style.left=l.toFixed(2)+'%'; pm.style.width=(100-l).toFixed(2)+'%'; pm.style.display='block';
+  } else pm.style.display='none';
+
+  // LT marker
+  const mkLT=document.getElementById('mk-lt');
+  if (lt!==null&&lt>=TL0&&lt<=TL1) {
+    mkLT.style.left=pct(lt).toFixed(2)+'%'; mkLT.style.display='block';
+  } else mkLT.style.display='none';
+
+  // NOW marker
+  const mkNow=document.getElementById('mk-now');
+  if (S.date===today()) {
+    const n=new Date(), nm=n.getHours()*60+n.getMinutes();
+    if (nm>=TL0&&nm<=TL1) { mkNow.style.left=pct(nm).toFixed(2)+'%'; mkNow.style.display='block'; }
+    else mkNow.style.display='none';
+  } else mkNow.style.display='none';
+
+  // Slot
+  rSlot(sun);
+
+  // Ticks
+  document.getElementById('bar-ticks').innerHTML=
+    [6,9,12,15,18,21].map(h=>{
+      const lbl=h===12?'12p':h<12?`${h}a`:`${h-12}p`;
+      return `<span style="left:${pct(h*60).toFixed(1)}%">${lbl}</span>`;
+    }).join('');
+}
+
+function rSlot(sun) {
+  const slot=document.getElementById('tl-slot');
+  const hint=document.getElementById('bar-hint');
+  if (S.start===null) { slot.style.display='none'; hint.style.display='flex'; return; }
+  hint.style.display='none'; slot.style.display='block';
+  slot.style.left =pct(S.start).toFixed(2)+'%';
+  slot.style.width=(S.dur/TL*100).toFixed(2)+'%';
+  const p=calcScore(S.start,S.dur,S.lt,sun);
+  slot.style.borderLeftColor=p?p.border:'rgba(255,255,255,0.8)';
+}
+
+function rDurSlider() {
+  document.getElementById('dur-slider').value = S.dur;
+  document.getElementById('dur-val').textContent = durLabel(S.dur);
+}
+
+function rBeach() {
+  document.getElementById('beach-pills').innerHTML=
+    BEACHES.map(b=>`<button class="bpill${b.id===S.beach?' on':''}" onclick="pickBeach('${b.id}')">${b.name}</button>`).join('');
+}
+
+function rShare(sun) {
+  const box=document.getElementById('share-box');
+  const b=BEACHES.find(x=>x.id===S.beach);
+  if (!b||S.start===null) {
+    box.textContent='Tap the timeline to place your game — your WhatsApp message will appear here.'; return;
+  }
+  const lt=S.lt, ge=S.start+S.dur;
+  const d=new Date(S.date+'T12:00:00');
+  const day=d.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+  const p=calcScore(S.start,S.dur,lt,sun);
+  const lines=[
+    `⚽ Beach Futsal`,`📍 ${b.name}, Goa`,`📅 ${day}`,
+    `⏰ ${fmt(S.start)} – ${fmt(ge)} (${durLabel(S.dur)})`,
+  ];
+  if (lt!==null) lines.push(`🌊 Best tide window: ${fmt(lt-120)} – ${fmt(lt+120)}`);
+  lines.push(`🌅 Sunset: ${fmt(sun.set)}`);
+  if (p) lines.push(`${p.emoji} Conditions: ${p.text}`);
+  lines.push('','Reply In / Maybe / Out!');
+  box.textContent=lines.join('\n');
+}
+
+// Live update during drag (fast path)
+function liveUpdate(gs) {
+  const sun=sunTimes(S.date);
+  const lt=S.lt;
+  const p=calcScore(gs,S.dur,lt,sun);
+  const sc=document.getElementById('hero-score');
+  const st=document.getElementById('hero-time');
+  if (p) { sc.className=`hero-score ${p.cls}`; sc.textContent=p.text; }
+  st.textContent=`${fmt(gs)} – ${fmt(gs+S.dur)}`;
+  const slot=document.getElementById('tl-slot');
+  slot.style.borderLeftColor=p?p.border:'rgba(255,255,255,0.8)';
+}
+
+// ═══════════════════════════════════════
+// DRAG
+// ═══════════════════════════════════════
+
+let drag={on:false,startX:0,startL:0,didDrag:false};
+
+function initDrag() {
+  const bar  = document.getElementById('dual-bar');
+  const slot = document.getElementById('tl-slot');
+
+  bar.addEventListener('click', e=>{
+    if (drag.didDrag) return;
+    const r   =bar.getBoundingClientRect();
+    const frac=(e.clientX-r.left)/r.width;
+    S.start   =snapMs(TL0+frac*TL - S.dur/2);
+    save(); render();
+  });
+  slot.addEventListener('click', e=>e.stopPropagation());
+
+  const onStart=clientX=>{
+    if (S.start===null) return;
+    drag.on=true; drag.didDrag=false;
+    drag.startX=clientX; drag.startL=pct(S.start);
+    slot.classList.add('drag');
+  };
+
+  const onMove=clientX=>{
+    if (!drag.on) return;
+    drag.didDrag=true;
+    const r   =bar.getBoundingClientRect();
+    const dpct=(clientX-drag.startX)/r.width*100;
+    const slotW=S.dur/TL*100;
+    const newL=Math.max(0,Math.min(100-slotW,drag.startL+dpct));
+    const rawMs=TL0+newL/100*TL;
+    const gs   =snapMs(rawMs);
+    S.start=gs;
+    slot.style.left=pct(gs).toFixed(2)+'%';
+    liveUpdate(gs);
+  };
+
+  const onEnd=()=>{
+    if (!drag.on) return;
+    drag.on=false; slot.classList.remove('drag');
+    save(); render();
+    setTimeout(()=>drag.didDrag=false, 80);
+  };
+
+  slot.addEventListener('mousedown',  e=>{onStart(e.clientX);e.preventDefault();});
+  document.addEventListener('mousemove',e=>{if(drag.on)onMove(e.clientX);});
+  document.addEventListener('mouseup',  ()=>{if(drag.on)onEnd();});
+
+  slot.addEventListener('touchstart', e=>{onStart(e.touches[0].clientX);e.preventDefault();},{passive:false});
+  document.addEventListener('touchmove',e=>{if(drag.on){onMove(e.touches[0].clientX);e.preventDefault();}},{passive:false});
+  document.addEventListener('touchend', ()=>{if(drag.on)onEnd();},{passive:false});
+}
+
+// ═══════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════
+
+function pickBeach(id) { S.beach=id; save(); render(); }
+
+function copyMsg() {
+  const text=document.getElementById('share-box').textContent;
+  const btn =document.getElementById('copy-btn');
+  const done=()=>{
+    btn.textContent='✓ Copied!'; btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='📋 Copy for WhatsApp';btn.classList.remove('done');},2400);
+  };
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done);
+  else {
+    const ta=document.createElement('textarea');
+    ta.value=text; ta.style.cssText='position:fixed;opacity:0;pointer-events:none';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); done();
+  }
+}
+
+// ═══════════════════════════════════════
+// PERSIST
+// ═══════════════════════════════════════
+
+const KEY='fp8';
+function save() { try{const{lt,...p}=S;localStorage.setItem(KEY,JSON.stringify(p));}catch(e){} }
+function load() { try{const r=localStorage.getItem(KEY);if(r)S={...S,...JSON.parse(r)};}catch(e){} }
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+
+function init() {
+  load();
+  if (S.start === null) {
+    const sun = sunTimes(S.date);
+    S.start = snapMs(sun.set - S.dur / 2);
+  }
+  initDrag();
+
+  // Date slider
+  document.getElementById('date-slider').addEventListener('input', e => {
+    const offset = parseInt(e.target.value);
+    S.date = dateFromOffset(offset);
+    const sun = sunTimes(S.date);
+    S.start = snapMs(sun.set - S.dur / 2);
+    save(); render();
+  });
+
+  // Duration slider
+  document.getElementById('dur-slider').addEventListener('input', e => {
+    const newDur = parseInt(e.target.value);
+    if (S.start !== null) {
+      const mid = S.start + S.dur / 2;
+      S.start = snapMs(mid - newDur / 2);
+    }
+    S.dur = newDur;
+    document.getElementById('dur-val').textContent = durLabel(newDur);
+    save(); render();
+  });
+
+  setInterval(()=>{if(S.date===today()){const sun=sunTimes(S.date);rHero(sun);rTimeline(sun);}},60000);
+  render();
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
