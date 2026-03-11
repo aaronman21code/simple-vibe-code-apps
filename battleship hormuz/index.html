@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Strait of Hormuz — Naval Engagement</title>
+<style>
+/* ═══════════ RESET ═══════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+
+/* ═══════════ MUTE ═══════════ */
+#mute-btn{position:fixed;top:6px;right:10px;z-index:300;background:none;border:1px solid #445;color:#889;font-size:14px;padding:2px 7px;cursor:pointer;font-family:inherit;transition:color .2s}
+#mute-btn:hover{color:#aaa}
+
+/* ═══════════ TICKER ═══════════ */
+#ticker-wrap{background:#0a0d12;border-bottom:1px solid #1e2a3a;overflow:hidden;height:28px;display:flex;align-items:center;flex-shrink:0}
+#ticker-label{background:#b02020;color:#fff;padding:2px 10px;font-size:10px;font-weight:bold;letter-spacing:2px;white-space:nowrap;flex-shrink:0}
+#ticker-content{white-space:nowrap;font-size:11px;color:#889;padding-left:30px;animation:ticker-scroll 80s linear infinite}
+@keyframes ticker-scroll{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+
+/* ═══════════ SCREENS ═══════════ */
+#game-container{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}
+.screen{display:none;flex-direction:column;align-items:center;width:100%;max-width:1280px;animation:screen-in .3s ease}
+.screen.active{display:flex}
+@keyframes screen-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════ SHARED TYPOGRAPHY ═══════════ */
+.eyebrow{font-size:9px;letter-spacing:5px;color:#556;text-transform:uppercase;margin-bottom:6px}
+.btn{background:#0c1828;color:#4fc3f7;border:1px solid #4fc3f7;padding:9px 26px;font-family:'Courier New',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .15s,color .15s}
+.btn:hover{background:#4fc3f7;color:#080c12}
+.btn.red{color:#c0392b;border-color:#c0392b;background:#120808}
+.btn.red:hover{background:#c0392b;color:#080c12}
+.btn.sm{padding:5px 14px;font-size:11px}
+
+/* ═══════════ TITLE ═══════════ */
+#title-screen{text-align:center;gap:6px;position:relative;overflow:hidden}
+#title-screen h1{font-size:2em;letter-spacing:6px;color:#4fc3f7;text-transform:uppercase;text-shadow:0 0 30px rgba(79,195,247,.35)}
+#title-screen h2{font-size:.8em;letter-spacing:4px;color:#778;text-transform:uppercase;margin-bottom:20px}
+.faction-intro{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.faction-box{border:1px solid;padding:14px 18px;width:190px;text-align:left}
+.faction-box.us{border-color:#1a4060}
+.faction-box.irgc{border-color:#4a1a1a}
+.faction-name{font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.faction-box.us .faction-name{color:#4fc3f7}
+.faction-box.irgc .faction-name{color:#c0392b}
+.faction-box ul{list-style:none;font-size:10px;color:#778;line-height:2}
+.faction-box ul li::before{content:"▸ ";color:#445}
+#title-tanker-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.3}
+
+/* ═══════════ SETUP ═══════════ */
+#setup-screen{text-align:center;gap:0}
+#setup-title{font-size:1.3em;letter-spacing:4px;text-transform:uppercase;margin-bottom:3px}
+#setup-sub{font-size:.75em;letter-spacing:3px;color:#778;text-transform:uppercase;margin-bottom:12px}
+.ship-info-bar{background:#0a0d12;border:1px solid #1e2a3a;padding:7px 18px;font-size:11px;color:#778;margin-bottom:10px}
+.ship-info-bar b{color:#ccc}
+.ship-info-bar b.us{color:#4fc3f7}
+.ship-info-bar b.irgc{color:#c0392b}
+#setup-ctrl{display:flex;align-items:center;gap:14px;margin-bottom:12px;font-size:11px;color:#667}
+.orient-val{font-weight:bold}
+.orient-val.us{color:#4fc3f7}
+.orient-val.irgc{color:#c0392b}
+#ship-queue{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-size:10px}
+.queue-chip{padding:2px 8px;border:1px solid #1e2a3a;color:#556}
+.queue-chip.done{text-decoration:line-through;color:#2a3040;border-color:#131820}
+.queue-chip.cur{color:#ddd;border-color:#4fc3f7}
+.queue-chip.cur.irgc{border-color:#c0392b}
+
+/* ═══════════ GRID SYSTEM ═══════════ */
+.grid-outer{display:inline-block;position:relative}
+.col-labels{display:grid;grid-template-columns:var(--lbl,18px) repeat(var(--cols,24),var(--cell,22px));margin-bottom:2px}
+.col-labels span{text-align:center;font-size:9px;color:#506070}
+.grid-row{display:grid;grid-template-columns:var(--lbl,18px) repeat(var(--cols,24),var(--cell,22px));margin-bottom:2px}
+.row-lbl{font-size:9px;color:#506070;display:flex;align-items:center;justify-content:center}
+
+/* cells */
+.cell{width:var(--cell,22px);height:var(--cell,22px);display:flex;align-items:center;justify-content:center;font-size:calc(var(--cell,22px)*.48);border:1px solid #0e1820;position:relative;overflow:visible;user-select:none;transition:background .08s}
+.cell-land{background:#1c1408;cursor:default}
+.cell-island{background:#191410;cursor:default;color:#6a5a30}
+.cell-water{background:#090e16;cursor:default}
+.cell-water.clickable{cursor:crosshair}
+.cell-water.clickable:hover{background:#0f1e30;border-color:#1e3a5c}
+.cell.ship-us{background:#0a2040}
+.cell.ship-irgc{background:#141f0c}
+.cell.prev-ok{background:#0a2618;border-color:#27ae60}
+.cell.prev-bad{background:#200808;border-color:#922}
+.cell.c-hit{background:#3a0a0a}
+.cell.c-miss{background:#090e16}
+.cell.c-sunk{background:#240000;border-color:#4a0000}
+
+/* ring animation overlay */
+.ring{position:absolute;inset:-3px;border-radius:50%;pointer-events:none;z-index:20}
+.ring-hit{border:2px solid #ff4444;animation:ring-out .65s ease-out forwards}
+.ring-miss{border:1.5px solid #4fc3f7;animation:ring-out .55s ease-out forwards}
+@keyframes ring-out{0%{transform:scale(.8);opacity:1}100%{transform:scale(2.8);opacity:0}}
+
+/* board wrapper with geo overlays */
+.grid-wrap-outer{position:relative;display:inline-block}
+.geo-label{position:absolute;font-size:9px;letter-spacing:2px;text-transform:uppercase;pointer-events:none;color:#445566;white-space:nowrap}
+.geo-label.iran{top:2px;left:50%;transform:translateX(-50%)}
+.geo-label.oman{bottom:2px;left:22%;transform:translateX(-50%)}
+.geo-label.uae{bottom:2px;left:10%}
+.geo-label.pg{left:8%;top:48%;transform:translateY(-50%);font-size:8px}
+.geo-label.goo{right:16%;top:55%;font-size:8px}
+.geo-label.as{right:3%;bottom:20%;font-size:7px}
+.geo-label.soh{left:40%;top:2px;font-size:7px;color:#334455}
+
+/* tanker layer */
+.tanker-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.tanker{position:absolute;display:flex;align-items:center;gap:3px;pointer-events:none;opacity:.65}
+.t-hull{width:22px;height:8px;background:#3a3a3a;border-radius:1px 3px 1px 1px;position:relative;flex-shrink:0}
+.t-hull::before{content:'';position:absolute;top:-4px;right:5px;width:6px;height:4px;background:#484848}
+.t-hull::after{content:'';position:absolute;bottom:-2px;left:2px;right:3px;height:2px;background:#2a2a2a;border-radius:0 0 2px 2px}
+.t-hull.flip{transform:scaleX(-1)}
+.t-dest{font-size:8px;color:#6a7a8a;letter-spacing:1px;white-space:nowrap}
+@keyframes tanker-ltr{from{transform:translateX(var(--sx,-80px))}to{transform:translateX(var(--ex,700px))}}
+@keyframes tanker-rtl{from{transform:translateX(var(--ex,700px))}to{transform:translateX(var(--sx,-80px))}}
+.tanker.anim-distress .t-hull{animation:distress .4s linear 3}
+@keyframes distress{0%,100%{filter:brightness(1)}50%{filter:brightness(3) saturate(5) sepia(1)}}
+
+/* ═══════════ PASS SCREEN ═══════════ */
+#pass-screen{display:none;position:fixed;inset:0;z-index:200;background:#040406;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+#pass-screen.active{display:flex;animation:pass-in .35s cubic-bezier(.2,1,.3,1)}
+@keyframes pass-in{from{transform:translateY(-40px);opacity:0}to{transform:translateY(0);opacity:1}}
+#pass-name{font-size:1.8em;letter-spacing:5px;text-transform:uppercase}
+#pass-name.us{color:#4fc3f7}
+#pass-name.irgc{color:#c0392b}
+#pass-instr{font-size:11px;color:#6a7a8a;max-width:380px;line-height:1.8}
+
+/* ═══════════ BATTLE ═══════════ */
+#battle-screen{gap:0}
+.battle-hdr{text-align:center;margin-bottom:10px}
+.battle-hdr h1{font-size:1.2em;letter-spacing:4px;text-transform:uppercase;margin-bottom:0}
+#salvo-bar{font-size:11px;color:#778;margin:6px 0 10px;display:flex;align-items:center;justify-content:center;gap:8px}
+#salvo-pips{display:flex;gap:4px}
+.spip{width:9px;height:9px;border-radius:50%;background:#4fc3f7;transition:background .3s,transform .3s}
+.spip.used{background:#2a3545;transform:scale(.7)}
+.spip.irgc{background:#c0392b}
+#battle-status{background:#0a0d12;border:1px solid #1e2a3a;padding:7px 18px;font-size:12px;color:#7a8a9a;min-height:32px;display:flex;align-items:center;justify-content:center;text-align:center;width:100%;max-width:1200px;margin-bottom:14px;transition:color .2s,border-color .3s;animation:status-in .25s ease}
+@keyframes status-in{from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
+#battle-status.s-hit{color:#e74c3c;border-color:#5a1010}
+#battle-status.s-miss{color:#4fc3f7;border-color:#1a3a5c}
+#battle-status.s-sink{color:#f39c12;border-color:#5a3a00}
+.battle-main{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+.board-section{text-align:center;flex-shrink:0}
+.board-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#506070;margin-bottom:6px}
+.board-lbl.live{color:#4fc3f7}
+.board-lbl.live.irgc{color:#c0392b}
+.ships-status{margin-top:8px;text-align:left;font-size:10px;line-height:2}
+.sentry{color:#445}
+.sentry.alive{color:#8a9aaa}
+.sentry.sunk{color:#5a1010;text-decoration:line-through}
+#endturn-wrap{margin-top:16px;text-align:center}
+
+/* ═══════════ BATTLE LOG ═══════════ */
+#log-panel{width:190px;flex-shrink:0}
+.log-hdr{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#506070;margin-bottom:6px}
+#battle-log{height:280px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#1e2a3a transparent}
+#battle-log::-webkit-scrollbar{width:4px}
+#battle-log::-webkit-scrollbar-track{background:transparent}
+#battle-log::-webkit-scrollbar-thumb{background:#1e2a3a}
+.log-entry{padding:4px 6px;border-left:2px solid;margin-bottom:5px;font-size:10px;animation:log-in .2s ease;line-height:1.5}
+.log-entry.hit{border-color:#5a1010;color:#c0392b}
+.log-entry.miss{border-color:#1e2a3a;color:#556070}
+.log-entry.sink{border-color:#5a3a00;color:#f39c12}
+.log-sub{font-size:9px;opacity:.8;display:block}
+@keyframes log-in{from{transform:translateX(16px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ═══════════ VICTORY ═══════════ */
+#victory-screen{text-align:center;gap:10px;position:relative;overflow:hidden}
+#victory-title{font-size:1.9em;letter-spacing:5px;text-transform:uppercase;overflow:hidden;white-space:nowrap;animation:type-in .8s steps(30,end) forwards}
+@keyframes type-in{from{max-width:0}to{max-width:100%}}
+#victory-title.us{color:#4fc3f7}
+#victory-title.irgc{color:#c0392b}
+#victory-detail{font-size:11px;color:#778;margin-bottom:10px}
+.particle{position:absolute;width:6px;height:6px;border-radius:50%;left:50%;top:42%;animation:p-burst 1.6s ease-out forwards}
+@keyframes p-burst{0%{transform:translate(-50%,-50%) translate(0,0) scale(1);opacity:1}100%{transform:translate(-50%,-50%) translate(var(--tx),var(--ty)) scale(.3);opacity:0}}
+
+/* ═══════════ CELL ANIMATIONS ═══════════ */
+.anim-hit{animation:cell-hit .65s ease-out forwards}
+@keyframes cell-hit{0%{background:#ff2222;transform:scale(1.25)}60%{background:#aa1111;transform:scale(1.05)}100%{background:#3a0a0a;transform:scale(1)}}
+.anim-miss{animation:cell-miss .5s ease-out forwards}
+@keyframes cell-miss{0%{background:#88ccff;transform:scale(1.1)}100%{background:#090e16;transform:scale(1)}}
+.anim-place{animation:cell-place .35s ease-out forwards}
+@keyframes cell-place{0%{background:#00ff88;transform:scale(1.2)}100%{transform:scale(1)}}
+.anim-sunk{animation:cell-shake .5s ease-out}
+@keyframes cell-shake{0%,100%{transform:translate(0)}15%{transform:translate(-2px,-1px)}30%{transform:translate(2px,1px)}45%{transform:translate(-2px,1px)}60%{transform:translate(2px,-1px)}75%{transform:translate(-1px,0)}}
+
+/* ═══════════ TOOLTIP ═══════════ */
+#coord-tip{position:fixed;display:none;z-index:400;background:#0a0d12;border:1px solid #4fc3f7;color:#4fc3f7;font-size:10px;padding:1px 5px;pointer-events:none;letter-spacing:1px}
+
+/* ═══════════ MOBILE: PHONE LANDSCAPE ═══════════ */
+@media (max-height:520px) and (orientation:landscape){
+  #game-container{padding:2px 8px}
+  #ticker-wrap{height:20px}
+  #ticker-content{font-size:10px}
+  .battle-hdr h1{font-size:.85em;letter-spacing:2px;margin-bottom:0}
+  #battle-status{padding:4px 10px;font-size:10px;min-height:22px;margin-bottom:4px}
+  #salvo-bar{margin:2px 0 4px;font-size:10px}
+  .battle-main{gap:8px;flex-wrap:nowrap;align-items:center}
+  #log-panel{display:none}
+  #endturn-wrap{margin-top:4px}
+  .ships-status{font-size:9px;line-height:1.4;margin-top:3px}
+  .btn{padding:6px 14px;font-size:11px}
+  .faction-intro{flex-direction:row;gap:12px;margin-bottom:14px}
+  .faction-box{width:160px;padding:10px}
+  .faction-box ul{font-size:9px}
+  #title-screen h1{font-size:1.4em}
+  #title-screen h2{font-size:.7em;margin-bottom:12px}
+  #setup-sub{display:none}
+  .ship-info-bar{padding:4px 12px;font-size:10px;margin-bottom:6px}
+  #setup-ctrl{margin-bottom:8px;font-size:10px;gap:10px}
+  #ship-queue{margin-top:6px;font-size:9px;gap:5px}
+  #pass-name{font-size:1.3em;letter-spacing:3px}
+  #pass-instr{font-size:10px}
+  .battle-hdr{margin-bottom:4px}
+}
+
+/* ═══════════ MOBILE: PORTRAIT ═══════════ */
+@media (max-width:520px) and (orientation:portrait){
+  .battle-main{flex-direction:column;gap:12px}
+  #log-panel{width:100%}
+  #battle-log{height:90px}
+  .faction-intro{flex-direction:column;align-items:center}
+  .faction-box{width:260px}
+}
+</style>
+</head>
+<body>
+
+<button id="mute-btn" onclick="toggleMute()">🔊</button>
+
+<div id="ticker-wrap">
+  <div id="ticker-label">BREAKING</div>
+  <div id="ticker-content"></div>
+</div>
+
+<div id="coord-tip"></div>
+
+<div id="game-container">
+
+  <!-- TITLE -->
+  <div id="title-screen" class="screen">
+    <div class="eyebrow">classified — operation hormuz</div>
+    <h1>Strait of Hormuz</h1>
+    <h2>Naval Engagement — Two-Player Tactical Strike</h2>
+    <div class="faction-intro">
+      <div class="faction-box us">
+        <div class="faction-name">US Navy — Player 1</div>
+        <ul>
+          <li>USS Nimitz (Carrier, 5)</li>
+          <li>USS Paul Hamilton (DDG, 4)</li>
+          <li>USS Monterey (CG, 3)</li>
+          <li>USS Connecticut (SSN, 3)</li>
+          <li>PB-814 (Patrol, 2)</li>
+        </ul>
+      </div>
+      <div class="faction-box irgc">
+        <div class="faction-name">IRGC Navy — Player 2</div>
+        <ul>
+          <li>IRIS Jamaran (Frigate, 5)</li>
+          <li>IRIS Fateh (Submarine, 4)</li>
+          <li>FAC-305 (Fast Attack, 3)</li>
+          <li>IRIS Ghadir (Midget Sub, 3)</li>
+          <li>IRGCN Patrol (Speedboat, 2)</li>
+        </ul>
+      </div>
+    </div>
+    <div id="title-tanker-bg"></div>
+    <button class="btn" onclick="startGame()">▶ BEGIN MISSION</button>
+  </div>
+
+  <!-- SETUP -->
+  <div id="setup-screen" class="screen">
+    <div id="setup-title"></div>
+    <div id="setup-sub">Fleet Deployment</div>
+    <div class="ship-info-bar">
+      Placing: <b id="s-name"></b> (<b id="s-type"></b>) — <b id="s-size"></b> cells
+    </div>
+    <div id="setup-ctrl">
+      <span>Orientation: <span class="orient-val" id="orient-val">HORIZONTAL</span></span>
+      <button class="btn sm" id="rotate-btn" onclick="rotateShip()">[R] ROTATE</button>
+      <button class="btn sm" id="undo-btn" onclick="undoShip()">↩ UNDO</button>
+    </div>
+    <div class="grid-wrap-outer" id="setup-wrap">
+      <div class="geo-label iran">IRAN</div>
+      <div class="geo-label oman">OMAN</div>
+      <div class="geo-label uae">UAE</div>
+      <div class="geo-label pg">PERSIAN GULF</div>
+      <div class="geo-label goo">GULF OF OMAN</div>
+      <div class="geo-label as">ARABIAN<br>SEA</div>
+      <div class="tanker-layer" id="setup-tankers"></div>
+      <div class="grid-outer" id="setup-grid"></div>
+    </div>
+    <div id="ship-queue"></div>
+  </div>
+
+  <!-- PASS OVERLAY -->
+  <div id="pass-screen">
+    <div class="eyebrow">— classified —</div>
+    <div id="pass-name"></div>
+    <div id="pass-instr"></div>
+    <button class="btn" id="pass-btn" onclick="onPassReady()">▶ READY</button>
+  </div>
+
+  <!-- BATTLE -->
+  <div id="battle-screen" class="screen">
+    <div class="battle-hdr"><h1 id="battle-title"></h1></div>
+    <div id="salvo-bar"><span id="salvo-text">Salvo: 5/5</span><div id="salvo-pips"></div></div>
+    <div id="battle-status">Select a target on the attack grid.</div>
+    <div class="battle-main">
+      <div class="board-section">
+        <div class="board-lbl">Your Fleet</div>
+        <div class="grid-wrap-outer">
+          <div class="tanker-layer" id="def-tankers"></div>
+          <div class="grid-outer" id="def-grid"></div>
+        </div>
+        <div class="ships-status" id="own-ships"></div>
+      </div>
+      <div class="board-section">
+        <div class="board-lbl live" id="atk-lbl">▶ Attack Grid</div>
+        <div class="grid-wrap-outer">
+          <div class="tanker-layer" id="atk-tankers"></div>
+          <div class="grid-outer" id="atk-grid"></div>
+        </div>
+      </div>
+      <div id="log-panel">
+        <div class="log-hdr">Intel Log</div>
+        <div id="battle-log"></div>
+      </div>
+    </div>
+    <div id="endturn-wrap">
+      <button class="btn" id="endturn-btn" style="display:none" onclick="endTurn()">PASS DEVICE ▶</button>
+    </div>
+  </div>
+
+  <!-- VICTORY -->
+  <div id="victory-screen" class="screen">
+    <div class="eyebrow">— mission complete —</div>
+    <div id="victory-title"></div>
+    <div id="victory-detail"></div>
+    <button class="btn" onclick="resetGame()">↺ PLAY AGAIN</button>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════
+
+const COLS = 24, ROWS = 11;
+const COL_LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWX'.split('');
+
+// Strait of Hormuz region — 0=land, 1=water, 2=island
+// Left: Persian Gulf | Center: Strait | Right: Gulf of Oman + Arabian Sea
+const MASK = [
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R0  Iran coast
+  [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0], // R1  PG narrows north
+  [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0], // R2
+  [0,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,0,0,0,0], // R3  Qeshm Is.(11)
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0], // R4
+  [1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,0,0], // R5  Hormuz Is.(9)
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], // R6  full (GoO + AS)
+  [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0], // R7
+  [0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,1,0,0], // R8  Musandam+GoO
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0], // R9  Arabian Sea
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R10 UAE/Oman coast
+];
+
+const FLEETS = [
+  { name:'US Navy', faction:'us', ships:[
+    {name:'USS Nimitz',       type:'Aircraft Carrier',         size:5},
+    {name:'USS Paul Hamilton',type:'Guided Missile Destroyer', size:4},
+    {name:'USS Monterey',     type:'Guided Missile Cruiser',   size:3},
+    {name:'USS Connecticut',  type:'Attack Submarine',         size:3},
+    {name:'PB-814',           type:'Mark VI Patrol Boat',      size:2}
+  ]},
+  { name:'IRGC Navy', faction:'irgc', ships:[
+    {name:'IRIS Jamaran', type:'Moudge-class Frigate',     size:5},
+    {name:'IRIS Fateh',   type:'Fateh-class Submarine',    size:4},
+    {name:'FAC-305',      type:'Sina Fast Attack Craft',   size:3},
+    {name:'IRIS Ghadir',  type:'Ghadir Midget Submarine',  size:3},
+    {name:'IRGCN Patrol', type:'Speedboat Flotilla',       size:2}
+  ]}
+];
+
+const TICKER_BASE = [
+  'BREAKING: USS Nimitz carrier group enters Strait of Hormuz — Pentagon confirms deployment',
+  'IRGC speedboats shadow US destroyer in contested waters near Bandar Abbas',
+  'Iran warns: any aggression in the strait will be met with overwhelming force',
+  'Pentagon confirms heightened 5th Fleet readiness amid escalating naval standoff',
+  'IRGC commander: our forces are ready to defend every metre of Iranian territorial waters',
+  'Satellite imagery shows IRGC naval buildup along the northern Hormuz coastline',
+  'Tanker traffic through the strait falls as war-risk insurance premiums spike',
+  'IRGC fast-attack craft conduct live-fire drills within sight of US carrier strike group',
+  'Oil futures surge as standoff between US Navy and IRGC intensifies in Persian Gulf',
+  'Analysis: Strait of Hormuz choke-point geography gives IRGC asymmetric advantage',
+  'White House: all options remain on the table regarding Iranian naval provocations',
+  'Commercial shipping companies rerouting tankers around Cape of Good Hope to avoid strait'
+];
+
+const TANKER_DEFS = [
+  {name:'→ CHINA',  yRow:2.8, dur:52, dir: 1},
+  {name:'→ INDIA',  yRow:4.5, dur:44, dir: 1},
+  {name:'→ JAPAN',  yRow:3.6, dur:67, dir: 1},
+  {name:'← GULF',   yRow:5.5, dur:48, dir:-1},
+  {name:'→ EUROPE', yRow:6.2, dur:58, dir: 1},
+  {name:'→ KOREA',  yRow:2.0, dur:73, dir: 1},
+  {name:'← CHINA',  yRow:7.0, dur:61, dir:-1},
+];
+
+// ═══════════════════════════════════════
+// RESPONSIVE LAYOUT
+// ═══════════════════════════════════════
+
+function getLayout() {
+  const w = window.innerWidth, h = window.innerHeight;
+  const landscape = w > h;
+  const phone = Math.min(w, h) <= 520;
+
+  if (phone && landscape) {
+    const atkCell  = Math.max(13, Math.floor((w * 0.52 - 14) / COLS));
+    const defCell  = Math.max(8,  Math.floor((w * 0.25 - 12) / COLS));
+    const setupCell= Math.max(15, Math.floor((w * 0.88 - 14) / COLS));
+    return { atkCell, defCell, setupCell, lbl:13, showLog:false, compact:true };
+  }
+  if (!landscape && phone) {
+    const cell = Math.max(14, Math.floor((w * 0.93 - 14) / COLS));
+    return { atkCell:cell, defCell:Math.floor(cell*.6), setupCell:cell, lbl:13, showLog:false, compact:true };
+  }
+  return { atkCell:22, defCell:18, setupCell:26, lbl:18, showLog:true, compact:false };
+}
+
+// ═══════════════════════════════════════
+// AUDIO
+// ═══════════════════════════════════════
+
+let audioCtx = null, muted = false;
+
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+function tone(freq, type, dur, gainVal, delay=0, freqEnd=null) {
+  ensureAudio();
+  const osc=audioCtx.createOscillator(), g=audioCtx.createGain(), t0=audioCtx.currentTime+delay;
+  osc.type=type; osc.frequency.setValueAtTime(freq,t0);
+  if(freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd,t0+dur);
+  g.gain.setValueAtTime(gainVal,t0); g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+  osc.connect(g); g.connect(audioCtx.destination); osc.start(t0); osc.stop(t0+dur);
+}
+function noise(dur, gainVal, freqC=600, delay=0) {
+  ensureAudio();
+  const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*dur,audioCtx.sampleRate);
+  const d=buf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  const src=audioCtx.createBufferSource(); src.buffer=buf;
+  const f=audioCtx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=freqC; f.Q.value=1;
+  const g=audioCtx.createGain(), t0=audioCtx.currentTime+delay;
+  g.gain.setValueAtTime(gainVal,t0); g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+  src.connect(f); f.connect(g); g.connect(audioCtx.destination); src.start(t0); src.stop(t0+dur);
+}
+function playHit()     { if(muted) return; tone(220,'sawtooth',.25,.3,0,50); noise(.25,.35,400,.04); }
+function playMiss()    { if(muted) return; tone(400,'sine',.4,.18,0,90); }
+function playSunk()    { if(muted) return; [0,.13,.26].forEach((d,i)=>tone([280,200,140][i],'sawtooth',.18,.32,d,[140,100,70][i])); noise(.4,.4,300,.1); }
+function playVictory() { if(muted) return; [261.63,329.63,392.00,523.25].forEach((f,i)=>tone(f,'triangle',.45,.28,i*.18)); }
+function playPlace()   { if(muted) return; tone(880,'sine',.1,.15); }
+function playClick()   { if(muted) return; tone(1200,'sine',.04,.1); }
+function toggleMute()  { muted=!muted; document.getElementById('mute-btn').textContent=muted?'🔇':'🔊'; }
+
+// ═══════════════════════════════════════
+// GAME STATE
+// ═══════════════════════════════════════
+
+let G = {};
+function newGrid(){ return Array.from({length:ROWS},()=>Array(COLS).fill(null)); }
+function newPlayer(){ return {grid:newGrid(),received:newGrid(),fired:newGrid(),placed:[]}; }
+function initGame(){
+  G={phase:'title',setupPidx:0,setupSidx:0,orientation:'h',currentPidx:0,salvosLeft:5,
+     players:[newPlayer(),newPlayer()],passCallback:null};
+}
+function countAlive(pidx){ return G.players[pidx].placed.filter(p=>!p.sunk).length; }
+
+// ═══════════════════════════════════════
+// TICKER
+// ═══════════════════════════════════════
+
+let tickerLines=[...TICKER_BASE];
+function renderTicker(){
+  const el=document.getElementById('ticker-content');
+  el.textContent=tickerLines.join('   ◆   ');
+  el.style.animation='none'; void el.offsetWidth;
+  const dur=Math.max(30,tickerLines.join(' ').length*.095);
+  el.style.animation=`ticker-scroll ${dur}s linear infinite`;
+}
+function pushTicker(line){
+  tickerLines.unshift(line);
+  if(tickerLines.length>25) tickerLines.pop();
+  renderTicker();
+}
+
+// ═══════════════════════════════════════
+// SCREENS
+// ═══════════════════════════════════════
+
+function showScreen(id){
+  const passEl=document.getElementById('pass-screen');
+  if(id==='pass-screen'){ passEl.classList.add('active'); return; }
+  passEl.classList.remove('active');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// GRID BUILDER
+// ═══════════════════════════════════════
+
+function buildGrid(containerId, {onClick,onHover,onLeave,cellPx,lblPx}={}){
+  const lay = getLayout();
+  const cell = cellPx ?? lay.atkCell;
+  const lbl  = lblPx  ?? lay.lbl;
+
+  const wrap = document.getElementById(containerId);
+  wrap.innerHTML='';
+  wrap.style.setProperty('--cell', cell+'px');
+  wrap.style.setProperty('--lbl',  lbl+'px');
+  wrap.style.setProperty('--cols', COLS);
+
+  // Column labels
+  const hdr=document.createElement('div'); hdr.className='col-labels';
+  hdr.appendChild(Object.assign(document.createElement('span'),{textContent:''}));
+  COL_LABELS.forEach(l=>hdr.appendChild(Object.assign(document.createElement('span'),{textContent:l})));
+  wrap.appendChild(hdr);
+
+  for(let r=0;r<ROWS;r++){
+    const row=document.createElement('div'); row.className='grid-row';
+    const rl=document.createElement('div'); rl.className='row-lbl'; rl.textContent=r+1;
+    row.appendChild(rl);
+    for(let c=0;c<COLS;c++){
+      const cell_el=document.createElement('div');
+      const m=MASK[r][c];
+      cell_el.dataset.r=r; cell_el.dataset.c=c;
+      if(m===0){
+        cell_el.className='cell cell-land';
+      } else if(m===2){
+        cell_el.className='cell cell-island'; cell_el.textContent='▲';
+      } else {
+        cell_el.className='cell cell-water';
+        if(onClick){ cell_el.classList.add('clickable'); cell_el.addEventListener('click',()=>onClick(r,c)); }
+        if(onHover) cell_el.addEventListener('mouseenter',()=>onHover(r,c));
+        if(onLeave) cell_el.addEventListener('mouseleave',onLeave);
+      }
+      row.appendChild(cell_el);
+    }
+    wrap.appendChild(row);
+  }
+  if(onLeave) wrap.addEventListener('mouseleave',onLeave);
+}
+
+function cellEl(cid,r,c){
+  return document.querySelector(`#${cid} .cell[data-r="${r}"][data-c="${c}"]`);
+}
+
+function gridPixelWidth(containerId){
+  const el=document.getElementById(containerId);
+  if(!el) return 500;
+  const style=getComputedStyle(el);
+  const cell=parseFloat(style.getPropertyValue('--cell'))||22;
+  const lbl =parseFloat(style.getPropertyValue('--lbl'))||18;
+  return lbl + COLS*cell;
+}
+
+// ═══════════════════════════════════════
+// TANKERS
+// ═══════════════════════════════════════
+
+function spawnTankers(layerId, gridId){
+  const layer=document.getElementById(layerId);
+  if(!layer) return;
+  layer.innerHTML='';
+  const bw = gridId ? gridPixelWidth(gridId) : 550;
+  const lay = getLayout();
+  const cellH = lay.atkCell, lblH = lay.lbl;
+
+  TANKER_DEFS.forEach(def=>{
+    const t=document.createElement('div');
+    const goRight=def.dir>0;
+    t.className=`tanker ${goRight?'ltr':'rtl'}`;
+    const sx=-80, ex=bw+80;
+    const yPx=lblH+def.yRow*cellH;
+    const delay=-(Math.random()*def.dur);
+    t.style.cssText=`top:${yPx}px;--sx:${sx}px;--ex:${ex}px;animation:tanker-${goRight?'ltr':'rtl'} ${def.dur}s linear ${delay}s infinite`;
+    t.innerHTML=`<div class="t-hull${goRight?'':' flip'}"></div><span class="t-dest">${def.name}</span>`;
+    layer.appendChild(t);
+  });
+}
+
+function distressTankers(layerId){
+  const layer=document.getElementById(layerId);
+  if(!layer) return;
+  layer.querySelectorAll('.tanker').forEach(t=>{
+    t.classList.add('anim-distress');
+    setTimeout(()=>t.classList.remove('anim-distress'),1400);
+  });
+}
+
+// ═══════════════════════════════════════
+// SETUP PHASE
+// ═══════════════════════════════════════
+
+function startSetup(pidx){
+  G.setupPidx=pidx; G.setupSidx=0; G.orientation='h';
+  rebuildSetupGrid();
+  refreshSetupUI();
+  spawnTankers('setup-tankers','setup-grid');
+  showScreen('setup-screen');
+}
+
+function rebuildSetupGrid(){
+  const lay=getLayout();
+  buildGrid('setup-grid',{
+    cellPx:lay.setupCell, lblPx:lay.lbl,
+    onClick:(r,c)=>placeShip(r,c),
+    onHover:(r,c)=>previewHover(r,c),
+    onLeave:()=>clearPreview()
+  });
+  const pidx=G.setupPidx, faction=FLEETS[pidx].faction;
+  G.players[pidx].placed.forEach(pl=>{
+    pl.cells.forEach(({r,c})=>{
+      const el=cellEl('setup-grid',r,c);
+      if(el){ el.classList.remove('cell-water','clickable'); el.classList.add(`ship-${faction}`); }
+    });
+  });
+}
+
+function getShipCells(r,c,size,orient){
+  return Array.from({length:size},(_,i)=>orient==='h'?{r,c:c+i}:{r:r+i,c});
+}
+function isValidPlace(pidx,cells){
+  const grid=G.players[pidx].grid;
+  return cells.every(({r,c})=>r>=0&&r<ROWS&&c>=0&&c<COLS&&MASK[r][c]===1&&grid[r][c]===null);
+}
+function previewHover(r,c){
+  clearPreview();
+  const ship=FLEETS[G.setupPidx].ships[G.setupSidx];
+  if(!ship) return;
+  const cells=getShipCells(r,c,ship.size,G.orientation);
+  const ok=isValidPlace(G.setupPidx,cells);
+  cells.forEach(({r,c})=>{
+    if(r>=0&&r<ROWS&&c>=0&&c<COLS){
+      const el=cellEl('setup-grid',r,c);
+      if(el&&MASK[r][c]===1) el.classList.add(ok?'prev-ok':'prev-bad');
+    }
+  });
+}
+function clearPreview(){
+  document.querySelectorAll('#setup-grid .cell').forEach(el=>el.classList.remove('prev-ok','prev-bad'));
+}
+
+function placeShip(r,c){
+  const pidx=G.setupPidx;
+  const ship=FLEETS[pidx].ships[G.setupSidx];
+  if(!ship) return;
+  const cells=getShipCells(r,c,ship.size,G.orientation);
+  if(!isValidPlace(pidx,cells)) return;
+
+  cells.forEach(({r,c})=>{G.players[pidx].grid[r][c]=G.setupSidx;});
+  G.players[pidx].placed.push({shipIdx:G.setupSidx,cells,sunk:false});
+  G.setupSidx++;
+  playPlace();
+  cells.forEach(({r,c})=>{
+    const el=cellEl('setup-grid',r,c);
+    if(el){ el.classList.add('anim-place'); setTimeout(()=>el.classList.remove('anim-place'),350); }
+  });
+
+  if(G.setupSidx>=FLEETS[pidx].ships.length){
+    if(pidx===0){
+      showPass(FLEETS[1].name,FLEETS[1].faction,
+        `${FLEETS[0].name} fleet deployed. Hand device to ${FLEETS[1].name} commander. Do not reveal positions.`,
+        ()=>startSetup(1));
+    } else {
+      showPass(FLEETS[0].name,FLEETS[0].faction,
+        'All fleets deployed. The battle for the Strait begins. Hand device to US Navy commander.',
+        ()=>startBattle());
+    }
+  } else {
+    clearPreview(); rebuildSetupGrid(); refreshSetupUI();
+  }
+}
+
+function rotateShip(){
+  G.orientation=G.orientation==='h'?'v':'h';
+  clearPreview(); refreshSetupUI();
+}
+function undoShip(){
+  const pidx=G.setupPidx;
+  if(G.players[pidx].placed.length===0) return;
+  const last=G.players[pidx].placed.pop();
+  last.cells.forEach(({r,c})=>{G.players[pidx].grid[r][c]=null;});
+  G.setupSidx--;
+  playClick(); rebuildSetupGrid(); refreshSetupUI();
+}
+
+function refreshSetupUI(){
+  const pidx=G.setupPidx, faction=FLEETS[pidx].faction;
+  const ships=FLEETS[pidx].ships, ship=ships[G.setupSidx];
+  const titleEl=document.getElementById('setup-title');
+  titleEl.textContent=FLEETS[pidx].name;
+  titleEl.style.color=faction==='us'?'#4fc3f7':'#c0392b';
+  if(ship){
+    const sn=document.getElementById('s-name');
+    sn.textContent=ship.name; sn.className=faction;
+    document.getElementById('s-type').textContent=ship.type;
+    document.getElementById('s-size').textContent=ship.size;
+  }
+  const ov=document.getElementById('orient-val');
+  ov.textContent=G.orientation==='h'?'HORIZONTAL':'VERTICAL';
+  ov.className=`orient-val ${faction}`;
+  document.getElementById('rotate-btn').className=`btn sm${faction==='irgc'?' red':''}`;
+  document.getElementById('undo-btn').className=`btn sm${faction==='irgc'?' red':''}`;
+  document.getElementById('ship-queue').innerHTML=ships.map((s,i)=>{
+    let cls='queue-chip';
+    if(i<G.setupSidx) cls+=' done';
+    else if(i===G.setupSidx) cls+=` cur ${faction}`;
+    return `<span class="${cls}">${s.name}</span>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════
+// PASS SCREEN
+// ═══════════════════════════════════════
+
+function showPass(name,faction,instruction,callback){
+  G.passCallback=callback;
+  const nameEl=document.getElementById('pass-name');
+  nameEl.textContent=name; nameEl.className=faction;
+  document.getElementById('pass-instr').textContent=instruction;
+  document.getElementById('pass-btn').className=`btn${faction==='irgc'?' red':''}`;
+  showScreen('pass-screen');
+}
+function onPassReady(){
+  const cb=G.passCallback; G.passCallback=null; playClick(); if(cb) cb();
+}
+
+// ═══════════════════════════════════════
+// BATTLE
+// ═══════════════════════════════════════
+
+function startBattle(){
+  G.phase='battle'; G.currentPidx=0; G.salvosLeft=countAlive(0);
+  renderBattle(); showScreen('battle-screen');
+}
+
+function renderBattle(){
+  const pidx=G.currentPidx, faction=FLEETS[pidx].faction, eidx=1-pidx;
+  const lay=getLayout();
+
+  const titleEl=document.getElementById('battle-title');
+  titleEl.textContent=`${FLEETS[pidx].name} — Your Turn`;
+  titleEl.style.color=faction==='us'?'#4fc3f7':'#c0392b';
+  document.getElementById('atk-lbl').className=`board-lbl live${faction==='irgc'?' irgc':''}`;
+
+  // Log panel visibility
+  document.getElementById('log-panel').style.display=lay.showLog?'':'none';
+
+  // Defense grid
+  buildGrid('def-grid',{cellPx:lay.defCell,lblPx:lay.lbl});
+  paintDefenseGrid(pidx);
+  spawnTankers('def-tankers','def-grid');
+
+  // Attack grid
+  buildGrid('atk-grid',{cellPx:lay.atkCell,lblPx:lay.lbl,onClick:(r,c)=>fireAt(r,c)});
+  paintAttackGrid(pidx);
+  spawnTankers('atk-tankers','atk-grid');
+
+  const sEl=document.getElementById('battle-status');
+  sEl.textContent='Select a target on the attack grid.'; sEl.className='';
+
+  updateSalvoBar(pidx);
+  renderShipsList(pidx);
+  document.getElementById('endturn-btn').style.display='none';
+}
+
+function paintDefenseGrid(pidx){
+  const p=G.players[pidx], faction=FLEETS[pidx].faction;
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+    const el=cellEl('def-grid',r,c);
+    if(!el||MASK[r][c]!==1) continue;
+    el.className='cell cell-water'; el.textContent='';
+    if(p.grid[r][c]!==null) el.classList.add(`ship-${faction}`);
+    const rec=p.received[r][c];
+    if(rec==='hit'){el.classList.add('c-hit');el.textContent='✕';}
+    if(rec==='miss'){el.classList.add('c-miss');el.textContent='·';}
+  }
+}
+
+function paintAttackGrid(pidx){
+  const p=G.players[pidx];
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+    const el=cellEl('atk-grid',r,c);
+    if(!el||MASK[r][c]!==1) continue;
+    el.className='cell cell-water'; el.textContent='';
+    const f=p.fired[r][c];
+    if(f==='hit'){el.classList.add('c-hit','attacked');el.textContent='✕';}
+    else if(f==='miss'){el.classList.add('c-miss','attacked');el.textContent='·';}
+    else if(G.salvosLeft>0) el.classList.add('clickable');
+  }
+}
+
+function updateSalvoBar(pidx){
+  const faction=FLEETS[pidx].faction, total=countAlive(pidx), rem=G.salvosLeft;
+  document.getElementById('salvo-text').textContent=`Salvo: ${rem}/${total}`;
+  const pipsEl=document.getElementById('salvo-pips');
+  pipsEl.innerHTML='';
+  for(let i=0;i<total;i++){
+    const pip=document.createElement('span');
+    pip.className=`spip${faction==='irgc'?' irgc':''}${i>=rem?' used':''}`;
+    pipsEl.appendChild(pip);
+  }
+}
+
+function renderShipsList(pidx){
+  const p=G.players[pidx], ships=FLEETS[pidx].ships;
+  document.getElementById('own-ships').innerHTML=
+    p.placed.map(pl=>{
+      const s=ships[pl.shipIdx], cls=pl.sunk?'sunk':'alive';
+      return `<div class="sentry ${cls}">${pl.sunk?'✕':'○'} ${s.name}</div>`;
+    }).join('');
+}
+
+// ═══════════════════════════════════════
+// FIRE LOGIC
+// ═══════════════════════════════════════
+
+function fireAt(r,c){
+  if(G.salvosLeft<=0||MASK[r][c]!==1) return;
+  const pidx=G.currentPidx, eidx=1-pidx;
+  const att=G.players[pidx], def=G.players[eidx];
+  if(att.fired[r][c]!==null) return;
+
+  const hitIdx=def.grid[r][c], isHit=hitIdx!==null;
+  att.fired[r][c]=isHit?'hit':'miss';
+  def.received[r][c]=isHit?'hit':'miss';
+  G.salvosLeft--;
+
+  let sunkShip=null;
+  if(isHit){
+    const pl=def.placed.find(p=>p.shipIdx===hitIdx);
+    if(pl&&!pl.sunk&&pl.cells.every(({r,c})=>def.received[r][c]==='hit')){
+      pl.sunk=true; sunkShip={...FLEETS[eidx].ships[hitIdx],cells:pl.cells};
+    }
+  }
+
+  // Animate attack cell
+  const atkEl=cellEl('atk-grid',r,c);
+  if(atkEl){
+    atkEl.classList.remove('clickable');
+    atkEl.classList.add(isHit?'anim-hit':'anim-miss');
+    const ring=document.createElement('div');
+    ring.className=`ring ${isHit?'ring-hit':'ring-miss'}`;
+    atkEl.appendChild(ring);
+    setTimeout(()=>{
+      atkEl.classList.remove(isHit?'anim-hit':'anim-miss');
+      atkEl.classList.add(isHit?'c-hit':'c-miss','attacked');
+      atkEl.textContent=isHit?'✕':'·';
+      ring.remove();
+    }, isHit?650:550);
+  }
+
+  // Sunk animation on defense grid
+  if(sunkShip){
+    sunkShip.cells.forEach(({r,c})=>{
+      const el=cellEl('def-grid',r,c);
+      if(el){ el.classList.add('anim-sunk'); setTimeout(()=>{el.classList.remove('anim-sunk');el.classList.add('c-sunk');},550); }
+    });
+    distressTankers('atk-tankers');
+    distressTankers('def-tankers');
+  }
+
+  // Sound
+  if(sunkShip) playSunk(); else if(isHit) playHit(); else playMiss();
+
+  // Status
+  const sEl=document.getElementById('battle-status');
+  let msg, cls;
+  if(sunkShip){ msg=sinkMsg(pidx,sunkShip.name); cls='s-sink'; pushTicker(`CONFIRMED: ${sunkShip.name} destroyed — vessel sunk in the Strait of Hormuz`); addLog(`[${FLEETS[pidx].name}] ${COL_LABELS[c]}${r+1} — SUNK`,'sink',sunkShip.name+' destroyed'); }
+  else if(isHit){ msg=hitMsg(pidx); cls='s-hit'; addLog(`[${FLEETS[pidx].name}] ${COL_LABELS[c]}${r+1} — HIT`,'hit'); }
+  else{ msg=missMsg(pidx); cls='s-miss'; addLog(`[${FLEETS[pidx].name}] ${COL_LABELS[c]}${r+1} — MISS`,'miss'); }
+
+  sEl.style.animation='none'; void sEl.offsetWidth; sEl.style.animation='status-in .25s ease';
+  sEl.textContent=msg; sEl.className=cls;
+
+  updateSalvoBar(pidx);
+  updateClickability(pidx);
+
+  if(def.placed.every(p=>p.sunk)){ setTimeout(()=>showVictory(pidx),900); return; }
+  if(G.salvosLeft<=0){
+    const btn=document.getElementById('endturn-btn');
+    btn.style.display='inline-block';
+    btn.className=`btn${FLEETS[pidx].faction==='irgc'?' red':''}`;
+  }
+}
+
+function updateClickability(pidx){
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+    const el=cellEl('atk-grid',r,c);
+    if(!el||MASK[r][c]!==1||G.players[pidx].fired[r][c]!==null) continue;
+    if(G.salvosLeft>0) el.classList.add('clickable'); else el.classList.remove('clickable');
+  }
+}
+
+function endTurn(){
+  const next=1-G.currentPidx, prevName=FLEETS[G.currentPidx].name;
+  G.currentPidx=next; G.salvosLeft=countAlive(next); playClick();
+  showPass(FLEETS[next].name,FLEETS[next].faction,
+    `${prevName} strike complete. Hand device to ${FLEETS[next].name} commander.`,
+    ()=>{ renderBattle(); showScreen('battle-screen'); }
+  );
+}
+
+// ═══════════════════════════════════════
+// BATTLE LOG
+// ═══════════════════════════════════════
+
+function addLog(text, cls, sub=''){
+  const log=document.getElementById('battle-log');
+  const entry=document.createElement('div');
+  entry.className=`log-entry ${cls}`; entry.textContent=text;
+  if(sub){ const s=document.createElement('span'); s.className='log-sub'; s.textContent='└ '+sub; entry.appendChild(s); }
+  log.appendChild(entry); log.scrollTop=log.scrollHeight;
+  while(log.children.length>40) log.removeChild(log.firstChild);
+}
+
+// ═══════════════════════════════════════
+// FLAVOR TEXT
+// ═══════════════════════════════════════
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function hitMsg(pidx){
+  return pidx===0?rand(['Target acquired — IRGC vessel hit. Strike confirmed.','Direct hit. IRGC warship taking on water.','Tomahawk impact confirmed. Enemy hull breached.','AGM-84 on target. IRGCN vessel damaged.','Positive track on target — hit confirmed.'])
+  :rand(['Allahu Akbar — US warship struck! IRGCN scores a hit.','C-802 missile impact confirmed. American vessel damaged.','Direct hit on the infidel fleet. Strike successful.','IRGC fast attack confirms impact on US warship.']);
+}
+function missMsg(pidx){
+  return pidx===0?rand(['Missile splashes into the strait. Target evaded.','Strike package missed. Enemy vessel maneuvers clear.','No impact confirmed. IRGC boat withdraws into coastal shallows.','Torpedo run misses the mark. Target lost.'])
+  :rand(['Torpedo run fails — US fleet maneuvers clear.','Anti-ship missile splashes harmlessly. American warship evades.','IRGC strike misses. The enemy is protected — for now.','Missile lost in electronic countermeasures.']);
+}
+function sinkMsg(pidx,name){
+  return pidx===0?rand([`${name} is going down. Confirmed kill.`,`${name} sunk. Strike mission successful.`,`All hands on ${name} lost. IRGC asset eliminated.`])
+  :rand([`${name} is going down. Allahu Akbar — American warship destroyed!`,`${name} sunk. The Islamic Republic defends its waters.`,`${name} destroyed. Another US vessel lost.`]);
+}
+
+// ═══════════════════════════════════════
+// VICTORY
+// ═══════════════════════════════════════
+
+function showVictory(winnerIdx){
+  const faction=FLEETS[winnerIdx].faction;
+  const titleEl=document.getElementById('victory-title');
+  titleEl.textContent=`${FLEETS[winnerIdx].name} Victorious`;
+  titleEl.className=faction;
+  const shots=G.players[winnerIdx].fired.flat().filter(x=>x!==null).length;
+  document.getElementById('victory-detail').textContent=`All enemy vessels destroyed. ${shots} strikes fired. The Strait of Hormuz is secured.`;
+  pushTicker(`MISSION COMPLETE: ${FLEETS[winnerIdx].name} achieves total naval supremacy in the Strait of Hormuz`);
+  playVictory(); showScreen('victory-screen');
+  const screen=document.getElementById('victory-screen');
+  document.querySelectorAll('.particle').forEach(p=>p.remove());
+  const colors=['#4fc3f7','#f39c12','#c0392b','#27ae60','#fff'];
+  for(let i=0;i<24;i++){
+    const p=document.createElement('div'); p.className='particle';
+    const angle=(i/24)*Math.PI*2, dist=80+Math.random()*150;
+    p.style.cssText=`--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;background:${colors[i%5]};animation-delay:${Math.random()*.6}s`;
+    screen.appendChild(p);
+  }
+}
+
+// ═══════════════════════════════════════
+// GAME LIFECYCLE
+// ═══════════════════════════════════════
+
+function startGame(){ ensureAudio(); playClick(); initGame(); startSetup(0); }
+function resetGame(){
+  playClick(); initGame();
+  document.querySelectorAll('.particle').forEach(p=>p.remove());
+  document.getElementById('battle-log').innerHTML='';
+  showScreen('title-screen');
+}
+
+// ═══════════════════════════════════════
+// TOOLTIP
+// ═══════════════════════════════════════
+
+document.addEventListener('mousemove',e=>{
+  const tip=document.getElementById('coord-tip');
+  const cell=e.target.closest?e.target.closest('.cell[data-r]'):null;
+  if(cell){ const r=+cell.dataset.r,c=+cell.dataset.c;
+    if(MASK[r][c]===1){ tip.textContent=`${COL_LABELS[c]}${r+1}`;tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-8)+'px';return; }
+  }
+  tip.style.display='none';
+});
+
+// ═══════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════
+
+document.addEventListener('keydown',e=>{
+  if((e.key==='r'||e.key==='R')&&document.getElementById('setup-screen').classList.contains('active')) rotateShip();
+});
+
+// ═══════════════════════════════════════
+// TITLE TANKERS
+// ═══════════════════════════════════════
+
+function initTitleTankers(){
+  const bg=document.getElementById('title-tanker-bg');
+  [{y:30,dur:55,dir:1,name:'→ CHINA'},{y:55,dur:43,dir:1,name:'→ INDIA'},{y:70,dur:70,dir:-1,name:'← GULF'},{y:42,dur:62,dir:1,name:'→ JAPAN'}]
+  .forEach(def=>{
+    const t=document.createElement('div'), goRight=def.dir>0;
+    t.className=`tanker ${goRight?'ltr':'rtl'}`;
+    const delay=-(Math.random()*def.dur);
+    t.style.cssText=`top:${def.y}%;left:0;--sx:-80px;--ex:700px;animation:tanker-${goRight?'ltr':'rtl'} ${def.dur}s linear ${delay}s infinite;opacity:.22`;
+    t.innerHTML=`<div class="t-hull${goRight?'':' flip'}"></div><span class="t-dest" style="color:#2a3545">${def.name}</span>`;
+    bg.appendChild(t);
+  });
+}
+
+// ═══════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════
+
+initGame();
+renderTicker();
+initTitleTankers();
+showScreen('title-screen');
+</script>
+</body>
+</html>
