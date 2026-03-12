@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Strait of Hormuz — Naval Engagement</title>
+<title>Battleship Hormuz</title>
 <style>
 /* ═══════════ RESET ═══════════ */
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+body{background:#06080e;color:#e8ecf0;font-family:'Courier New',monospace;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
 
 /* ═══════════ MUTE ═══════════ */
-#mute-btn{position:fixed;top:6px;right:10px;z-index:300;background:none;border:1px solid #445;color:#889;font-size:14px;padding:2px 7px;cursor:pointer;font-family:inherit;transition:color .2s}
+#mute-btn{position:fixed;top:6px;right:10px;z-index:300;background:none;border:1px solid #557;color:#aab;font-size:14px;padding:2px 7px;cursor:pointer;font-family:inherit;transition:color .2s}
 #mute-btn:hover{color:#aaa}
 
 /* ═══════════ TICKER ═══════════ */
-#ticker-wrap{background:#0a0d12;border-bottom:1px solid #1e2a3a;overflow:hidden;height:28px;display:flex;align-items:center;flex-shrink:0}
-#ticker-label{background:#b02020;color:#fff;padding:2px 10px;font-size:10px;font-weight:bold;letter-spacing:2px;white-space:nowrap;flex-shrink:0}
-#ticker-content{white-space:nowrap;font-size:11px;color:#889;padding-left:30px;animation:ticker-scroll 80s linear infinite}
+#ticker-wrap{background:#090c14;border-bottom:1px solid #3a5a78;overflow:hidden;height:28px;display:flex;align-items:center;flex-shrink:0}
+#ticker-label{background:#c02020;color:#fff;padding:2px 10px;font-size:10px;font-weight:bold;letter-spacing:2px;white-space:nowrap;flex-shrink:0}
+#ticker-content{white-space:nowrap;font-size:11px;color:#aabbcc;padding-left:30px;animation:ticker-scroll 80s linear infinite}
 @keyframes ticker-scroll{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
 
 /* ═══════════ SCREENS ═══════════ */
@@ -26,7 +26,7 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
 @keyframes screen-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* ═══════════ SHARED TYPOGRAPHY ═══════════ */
-.eyebrow{font-size:9px;letter-spacing:5px;color:#556;text-transform:uppercase;margin-bottom:6px}
+.eyebrow{font-size:9px;letter-spacing:5px;color:#7a8a9a;text-transform:uppercase;margin-bottom:6px}
 .btn{background:#0c1828;color:#4fc3f7;border:1px solid #4fc3f7;padding:9px 26px;font-family:'Courier New',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .15s,color .15s}
 .btn:hover{background:#4fc3f7;color:#080c12}
 .btn.red{color:#c0392b;border-color:#c0392b;background:#120808}
@@ -36,57 +36,57 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
 /* ═══════════ TITLE ═══════════ */
 #title-screen{text-align:center;gap:6px;position:relative;overflow:hidden}
 #title-screen h1{font-size:2em;letter-spacing:6px;color:#4fc3f7;text-transform:uppercase;text-shadow:0 0 30px rgba(79,195,247,.35)}
-#title-screen h2{font-size:.8em;letter-spacing:4px;color:#778;text-transform:uppercase;margin-bottom:20px}
+#title-screen h2{font-size:.8em;letter-spacing:4px;color:#9aabbf;text-transform:uppercase;margin-bottom:20px}
 .faction-intro{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
 .faction-box{border:1px solid;padding:14px 18px;width:190px;text-align:left}
-.faction-box.us{border-color:#1a4060}
-.faction-box.irgc{border-color:#4a1a1a}
+.faction-box.us{border-color:#3a78b0}
+.faction-box.irgc{border-color:#9a3030}
 .faction-name{font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
 .faction-box.us .faction-name{color:#4fc3f7}
 .faction-box.irgc .faction-name{color:#c0392b}
-.faction-box ul{list-style:none;font-size:10px;color:#778;line-height:2}
-.faction-box ul li::before{content:"▸ ";color:#445}
+.faction-box ul{list-style:none;font-size:10px;color:#b0c4d8;line-height:2}
+.faction-box ul li::before{content:"▸ ";color:#7a9ab0}
 #title-tanker-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.3}
 
 /* ═══════════ SETUP ═══════════ */
 #setup-screen{text-align:center;gap:0}
 #setup-title{font-size:1.3em;letter-spacing:4px;text-transform:uppercase;margin-bottom:3px}
-#setup-sub{font-size:.75em;letter-spacing:3px;color:#778;text-transform:uppercase;margin-bottom:12px}
-.ship-info-bar{background:#0a0d12;border:1px solid #1e2a3a;padding:7px 18px;font-size:11px;color:#778;margin-bottom:10px}
+#setup-sub{font-size:.75em;letter-spacing:3px;color:#9aabbc;text-transform:uppercase;margin-bottom:12px}
+.ship-info-bar{background:#0c1018;border:1px solid #3a5a78;padding:7px 18px;font-size:11px;color:#c0d0e0;margin-bottom:10px}
 .ship-info-bar b{color:#ccc}
 .ship-info-bar b.us{color:#4fc3f7}
 .ship-info-bar b.irgc{color:#c0392b}
-#setup-ctrl{display:flex;align-items:center;gap:14px;margin-bottom:12px;font-size:11px;color:#667}
+#setup-ctrl{display:flex;align-items:center;gap:14px;margin-bottom:12px;font-size:11px;color:#99aabb}
 .orient-val{font-weight:bold}
 .orient-val.us{color:#4fc3f7}
 .orient-val.irgc{color:#c0392b}
 #ship-queue{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-size:10px}
-.queue-chip{padding:2px 8px;border:1px solid #1e2a3a;color:#556}
-.queue-chip.done{text-decoration:line-through;color:#2a3040;border-color:#131820}
+.queue-chip{padding:2px 8px;border:1px solid #3a5a78;color:#b0c0d0}
+.queue-chip.done{text-decoration:line-through;color:#4a5a6a;border-color:#1e2e40}
 .queue-chip.cur{color:#ddd;border-color:#4fc3f7}
 .queue-chip.cur.irgc{border-color:#c0392b}
 
 /* ═══════════ GRID SYSTEM ═══════════ */
 .grid-outer{display:inline-block;position:relative}
 .col-labels{display:grid;grid-template-columns:var(--lbl,18px) repeat(var(--cols,24),var(--cell,22px));margin-bottom:2px}
-.col-labels span{text-align:center;font-size:9px;color:#506070}
+.col-labels span{text-align:center;font-size:9px;color:#b0cce0;font-weight:bold}
 .grid-row{display:grid;grid-template-columns:var(--lbl,18px) repeat(var(--cols,24),var(--cell,22px));margin-bottom:2px}
-.row-lbl{font-size:9px;color:#506070;display:flex;align-items:center;justify-content:center}
+.row-lbl{font-size:9px;color:#b0cce0;display:flex;align-items:center;justify-content:center;font-weight:bold}
 
 /* cells */
-.cell{width:var(--cell,22px);height:var(--cell,22px);display:flex;align-items:center;justify-content:center;font-size:calc(var(--cell,22px)*.48);border:1px solid #0e1820;position:relative;overflow:visible;user-select:none;transition:background .08s}
-.cell-land{background:#1c1408;cursor:default}
-.cell-island{background:#191410;cursor:default;color:#6a5a30}
-.cell-water{background:#090e16;cursor:default}
+.cell{width:var(--cell,22px);height:var(--cell,22px);display:flex;align-items:center;justify-content:center;font-size:calc(var(--cell,22px)*.48);border:1px solid #3a6080;position:relative;overflow:visible;user-select:none;transition:background .08s}
+.cell-land{background:#2c2008;cursor:default;border-color:#3a2a0c}
+.cell-island{background:#281e0c;cursor:default;color:#b8943a;border-color:#4a3818}
+.cell-water{background:#0c1a2c;cursor:default}
 .cell-water.clickable{cursor:crosshair}
-.cell-water.clickable:hover{background:#0f1e30;border-color:#1e3a5c}
-.cell.ship-us{background:#0a2040}
-.cell.ship-irgc{background:#141f0c}
-.cell.prev-ok{background:#0a2618;border-color:#27ae60}
-.cell.prev-bad{background:#200808;border-color:#922}
-.cell.c-hit{background:#3a0a0a}
-.cell.c-miss{background:#090e16}
-.cell.c-sunk{background:#240000;border-color:#4a0000}
+.cell-water.clickable:hover{background:#163048;border-color:#5090c0}
+.cell.ship-us{background:#0e3868;border-color:#2060a0}
+.cell.ship-irgc{background:#1e3412;border-color:#326020}
+.cell.prev-ok{background:#0d2e1e;border-color:#27ae60}
+.cell.prev-bad{background:#280c0c;border-color:#a03030}
+.cell.c-hit{background:#4a0f0f;border-color:#6a1a1a}
+.cell.c-miss{background:#0c1a2c;border-color:#3a6080}
+.cell.c-sunk{background:#300000;border-color:#5a0a0a}
 
 /* ring animation overlay */
 .ring{position:absolute;inset:-3px;border-radius:50%;pointer-events:none;z-index:20}
@@ -96,14 +96,15 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
 
 /* board wrapper with geo overlays */
 .grid-wrap-outer{position:relative;display:inline-block}
-.geo-label{position:absolute;font-size:9px;letter-spacing:2px;text-transform:uppercase;pointer-events:none;color:#445566;white-space:nowrap}
+.geo-label{position:absolute;font-size:9px;letter-spacing:2px;text-transform:uppercase;pointer-events:none;color:#90b8d8;white-space:nowrap}
 .geo-label.iran{top:2px;left:50%;transform:translateX(-50%)}
-.geo-label.oman{bottom:2px;left:22%;transform:translateX(-50%)}
-.geo-label.uae{bottom:2px;left:10%}
-.geo-label.pg{left:8%;top:48%;transform:translateY(-50%);font-size:8px}
-.geo-label.goo{right:16%;top:55%;font-size:8px}
-.geo-label.as{right:3%;bottom:20%;font-size:7px}
-.geo-label.soh{left:40%;top:2px;font-size:7px;color:#334455}
+.geo-label.oman{bottom:6%;left:20%;transform:translateX(-50%)}
+.geo-label.uae{bottom:6%;left:6%}
+.geo-label.pg{left:5%;top:22%;transform:translateY(-50%);font-size:8px}
+.geo-label.goo{right:22%;top:44%;font-size:8px}
+.geo-label.as{right:4%;bottom:28%;font-size:7px}
+.geo-label.soh{left:42%;top:28%;font-size:7px;color:#6a8aaa}
+.geo-label.musandam{left:24%;top:38%;font-size:7px;color:#6a8aaa}
 
 /* tanker layer */
 .tanker-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
@@ -112,7 +113,7 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
 .t-hull::before{content:'';position:absolute;top:-4px;right:5px;width:6px;height:4px;background:#484848}
 .t-hull::after{content:'';position:absolute;bottom:-2px;left:2px;right:3px;height:2px;background:#2a2a2a;border-radius:0 0 2px 2px}
 .t-hull.flip{transform:scaleX(-1)}
-.t-dest{font-size:8px;color:#6a7a8a;letter-spacing:1px;white-space:nowrap}
+.t-dest{font-size:8px;color:#8a9aaa;letter-spacing:1px;white-space:nowrap}
 @keyframes tanker-ltr{from{transform:translateX(var(--sx,-80px))}to{transform:translateX(var(--ex,700px))}}
 @keyframes tanker-rtl{from{transform:translateX(var(--ex,700px))}to{transform:translateX(var(--sx,-80px))}}
 .tanker.anim-distress .t-hull{animation:distress .4s linear 3}
@@ -125,43 +126,79 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
 #pass-name{font-size:1.8em;letter-spacing:5px;text-transform:uppercase}
 #pass-name.us{color:#4fc3f7}
 #pass-name.irgc{color:#c0392b}
-#pass-instr{font-size:11px;color:#6a7a8a;max-width:380px;line-height:1.8}
+#pass-instr{font-size:11px;color:#9aaabb;max-width:380px;line-height:1.8}
 
 /* ═══════════ BATTLE ═══════════ */
 #battle-screen{gap:0}
 .battle-hdr{text-align:center;margin-bottom:10px}
 .battle-hdr h1{font-size:1.2em;letter-spacing:4px;text-transform:uppercase;margin-bottom:0}
-#salvo-bar{font-size:11px;color:#778;margin:6px 0 10px;display:flex;align-items:center;justify-content:center;gap:8px}
+#salvo-bar{font-size:11px;color:#9aaabb;margin:6px 0 10px;display:flex;align-items:center;justify-content:center;gap:8px}
 #salvo-pips{display:flex;gap:4px}
 .spip{width:9px;height:9px;border-radius:50%;background:#4fc3f7;transition:background .3s,transform .3s}
-.spip.used{background:#2a3545;transform:scale(.7)}
+.spip.used{background:#3a4a5a;transform:scale(.7)}
 .spip.irgc{background:#c0392b}
-#battle-status{background:#0a0d12;border:1px solid #1e2a3a;padding:7px 18px;font-size:12px;color:#7a8a9a;min-height:32px;display:flex;align-items:center;justify-content:center;text-align:center;width:100%;max-width:1200px;margin-bottom:14px;transition:color .2s,border-color .3s;animation:status-in .25s ease}
+#battle-status{background:#0c1018;border:1px solid #3a6080;padding:7px 18px;font-size:12px;color:#a0b8cc;min-height:32px;display:flex;align-items:center;justify-content:center;text-align:center;width:100%;max-width:1200px;margin-bottom:14px;transition:color .2s,border-color .3s;animation:status-in .25s ease}
 @keyframes status-in{from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
 #battle-status.s-hit{color:#e74c3c;border-color:#5a1010}
 #battle-status.s-miss{color:#4fc3f7;border-color:#1a3a5c}
 #battle-status.s-sink{color:#f39c12;border-color:#5a3a00}
 .battle-main{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
 .board-section{text-align:center;flex-shrink:0}
-.board-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#506070;margin-bottom:6px}
+.board-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#90b0cc;margin-bottom:6px}
 .board-lbl.live{color:#4fc3f7}
 .board-lbl.live.irgc{color:#c0392b}
 .ships-status{margin-top:8px;text-align:left;font-size:10px;line-height:2}
-.sentry{color:#445}
-.sentry.alive{color:#8a9aaa}
+.sentry{color:#6a7a8a}
+.sentry.alive{color:#b0c4d4}
 .sentry.sunk{color:#5a1010;text-decoration:line-through}
-#endturn-wrap{margin-top:16px;text-align:center}
+#endturn-wrap{display:none}
+
+/* ═══════════ SEA MINES ═══════════ */
+.cell-mine{background:#1a0e2c;border-color:#7a40c0}
+.cell-mine::after{content:'●';color:#9060e0;font-size:60%;position:absolute}
+
+/* ═══════════ SPECIAL WEAPONS ═══════════ */
+#weapon-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 10px}
+.wpn-btn{background:#0c1020;border:1px solid #5a4080;color:#b090e0;padding:5px 14px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:.15s;text-transform:uppercase}
+.wpn-btn:hover:not(.used){background:#5a4080;color:#fff}
+.wpn-btn.active{background:#7a50b0;border-color:#c0a0ff;color:#fff;animation:wpn-pulse .8s ease-in-out infinite alternate}
+@keyframes wpn-pulse{from{box-shadow:0 0 4px #7a50b0}to{box-shadow:0 0 12px #c0a0ff}}
+.wpn-btn.irgc{border-color:#804020;color:#e09050}
+.wpn-btn.irgc:hover:not(.used){background:#804020;color:#fff}
+.wpn-btn.irgc.active{background:#a06030;border-color:#f0b060}
+.wpn-btn.used{opacity:.3;pointer-events:none;border-color:#333;color:#555}
+.cell.c-revealed{background:#0a1e1a;border-color:#30a070}
+.cell-aoe-preview{background:#2a1a40;border-color:#9060e0;cursor:crosshair}
+.cell-aoe-preview.irgc{background:#2a1408;border-color:#e06020}
+
+/* ═══════════ TIMER BAR ═══════════ */
+#timer-bar-wrap{height:3px;background:#111820;width:100%;max-width:1200px;margin-bottom:8px;overflow:hidden}
+#timer-bar{height:100%;background:#4fc3f7;width:100%;transition:width 1s linear}
+#timer-bar.warning{background:#e74c3c}
+#timer-countdown{font-size:10px;color:#6a8a9a;text-align:center;margin-bottom:6px;letter-spacing:1px;min-height:14px}
+#timer-countdown.warning{color:#e74c3c}
+
+/* ═══════════ INTEL MODAL ═══════════ */
+#intel-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:300;background:#060c14;border:1px solid #2a5a40;padding:18px 28px;text-align:center;min-width:280px;max-width:420px;animation:intel-in .3s ease}
+#intel-modal.active{display:block}
+@keyframes intel-in{from{transform:translate(-50%,-60%);opacity:0}to{transform:translate(-50%,-50%);opacity:1}}
+.intel-hdr{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#30a070;margin-bottom:10px}
+#intel-text{font-size:11px;color:#c0d8c8;line-height:1.8;letter-spacing:.5px}
+#intel-close{margin-top:12px;font-size:10px;color:#507060;cursor:pointer;letter-spacing:2px}
+#intel-close:hover{color:#80c0a0}
+#intel-overlay{display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.5)}
+#intel-overlay.active{display:block}
 
 /* ═══════════ BATTLE LOG ═══════════ */
 #log-panel{width:190px;flex-shrink:0}
-.log-hdr{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#506070;margin-bottom:6px}
-#battle-log{height:280px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#1e2a3a transparent}
+.log-hdr{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7a98b0;margin-bottom:6px}
+#battle-log{height:280px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#2e4a62 transparent}
 #battle-log::-webkit-scrollbar{width:4px}
 #battle-log::-webkit-scrollbar-track{background:transparent}
 #battle-log::-webkit-scrollbar-thumb{background:#1e2a3a}
 .log-entry{padding:4px 6px;border-left:2px solid;margin-bottom:5px;font-size:10px;animation:log-in .2s ease;line-height:1.5}
 .log-entry.hit{border-color:#5a1010;color:#c0392b}
-.log-entry.miss{border-color:#1e2a3a;color:#556070}
+.log-entry.miss{border-color:#2e4a62;color:#7090a8}
 .log-entry.sink{border-color:#5a3a00;color:#f39c12}
 .log-sub{font-size:9px;opacity:.8;display:block}
 @keyframes log-in{from{transform:translateX(16px);opacity:0}to{transform:translateX(0);opacity:1}}
@@ -172,7 +209,7 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
 @keyframes type-in{from{max-width:0}to{max-width:100%}}
 #victory-title.us{color:#4fc3f7}
 #victory-title.irgc{color:#c0392b}
-#victory-detail{font-size:11px;color:#778;margin-bottom:10px}
+#victory-detail{font-size:11px;color:#9aaabb;margin-bottom:10px}
 .particle{position:absolute;width:6px;height:6px;border-radius:50%;left:50%;top:42%;animation:p-burst 1.6s ease-out forwards}
 @keyframes p-burst{0%{transform:translate(-50%,-50%) translate(0,0) scale(1);opacity:1}100%{transform:translate(-50%,-50%) translate(var(--tx),var(--ty)) scale(.3);opacity:0}}
 
@@ -180,14 +217,14 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
 .anim-hit{animation:cell-hit .65s ease-out forwards}
 @keyframes cell-hit{0%{background:#ff2222;transform:scale(1.25)}60%{background:#aa1111;transform:scale(1.05)}100%{background:#3a0a0a;transform:scale(1)}}
 .anim-miss{animation:cell-miss .5s ease-out forwards}
-@keyframes cell-miss{0%{background:#88ccff;transform:scale(1.1)}100%{background:#090e16;transform:scale(1)}}
+@keyframes cell-miss{0%{background:#88ccff;transform:scale(1.1)}100%{background:#0c1a2c;transform:scale(1)}}
 .anim-place{animation:cell-place .35s ease-out forwards}
 @keyframes cell-place{0%{background:#00ff88;transform:scale(1.2)}100%{transform:scale(1)}}
 .anim-sunk{animation:cell-shake .5s ease-out}
 @keyframes cell-shake{0%,100%{transform:translate(0)}15%{transform:translate(-2px,-1px)}30%{transform:translate(2px,1px)}45%{transform:translate(-2px,1px)}60%{transform:translate(2px,-1px)}75%{transform:translate(-1px,0)}}
 
 /* ═══════════ TOOLTIP ═══════════ */
-#coord-tip{position:fixed;display:none;z-index:400;background:#0a0d12;border:1px solid #4fc3f7;color:#4fc3f7;font-size:10px;padding:1px 5px;pointer-events:none;letter-spacing:1px}
+#coord-tip{position:fixed;display:none;z-index:400;background:#0c1420;border:1px solid #4fc3f7;color:#7dd6f8;font-size:10px;padding:1px 5px;pointer-events:none;letter-spacing:1px}
 
 /* ═══════════ MOBILE: PHONE LANDSCAPE ═══════════ */
 @media (max-height:520px) and (orientation:landscape){
@@ -199,7 +236,7 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
   #salvo-bar{margin:2px 0 4px;font-size:10px}
   .battle-main{gap:8px;flex-wrap:nowrap;align-items:center}
   #log-panel{display:none}
-  #endturn-wrap{margin-top:4px}
+  #endturn-wrap{display:none}
   .ships-status{font-size:9px;line-height:1.4;margin-top:3px}
   .btn{padding:6px 14px;font-size:11px}
   .faction-intro{flex-direction:row;gap:12px;margin-bottom:14px}
@@ -224,7 +261,71 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
   .faction-intro{flex-direction:column;align-items:center}
   .faction-box{width:260px}
 }
+
+/* ═══════════ LOBBY ═══════════ */
+#lobby-screen{text-align:center;gap:16px}
+#lobby-screen h1{font-size:2em;letter-spacing:6px;color:#4fc3f7;text-transform:uppercase;text-shadow:0 0 30px rgba(79,195,247,.35)}
+#lobby-screen h2{font-size:.8em;letter-spacing:4px;color:#9aabbf;text-transform:uppercase;margin-bottom:10px}
+#lobby-actions{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:8px}
+#join-code{background:#0c1828;border:1px solid #4fc3f7;color:#e8ecf0;font-family:'Courier New',monospace;font-size:16px;letter-spacing:6px;text-transform:uppercase;padding:8px 16px;width:140px;text-align:center;outline:none}
+#join-code::placeholder{color:#3a5a78;letter-spacing:2px;font-size:12px}
+#lobby-status{font-size:11px;color:#7a9ab0;letter-spacing:1px;min-height:22px;text-align:center}
+#lobby-code-big{font-size:2em;letter-spacing:10px;color:#4fc3f7;font-weight:bold;margin:4px 0}
+#lobby-divider{color:#3a5a78;font-size:11px;letter-spacing:3px;margin:4px 0}
+#lobby-error{color:#c0392b;font-size:11px;letter-spacing:1px;min-height:16px}
+
+/* ═══════════ TURN INDICATOR ═══════════ */
+#turn-indicator{padding:6px 20px;font-size:10px;letter-spacing:3px;text-transform:uppercase;text-align:center;border-radius:0;margin-bottom:8px;transition:all .3s;max-width:1200px;width:100%}
+#turn-indicator.my-turn{background:#0a1e10;border:1px solid #2a9a50;color:#50e080}
+#turn-indicator.opp-turn{background:#1e1a0a;border:1px solid #6a5000;color:#b08020}
+#conn-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#50e080;margin-right:6px;vertical-align:middle}
+#conn-dot.disconnected{background:#c0392b}
+
+/* ═══════════ PENDING CELL ═══════════ */
+.c-pending{background:#0a1a2c!important;border-color:#304060!important;animation:cell-pending .8s ease-in-out infinite alternate}
+@keyframes cell-pending{from{opacity:.5}to{opacity:1}}
+
+/* ═══════════ LOBBY MODE ═══════════ */
+#lobby-mode{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:2px 0 8px}
+.mode-opt{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:10px;letter-spacing:1px;color:#7a9ab0;padding:5px 12px;border:1px solid #2a4060;transition:all .2s}
+.mode-opt:has(input:checked){color:#4fc3f7;border-color:#4fc3f7;background:#0a1a2c}
+.mode-opt input{accent-color:#4fc3f7;width:12px;height:12px;cursor:pointer}
+
+/* ═══════════ CHAT ═══════════ */
+#chat-section{width:100%;max-width:860px;margin-top:8px}
+#chat-log{height:68px;overflow-y:auto;background:#050810;border:1px solid #1a2a3a;padding:5px 8px;margin-bottom:4px;font-size:10px;scroll-behavior:smooth}
+.chat-msg{margin:2px 0;line-height:1.5}.chat-msg.mine{color:#4fc3f7;text-align:right}.chat-msg.theirs{color:#f39c12}
+.chat-who{font-weight:bold;letter-spacing:1px;margin-right:4px}
+#chat-input-row{display:flex;gap:6px;margin-bottom:4px}
+#chat-input{flex:1;background:#050810;border:1px solid #1a2a3a;color:#e8ecf0;font-family:'Courier New',monospace;font-size:11px;padding:4px 8px;outline:none}
+#chat-input:focus{border-color:#2a4a6a}
+#chat-taunts{display:flex;gap:5px;flex-wrap:wrap}
+.btn.taunt{opacity:.6;font-size:9px;padding:3px 8px;letter-spacing:1px}.btn.taunt:hover{opacity:1}
+
+/* ═══════════ STREAK BANNER ═══════════ */
+#streak-banner{position:fixed;top:56px;left:50%;transform:translateX(-50%);background:rgba(79,195,247,.12);border:1px solid #4fc3f7;color:#4fc3f7;font-size:14px;font-weight:bold;letter-spacing:4px;padding:7px 24px;z-index:500;opacity:0;transition:opacity .35s;pointer-events:none;text-transform:uppercase;white-space:nowrap}
+#streak-banner.mega{color:#f39c12;border-color:#f39c12;background:rgba(243,156,18,.12)}
+
+/* ═══════════ KILL CAM ═══════════ */
+#kill-cam{position:fixed;top:50%;left:50%;background:rgba(6,8,14,.93);border:2px solid #c0392b;flex-direction:column;align-items:center;justify-content:center;z-index:600;padding:22px 44px;display:none}
+#kill-cam.show{display:flex;animation:kc-in .3s ease}
+@keyframes kc-in{from{opacity:0;transform:translate(-50%,-50%) scale(.7)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+#kill-cam{transform:translate(-50%,-50%)}
+#kill-cam.sink{border-color:#f39c12}
+.kc-eyebrow{font-size:9px;letter-spacing:4px;color:#7a8a9a;margin-bottom:6px;text-transform:uppercase}
+.kc-ship{font-size:18px;font-weight:bold;letter-spacing:3px;color:#c0392b;text-transform:uppercase;margin-bottom:4px}
+#kill-cam.sink .kc-ship{color:#f39c12}
+.kc-sub{font-size:10px;letter-spacing:5px;color:#9aabbf;text-transform:uppercase}
+
+/* ═══════════ BLOCKER ROW ═══════════ */
+.c-blocked{background:rgba(243,156,18,.13)!important;border-color:#4a3000!important;cursor:not-allowed!important;position:relative}
+.c-blocked::after{content:'⛽';font-size:7px;opacity:.55;position:absolute;top:1px;right:1px;pointer-events:none}
+.s-tanker{color:#f39c12!important}
+
+/* ═══════════ VICTORY REMATCH ═══════════ */
+#rematch-status{font-size:10px;color:#7a9ab0;letter-spacing:1px;min-height:18px;margin-top:4px}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
 
@@ -239,10 +340,32 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
 
 <div id="game-container">
 
+  <!-- LOBBY -->
+  <div id="lobby-screen" class="screen">
+    <div class="eyebrow">classified — operation hormuz</div>
+    <h1>Battleship Hormuz</h1>
+    <h2>Naval Engagement — Two-Player Online</h2>
+    <div id="lobby-actions">
+      <button class="btn" onclick="createGame()">◈ CREATE MISSION</button>
+      <div id="lobby-mode">
+        <label class="mode-opt"><input type="radio" name="gmode" value="30"> ⚡ BLITZ — 30s</label>
+        <label class="mode-opt"><input type="radio" name="gmode" value="45" checked> ⏱ STANDARD — 45s</label>
+        <label class="mode-opt"><input type="radio" name="gmode" value="0"> ∞ NO TIMER</label>
+      </div>
+      <div id="lobby-divider">— OR —</div>
+      <input id="join-code" maxlength="4" placeholder="ENTER CODE" autocomplete="off" spellcheck="false" oninput="this.value=this.value.toUpperCase()">
+      <button class="btn" onclick="joinGame()">▶ JOIN MISSION</button>
+    </div>
+    <div id="lobby-code-big" style="display:none"></div>
+    <div id="lobby-status">Enter a code to join, or create a new mission.</div>
+    <div id="lobby-error"></div>
+    <button class="btn sm" style="margin-top:8px;opacity:.5" onclick="goToTitle()">← BACK</button>
+  </div>
+
   <!-- TITLE -->
   <div id="title-screen" class="screen">
     <div class="eyebrow">classified — operation hormuz</div>
-    <h1>Strait of Hormuz</h1>
+    <h1>Battleship Hormuz</h1>
     <h2>Naval Engagement — Two-Player Tactical Strike</h2>
     <div class="faction-intro">
       <div class="faction-box us">
@@ -267,7 +390,8 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
       </div>
     </div>
     <div id="title-tanker-bg"></div>
-    <button class="btn" onclick="startGame()">▶ BEGIN MISSION</button>
+    <input type="checkbox" id="timer-toggle" style="display:none">
+    <button class="btn" onclick="goToLobby()">▶ PROCEED</button>
   </div>
 
   <!-- SETUP -->
@@ -289,29 +413,46 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
       <div class="geo-label pg">PERSIAN GULF</div>
       <div class="geo-label goo">GULF OF OMAN</div>
       <div class="geo-label as">ARABIAN<br>SEA</div>
+      <div class="geo-label musandam">MUSANDAM</div>
       <div class="tanker-layer" id="setup-tankers"></div>
       <div class="grid-outer" id="setup-grid"></div>
     </div>
     <div id="ship-queue"></div>
   </div>
 
-  <!-- PASS OVERLAY -->
+  <!-- WAITING OVERLAY (replaces pass screen) -->
   <div id="pass-screen">
     <div class="eyebrow">— classified —</div>
     <div id="pass-name"></div>
     <div id="pass-instr"></div>
-    <button class="btn" id="pass-btn" onclick="onPassReady()">▶ READY</button>
+    <button class="btn" id="pass-btn" style="display:none">▶ READY</button>
+  </div>
+
+  <!-- INTEL OVERLAY + MODAL -->
+  <div id="intel-overlay" onclick="closeIntel()"></div>
+  <div id="intel-modal">
+    <div class="intel-hdr">◈ CLASSIFIED INTEL REPORT</div>
+    <div id="intel-text"></div>
+    <div id="intel-close" onclick="closeIntel()">[ DISMISS ]</div>
   </div>
 
   <!-- BATTLE -->
   <div id="battle-screen" class="screen">
+    <div id="turn-indicator" class="my-turn"><span id="conn-dot"></span>YOUR TURN — STRIKE</div>
     <div class="battle-hdr"><h1 id="battle-title"></h1></div>
     <div id="salvo-bar"><span id="salvo-text">Salvo: 5/5</span><div id="salvo-pips"></div></div>
+    <div id="timer-bar-wrap"><div id="timer-bar"></div></div>
+    <div id="timer-countdown"></div>
     <div id="battle-status">Select a target on the attack grid.</div>
+    <div id="weapon-bar"></div>
     <div class="battle-main">
       <div class="board-section">
         <div class="board-lbl">Your Fleet</div>
-        <div class="grid-wrap-outer">
+        <div class="grid-wrap-outer" id="def-wrap">
+          <div class="geo-label iran">IRAN</div>
+          <div class="geo-label pg">PERSIAN GULF</div>
+          <div class="geo-label goo">GULF OF OMAN</div>
+          <div class="geo-label musandam">MUSANDAM</div>
           <div class="tanker-layer" id="def-tankers"></div>
           <div class="grid-outer" id="def-grid"></div>
         </div>
@@ -319,7 +460,11 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
       </div>
       <div class="board-section">
         <div class="board-lbl live" id="atk-lbl">▶ Attack Grid</div>
-        <div class="grid-wrap-outer">
+        <div class="grid-wrap-outer" id="atk-wrap">
+          <div class="geo-label iran">IRAN</div>
+          <div class="geo-label pg">PERSIAN GULF</div>
+          <div class="geo-label goo">GULF OF OMAN</div>
+          <div class="geo-label musandam">MUSANDAM</div>
           <div class="tanker-layer" id="atk-tankers"></div>
           <div class="grid-outer" id="atk-grid"></div>
         </div>
@@ -329,8 +474,19 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
         <div id="battle-log"></div>
       </div>
     </div>
-    <div id="endturn-wrap">
-      <button class="btn" id="endturn-btn" style="display:none" onclick="endTurn()">PASS DEVICE ▶</button>
+    <div id="endturn-wrap"></div>
+    <div id="chat-section">
+      <div id="chat-log"></div>
+      <div id="chat-input-row">
+        <input id="chat-input" maxlength="80" placeholder="Message…" autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')sendMessage()">
+        <button class="btn sm" onclick="sendMessage()">SEND</button>
+      </div>
+      <div id="chat-taunts">
+        <button class="btn taunt" onclick="sendMessage('Nice try.')">Nice try.</button>
+        <button class="btn taunt" onclick="sendMessage('INCOMING!')">INCOMING!</button>
+        <button class="btn taunt" onclick="sendMessage('You\'ll regret that.')">You'll regret that.</button>
+        <button class="btn taunt" onclick="sendMessage('GG easy.')">GG easy.</button>
+      </div>
     </div>
   </div>
 
@@ -339,33 +495,66 @@ body{background:#080c12;color:#ddd;font-family:'Courier New',monospace;min-heigh
     <div class="eyebrow">— mission complete —</div>
     <div id="victory-title"></div>
     <div id="victory-detail"></div>
-    <button class="btn" onclick="resetGame()">↺ PLAY AGAIN</button>
+    <button class="btn" id="rematch-btn" onclick="clickRematch()">⚔ REMATCH</button>
+    <div id="rematch-status"></div>
+    <button class="btn sm" style="margin-top:8px;opacity:.6" onclick="resetGame()">↺ NEW GAME</button>
   </div>
 
 </div>
 
+<div id="streak-banner"></div>
+<div id="kill-cam"></div>
+
 <script>
+// ═══════════════════════════════════════
+// SUPABASE CONFIG
+// ═══════════════════════════════════════
+// Replace these with your Supabase project URL and anon key
+const SUPABASE_URL  = 'https://pjltfphforppnuxlgimu.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqbHRmcGhmb3JwcG51eGxnaW11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQ0MjAsImV4cCI6MjA4ODgzMDQyMH0.E4ahe8avJ1q0C02BlBJ75FhF96Gd9tTnBUsPe_ZDuaw';
+const sb = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON);
+
 // ═══════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════
 
-const COLS = 24, ROWS = 11;
-const COL_LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWX'.split('');
+const COLS = 26, ROWS = 30;
+const COL_LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 // Strait of Hormuz region — 0=land, 1=water, 2=island
-// Left: Persian Gulf | Center: Strait | Right: Gulf of Oman + Arabian Sea
+// Wide Persian Gulf (left) → narrow Strait (center) → Gulf of Oman → large Arabian Sea (right/bottom)
 const MASK = [
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R0  Iran coast
-  [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0], // R1  PG narrows north
-  [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0], // R2
-  [0,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,0,0,0,0], // R3  Qeshm Is.(11)
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0], // R4
-  [1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,0,0], // R5  Hormuz Is.(9)
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], // R6  full (GoO + AS)
-  [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0], // R7
-  [0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,1,0,0], // R8  Musandam+GoO
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0], // R9  Arabian Sea
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R10 UAE/Oman coast
+  // Col:  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R0  land (Iraq/Iran border)
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R1  land (Iraq/Iran/Arabia)
+  [0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R2  Kuwait bay (north tip PG)
+  [0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R3  PG opening
+  [0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R4  PG expanding
+  [0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R5  PG expanding
+  [1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R6  PG wide (Bahrain level)
+  [1,1,1,1,1,1,1,1,1,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0], // R7  PG + Qeshm Is. (K-L)
+  [1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0], // R8  Hormuz Is. (I), Strait entrance
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0], // R9  PG south + Strait passage (continuous)
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0], // R10 Strait of Hormuz + Gulf of Oman
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0], // R11 Gulf of Oman
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0], // R12 GoO / Arabian Sea boundary
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1], // R13 Arabian Sea opens
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1], // R14 Arabian Sea
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1], // R15 Arabian Sea
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1], // R16 Arabian Sea
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1], // R17 Arabian Sea south
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1], // R18 Arabian Sea south
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1], // R19 Arabian Sea south
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1], // R20 Arabian Sea south
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1], // R21 Arabian Sea deep
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1], // R22 Arabian Sea deep
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1], // R23 Arabian Sea far south
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1], // R24 Arabian Sea far south
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1], // R25 Arabian Sea tip
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1], // R26 Arabian Sea tip
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1], // R27 Arabian Sea extremity
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R28 Yemen/Oman south coast
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // R29 bottom boundary
 ];
 
 const FLEETS = [
@@ -420,16 +609,16 @@ function getLayout() {
   const phone = Math.min(w, h) <= 520;
 
   if (phone && landscape) {
-    const atkCell  = Math.max(13, Math.floor((w * 0.52 - 14) / COLS));
-    const defCell  = Math.max(8,  Math.floor((w * 0.25 - 12) / COLS));
-    const setupCell= Math.max(15, Math.floor((w * 0.88 - 14) / COLS));
-    return { atkCell, defCell, setupCell, lbl:13, showLog:false, compact:true };
+    const atkCell  = Math.max(10, Math.floor((w * 0.50 - 14) / COLS));
+    const defCell  = Math.max(6,  Math.floor((w * 0.23 - 12) / COLS));
+    const setupCell= Math.max(11, Math.floor((w * 0.86 - 14) / COLS));
+    return { atkCell, defCell, setupCell, lbl:12, showLog:false, compact:true };
   }
   if (!landscape && phone) {
-    const cell = Math.max(14, Math.floor((w * 0.93 - 14) / COLS));
-    return { atkCell:cell, defCell:Math.floor(cell*.6), setupCell:cell, lbl:13, showLog:false, compact:true };
+    const cell = Math.max(12, Math.floor((w * 0.93 - 14) / COLS));
+    return { atkCell:cell, defCell:Math.floor(cell*.6), setupCell:cell, lbl:12, showLog:false, compact:true };
   }
-  return { atkCell:22, defCell:18, setupCell:26, lbl:18, showLog:true, compact:false };
+  return { atkCell:17, defCell:13, setupCell:20, lbl:15, showLog:true, compact:false };
 }
 
 // ═══════════════════════════════════════
@@ -460,13 +649,178 @@ function noise(dur, gainVal, freqC=600, delay=0) {
   g.gain.setValueAtTime(gainVal,t0); g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
   src.connect(f); f.connect(g); g.connect(audioCtx.destination); src.start(t0); src.stop(t0+dur);
 }
-function playHit()     { if(muted) return; tone(220,'sawtooth',.25,.3,0,50); noise(.25,.35,400,.04); }
-function playMiss()    { if(muted) return; tone(400,'sine',.4,.18,0,90); }
-function playSunk()    { if(muted) return; [0,.13,.26].forEach((d,i)=>tone([280,200,140][i],'sawtooth',.18,.32,d,[140,100,70][i])); noise(.4,.4,300,.1); }
-function playVictory() { if(muted) return; [261.63,329.63,392.00,523.25].forEach((f,i)=>tone(f,'triangle',.45,.28,i*.18)); }
-function playPlace()   { if(muted) return; tone(880,'sine',.1,.15); }
-function playClick()   { if(muted) return; tone(1200,'sine',.04,.1); }
-function toggleMute()  { muted=!muted; document.getElementById('mute-btn').textContent=muted?'🔇':'🔊'; }
+
+// ─── Improved Sound Effects ───────────────────────────────────
+function playHit() {
+  if(muted) return;
+  noise(0.07,0.75,150,0);
+  tone(145,'sawtooth',0.5,0.45,0,30);
+  tone(152,'sawtooth',0.45,0.28,0,32);
+  noise(0.2,0.2,2800,0.06);
+}
+function playMiss() {
+  if(muted) return;
+  noise(0.1,0.45,1400,0);
+  noise(0.4,0.2,200,0.08);
+  tone(180,'sine',0.7,0.2,0.1,900);
+}
+function playSunk() {
+  if(muted) return;
+  noise(0.08,1.0,180,0);
+  noise(0.15,0.7,550,0);
+  tone(55,'sine',1.8,0.4,0.05);
+  tone(2600,'sawtooth',0.12,0.15,0,380);
+  [0,0.12,0.28].forEach((d,i)=>tone([260,190,130][i],'sawtooth',0.28,0.48,d,[70,55,40][i]));
+  noise(0.6,0.32,380,0.35);
+}
+function playVictory() {
+  if(muted) return;
+  tone(131,'triangle',0.5,0.2,0);
+  [261.63,329.63,392.00,523.25].forEach((f,i)=>tone(f,'triangle',0.55,0.32,i*0.16));
+  [523.25,659.26,783.99].forEach((f,i)=>tone(f,'sine',0.4,0.18,0.9+i*0.14));
+}
+function playPlace() {
+  if(muted) return;
+  tone(700,'triangle',0.07,0.22);
+  tone(1050,'sine',0.1,0.12,0.02);
+}
+function playLaunch() {
+  if(muted) return;
+  // Blast kick
+  noise(0.07, 0.65, 280, 0);
+  // Rising missile whoosh
+  tone(75, 'sawtooth', 0.65, 0.38, 0, 1400);
+  tone(55, 'sawtooth', 0.55, 0.22, 0.04, 950);
+  // Exhaust trail
+  noise(0.55, 0.14, 750, 0.08);
+}
+function playClick() {
+  if(muted) return;
+  tone(1500,'sine',0.025,0.14);
+  tone(750,'sine',0.04,0.09,0.008);
+}
+function playMineDetonate() {
+  if(muted) return;
+  noise(0.1,1.4,120,0); noise(0.2,0.9,500,0); noise(0.8,0.45,1600,0.15);
+  tone(65,'sine',2.2,0.55,0,20);
+  [0,0.14,0.32,0.55].forEach(d=>noise(0.15,0.5,280,d));
+  tone(3000,'sawtooth',0.1,0.18,0,200);
+}
+
+// ─── Background Music Engine ──────────────────────────────────
+let musicBus = null;
+let _musicTheme = null;
+let _musicTimer = null;
+const MUSIC_VOL = 0.15;
+
+function ensureMusicBus() {
+  ensureAudio();
+  if (!musicBus) {
+    musicBus = audioCtx.createGain();
+    musicBus.gain.value = 0;
+    musicBus.connect(audioCtx.destination);
+  }
+}
+function playMN(freq, type, durS, vol, t0, freqEnd=null) {
+  if (!musicBus || muted) return;
+  const osc=audioCtx.createOscillator(), g=audioCtx.createGain();
+  osc.type=type; osc.frequency.setValueAtTime(freq,t0);
+  if(freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd,t0+durS);
+  g.gain.setValueAtTime(0.0001,t0);
+  g.gain.linearRampToValueAtTime(vol,t0+Math.min(0.015,durS*0.1));
+  g.gain.exponentialRampToValueAtTime(0.0001,t0+durS);
+  osc.connect(g); g.connect(musicBus); osc.start(t0); osc.stop(t0+durS+0.05);
+}
+function playMNoise(durS, vol, freqC, t0, Q=3) {
+  if (!musicBus || muted) return;
+  const len=Math.ceil(audioCtx.sampleRate*(durS+0.05));
+  const buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate);
+  const d=buf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  const src=audioCtx.createBufferSource(); src.buffer=buf;
+  const f=audioCtx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=freqC; f.Q.value=Q;
+  const g=audioCtx.createGain();
+  g.gain.setValueAtTime(vol,t0); g.gain.exponentialRampToValueAtTime(0.0001,t0+durS*0.75);
+  src.connect(f); f.connect(g); g.connect(musicBus); src.start(t0); src.stop(t0+durS);
+}
+function _themeBeatDur(t){ return 60/{main:82,us:120,irgc:68}[t]; }
+function _scheduleMainTheme(t0,bd){
+  [[0,110],[2,82],[3.5,87],[4,110],[5,110],[6,98],[7,82]]
+    .forEach(([b,f])=>playMN(f,'square',bd*0.35,0.35,t0+b*bd));
+  [[1,131],[2,165],[3,147],[4.5,220],[5.5,196],[6.5,165],[7.5,220]]
+    .forEach(([b,f])=>playMN(f,'triangle',bd*0.4,0.14,t0+b*bd));
+  [0,2,4,6].forEach(b=>playMNoise(bd*0.12,0.45,90,t0+b*bd,2));
+  [1,3,5,7].forEach(b=>playMNoise(bd*0.14,0.28,700,t0+b*bd,4));
+  [0,4].forEach(b=>playMN(55,'sine',bd*0.8,0.12,t0+b*bd));
+}
+function _scheduleUsTheme(t0,bd){
+  [[0,392],[1,294],[2,392],[3,494],[4,587],[5,494],[6,392],[7,294]]
+    .forEach(([b,f])=>playMN(f,'sawtooth',bd*0.45,0.2,t0+b*bd));
+  [[0,196],[2,196],[4,294],[6,196]]
+    .forEach(([b,f])=>playMN(f,'triangle',bd*0.6,0.1,t0+b*bd));
+  [[0,98],[1,73],[2,98],[3,73],[4,98],[5,73],[6,98],[7,73]]
+    .forEach(([b,f])=>playMN(f,'square',bd*0.3,0.28,t0+b*bd));
+  [0,2,4,6].forEach(b=>playMNoise(bd*0.1,0.4,100,t0+b*bd,2));
+  [1,3,5,7].forEach(b=>playMNoise(bd*0.1,0.32,900,t0+b*bd,5));
+}
+function _scheduleIrgcTheme(t0,bd){
+  playMN(73,'sine',bd*8,0.1,t0);
+  [[0,147],[0.6,156],[1.0,185],[1.6,196],[2.1,185],[2.4,156],[2.8,147]]
+    .forEach(([b,f])=>playMN(f,'sawtooth',bd*0.45,0.24,t0+b*bd));
+  [[3.8,220],[4.4,233],[4.9,220],[5.3,196],[5.8,185],[6.1,156],[6.4,147],[6.9,185],[7.2,147]]
+    .forEach(([b,f])=>playMN(f,'sawtooth',bd*0.4,0.22,t0+b*bd));
+  [0,2,4,6].forEach(b=>playMNoise(bd*0.18,0.38,130,t0+b*bd,2.5));
+  [0.5,2.5,4.5,6.5].forEach(b=>playMNoise(bd*0.14,0.22,350,t0+b*bd,3));
+  [1,3,5,7].forEach(b=>playMNoise(bd*0.12,0.18,1100,t0+b*bd,5));
+}
+function _scheduleTheme(theme,t0){
+  const bd=_themeBeatDur(theme);
+  if(theme==='main') _scheduleMainTheme(t0,bd);
+  else if(theme==='us') _scheduleUsTheme(t0,bd);
+  else if(theme==='irgc') _scheduleIrgcTheme(t0,bd);
+}
+function _runMusicLoop(theme,t0){
+  if(_musicTheme!==theme) return;
+  _scheduleTheme(theme,t0);
+  const loopDur=_themeBeatDur(theme)*8;
+  _musicTimer=setTimeout(()=>_runMusicLoop(theme,t0+loopDur),(loopDur-0.05)*1000);
+}
+function setMusicTheme(theme){
+  if(_musicTheme===theme) return;
+  if(_musicTimer){clearTimeout(_musicTimer);_musicTimer=null;}
+  const prev=_musicTheme;
+  _musicTheme=theme;
+  if(muted||!theme) return;
+  ensureMusicBus();
+  const fade=prev?0.3:0.0;
+  musicBus.gain.setValueAtTime(musicBus.gain.value,audioCtx.currentTime);
+  musicBus.gain.linearRampToValueAtTime(0,audioCtx.currentTime+fade);
+  setTimeout(()=>{
+    if(_musicTheme!==theme||!musicBus) return;
+    musicBus.gain.setValueAtTime(0,audioCtx.currentTime);
+    musicBus.gain.linearRampToValueAtTime(MUSIC_VOL,audioCtx.currentTime+0.6);
+    _runMusicLoop(theme,audioCtx.currentTime+0.1);
+  },(fade+0.05)*1000);
+}
+function stopMusic(){
+  _musicTheme=null;
+  if(_musicTimer){clearTimeout(_musicTimer);_musicTimer=null;}
+  if(musicBus){
+    musicBus.gain.setValueAtTime(musicBus.gain.value,audioCtx.currentTime);
+    musicBus.gain.linearRampToValueAtTime(0,audioCtx.currentTime+0.5);
+  }
+}
+function currentExpectedTheme(){
+  if(!G||G.phase==='title') return null;
+  if(G.phase==='setup') return 'main';
+  if(G.phase==='battle') return G.currentPidx===0?'us':'irgc';
+  return null;
+}
+function toggleMute(){
+  muted=!muted;
+  document.getElementById('mute-btn').textContent=muted?'🔇':'🔊';
+  if(muted){ stopMusic(); }
+  else { const t=currentExpectedTheme(); if(t) setMusicTheme(t); }
+}
 
 // ═══════════════════════════════════════
 // GAME STATE
@@ -476,8 +830,22 @@ let G = {};
 function newGrid(){ return Array.from({length:ROWS},()=>Array(COLS).fill(null)); }
 function newPlayer(){ return {grid:newGrid(),received:newGrid(),fired:newGrid(),placed:[]}; }
 function initGame(){
+  const timerEl=document.getElementById('timer-toggle');
   G={phase:'title',setupPidx:0,setupSidx:0,orientation:'h',currentPidx:0,salvosLeft:5,
-     players:[newPlayer(),newPlayer()],passCallback:null};
+     players:[newPlayer(),newPlayer()],passCallback:null,
+     mines:[[],[]],minesLeft:2,minePhase:false,
+     weapons:[
+       [{key:'tomahawk', name:'Tomahawk Strike', desc:'2×2 area hit',used:false},{key:'recon',name:'Recon Drone',desc:'4×4 area reveal',used:false}],
+       [{key:'swarm',name:'Swarm Attack',desc:'4 random hits in 5×5',used:false},{key:'seadrone',name:'Sea Drone',desc:'Reveal row or column',used:false}]
+     ],
+     activeWeapon:null,_aoeAbort:null,
+     turnCount:0,streak:0,
+     timerEnabled:timerEl?timerEl.checked:false,
+     turnSeconds:45,
+     // Multiplayer fields
+     myPidx:0,gameId:null,gameCode:null,isMyTurn:false,
+     _sub:null,_msgSub:null,_procMoves:new Set(),_rematchGameId:null
+  };
 }
 function countAlive(pidx){ return G.players[pidx].placed.filter(p=>!p.sunk).length; }
 
@@ -609,11 +977,60 @@ function distressTankers(layerId){
 // ═══════════════════════════════════════
 
 function startSetup(pidx){
-  G.setupPidx=pidx; G.setupSidx=0; G.orientation='h';
+  G.phase='setup'; G.setupPidx=pidx; G.setupSidx=0; G.orientation='h'; G.minePhase=false; G.minesLeft=2;
+  // Restore UI elements that startMinePhase may have replaced/hidden
+  document.getElementById('setup-sub').textContent='Fleet Deployment';
+  document.getElementById('setup-ctrl').style.display='';
+  document.querySelector('.ship-info-bar').innerHTML='Placing: <b id="s-name"></b> (<b id="s-type"></b>) — <b id="s-size"></b> cells';
   rebuildSetupGrid();
   refreshSetupUI();
   spawnTankers('setup-tankers','setup-grid');
   showScreen('setup-screen');
+}
+
+function startMinePhase(pidx){
+  G.minePhase=true; G.minesLeft=2;
+  const faction=FLEETS[pidx].faction;
+  const titleEl=document.getElementById('setup-title');
+  titleEl.textContent=FLEETS[pidx].name;
+  titleEl.style.color=faction==='us'?'#4fc3f7':'#c0392b';
+  document.getElementById('setup-sub').textContent='Mine Placement';
+  document.getElementById('ship-queue').innerHTML='<span style="font-size:10px;color:#b090e0">Place 2 sea mines on your grid — they detonate if the enemy fires on those cells</span>';
+  document.querySelector('.ship-info-bar').innerHTML=`Mines remaining: <b id="mines-left" class="${faction}">2</b>`;
+  document.getElementById('setup-ctrl').style.display='none';
+  // Rebuild grid with mine placement click handler
+  const lay=getLayout();
+  buildGrid('setup-grid',{
+    cellPx:lay.setupCell,lblPx:lay.lbl,
+    onClick:(r,c)=>placeMine(r,c),
+    onHover:(r,c)=>{const el=cellEl('setup-grid',r,c); if(el&&MASK[r][c]===1&&!G.mines[pidx].some(m=>m.r===r&&m.c===c)) el.classList.add('prev-ok');},
+    onLeave:()=>document.querySelectorAll('#setup-grid .cell').forEach(e=>e.classList.remove('prev-ok'))
+  });
+  // Repaint ships
+  G.players[pidx].placed.forEach(pl=>{
+    pl.cells.forEach(({r,c})=>{
+      const el=cellEl('setup-grid',r,c);
+      if(el){ el.classList.remove('cell-water','clickable','prev-ok'); el.classList.add(`ship-${faction}`); }
+    });
+  });
+}
+
+function placeMine(r,c){
+  const pidx=G.setupPidx;
+  if(MASK[r][c]!==1) return;
+  if(G.mines[pidx].some(m=>m.r===r&&m.c===c)) return;
+  if(G.players[pidx].grid[r][c]!==null) return; // can't place on own ship
+  if(G.minesLeft<=0) return;
+  G.mines[pidx].push({r,c});
+  G.minesLeft--;
+  const el=cellEl('setup-grid',r,c);
+  if(el){ el.classList.remove('clickable','prev-ok'); el.classList.add('cell-mine'); }
+  const ml=document.getElementById('mines-left');
+  if(ml) ml.textContent=G.minesLeft;
+  playPlace();
+  if(G.minesLeft===0){
+    setTimeout(()=>submitSetup(), 500);
+  }
 }
 
 function rebuildSetupGrid(){
@@ -674,15 +1091,8 @@ function placeShip(r,c){
   });
 
   if(G.setupSidx>=FLEETS[pidx].ships.length){
-    if(pidx===0){
-      showPass(FLEETS[1].name,FLEETS[1].faction,
-        `${FLEETS[0].name} fleet deployed. Hand device to ${FLEETS[1].name} commander. Do not reveal positions.`,
-        ()=>startSetup(1));
-    } else {
-      showPass(FLEETS[0].name,FLEETS[0].faction,
-        'All fleets deployed. The battle for the Strait begins. Hand device to US Navy commander.',
-        ()=>startBattle());
-    }
+    // Enter mine placement phase
+    setTimeout(()=>startMinePhase(pidx), 300);
   } else {
     clearPreview(); rebuildSetupGrid(); refreshSetupUI();
   }
@@ -747,28 +1157,30 @@ function onPassReady(){
 // ═══════════════════════════════════════
 
 function startBattle(){
-  G.phase='battle'; G.currentPidx=0; G.salvosLeft=countAlive(0);
-  renderBattle(); showScreen('battle-screen');
+  // Triggered via onGameUpdate subscription when both players are ready
+  // Direct call path kept for safety
+  G.currentPidx=0; G.turnCount=0;
+  _startBattleLocal();
 }
 
 function renderBattle(){
-  const pidx=G.currentPidx, faction=FLEETS[pidx].faction, eidx=1-pidx;
+  const pidx=G.myPidx, faction=FLEETS[pidx].faction;
   const lay=getLayout();
 
   const titleEl=document.getElementById('battle-title');
-  titleEl.textContent=`${FLEETS[pidx].name} — Your Turn`;
+  titleEl.textContent=FLEETS[pidx].name;
   titleEl.style.color=faction==='us'?'#4fc3f7':'#c0392b';
   document.getElementById('atk-lbl').className=`board-lbl live${faction==='irgc'?' irgc':''}`;
 
   // Log panel visibility
   document.getElementById('log-panel').style.display=lay.showLog?'':'none';
 
-  // Defense grid
+  // Defense grid (always my fleet)
   buildGrid('def-grid',{cellPx:lay.defCell,lblPx:lay.lbl});
   paintDefenseGrid(pidx);
   spawnTankers('def-tankers','def-grid');
 
-  // Attack grid
+  // Attack grid (always my shots; fireAt checks G.isMyTurn internally)
   buildGrid('atk-grid',{cellPx:lay.atkCell,lblPx:lay.lbl,onClick:(r,c)=>fireAt(r,c)});
   paintAttackGrid(pidx);
   spawnTankers('atk-tankers','atk-grid');
@@ -778,7 +1190,9 @@ function renderBattle(){
 
   updateSalvoBar(pidx);
   renderShipsList(pidx);
-  document.getElementById('endturn-btn').style.display='none';
+  renderWeaponBar(pidx);
+  // endturn-btn removed — turns auto-end when salvos reach 0
+  updateTurnIndicator();
 }
 
 function paintDefenseGrid(pidx){
@@ -788,9 +1202,11 @@ function paintDefenseGrid(pidx){
     if(!el||MASK[r][c]!==1) continue;
     el.className='cell cell-water'; el.textContent='';
     if(p.grid[r][c]!==null) el.classList.add(`ship-${faction}`);
+    // Show own mines on defense board
+    if(G.mines[pidx].some(m=>m.r===r&&m.c===c)) el.classList.add('cell-mine');
     const rec=p.received[r][c];
-    if(rec==='hit'){el.classList.add('c-hit');el.textContent='✕';}
-    if(rec==='miss'){el.classList.add('c-miss');el.textContent='·';}
+    if(rec==='hit'){el.classList.remove('cell-mine');el.classList.add('c-hit');el.textContent='✕';}
+    if(rec==='miss'){el.classList.remove('cell-mine');el.classList.add('c-miss');el.textContent='·';}
   }
 }
 
@@ -799,11 +1215,15 @@ function paintAttackGrid(pidx){
   for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
     const el=cellEl('atk-grid',r,c);
     if(!el||MASK[r][c]!==1) continue;
+    const wasRevealed=el.classList.contains('c-revealed');
     el.className='cell cell-water'; el.textContent='';
     const f=p.fired[r][c];
     if(f==='hit'){el.classList.add('c-hit','attacked');el.textContent='✕';}
     else if(f==='miss'){el.classList.add('c-miss','attacked');el.textContent='·';}
-    else if(G.salvosLeft>0) el.classList.add('clickable');
+    else {
+      if(wasRevealed) el.classList.add('c-revealed');
+      if(G.isMyTurn&&G.salvosLeft>0) el.classList.add('clickable');
+    }
   }
 }
 
@@ -832,90 +1252,287 @@ function renderShipsList(pidx){
 // FIRE LOGIC
 // ═══════════════════════════════════════
 
-function fireAt(r,c){
-  if(G.salvosLeft<=0||MASK[r][c]!==1) return;
-  const pidx=G.currentPidx, eidx=1-pidx;
-  const att=G.players[pidx], def=G.players[eidx];
+async function fireAt(r,c,chain=false){
+  if(!chain&&!G.isMyTurn) return;
+  if(!chain&&(G.salvosLeft<=0||MASK[r][c]!==1)) return;
+  if(MASK[r][c]!==1) return;
+  const pidx=G.myPidx;
+  const att=G.players[pidx];
   if(att.fired[r][c]!==null) return;
-
-  const hitIdx=def.grid[r][c], isHit=hitIdx!==null;
-  att.fired[r][c]=isHit?'hit':'miss';
-  def.received[r][c]=isHit?'hit':'miss';
-  G.salvosLeft--;
-
-  let sunkShip=null;
-  if(isHit){
-    const pl=def.placed.find(p=>p.shipIdx===hitIdx);
-    if(pl&&!pl.sunk&&pl.cells.every(({r,c})=>def.received[r][c]==='hit')){
-      pl.sunk=true; sunkShip={...FLEETS[eidx].ships[hitIdx],cells:pl.cells};
-    }
+  // If a weapon is active, route to executeWeapon instead of normal fire
+  if(!chain&&G.activeWeapon!==null){ executeWeapon(r,c); return; }
+  // Tanker blocking
+  if(!chain&&getBlockerRow()===r){
+    const sEl=document.getElementById('battle-status');
+    sEl.textContent=`⛽ TANKER CROSSING — Row ${r+1} is blocked this turn`;
+    sEl.className='s-tanker'; return;
   }
 
-  // Animate attack cell
+  // Mark pending locally and show on grid
+  att.fired[r][c]='pending';
   const atkEl=cellEl('atk-grid',r,c);
-  if(atkEl){
-    atkEl.classList.remove('clickable');
-    atkEl.classList.add(isHit?'anim-hit':'anim-miss');
-    const ring=document.createElement('div');
-    ring.className=`ring ${isHit?'ring-hit':'ring-miss'}`;
-    atkEl.appendChild(ring);
-    setTimeout(()=>{
-      atkEl.classList.remove(isHit?'anim-hit':'anim-miss');
-      atkEl.classList.add(isHit?'c-hit':'c-miss','attacked');
-      atkEl.textContent=isHit?'✕':'·';
-      ring.remove();
-    }, isHit?650:550);
-  }
+  if(atkEl){ atkEl.classList.remove('clickable'); atkEl.classList.add('c-pending'); atkEl.textContent='?'; }
+  if(!chain) playLaunch();
 
-  // Sunk animation on defense grid
-  if(sunkShip){
-    sunkShip.cells.forEach(({r,c})=>{
-      const el=cellEl('def-grid',r,c);
-      if(el){ el.classList.add('anim-sunk'); setTimeout(()=>{el.classList.remove('anim-sunk');el.classList.add('c-sunk');},550); }
-    });
-    distressTankers('atk-tankers');
-    distressTankers('def-tankers');
-  }
-
-  // Sound
-  if(sunkShip) playSunk(); else if(isHit) playHit(); else playMiss();
-
-  // Status
-  const sEl=document.getElementById('battle-status');
-  let msg, cls;
-  if(sunkShip){ msg=sinkMsg(pidx,sunkShip.name); cls='s-sink'; pushTicker(`CONFIRMED: ${sunkShip.name} destroyed — vessel sunk in the Strait of Hormuz`); addLog(`[${FLEETS[pidx].name}] ${COL_LABELS[c]}${r+1} — SUNK`,'sink',sunkShip.name+' destroyed'); }
-  else if(isHit){ msg=hitMsg(pidx); cls='s-hit'; addLog(`[${FLEETS[pidx].name}] ${COL_LABELS[c]}${r+1} — HIT`,'hit'); }
-  else{ msg=missMsg(pidx); cls='s-miss'; addLog(`[${FLEETS[pidx].name}] ${COL_LABELS[c]}${r+1} — MISS`,'miss'); }
-
-  sEl.style.animation='none'; void sEl.offsetWidth; sEl.style.animation='status-in .25s ease';
-  sEl.textContent=msg; sEl.className=cls;
-
-  updateSalvoBar(pidx);
-  updateClickability(pidx);
-
-  if(def.placed.every(p=>p.sunk)){ setTimeout(()=>showVictory(pidx),900); return; }
-  if(G.salvosLeft<=0){
-    const btn=document.getElementById('endturn-btn');
-    btn.style.display='inline-block';
-    btn.className=`btn${FLEETS[pidx].faction==='irgc'?' red':''}`;
-  }
+  // Submit shot to Supabase — defender's device will write result
+  await sb.from('moves').insert({game_id:G.gameId,pidx,r,c,mine_chain:chain||false,weapon_key:null});
+  // Result arrives via onMoveUpdated → onMoveResultData subscription
 }
 
 function updateClickability(pidx){
+  const blockerRow=getBlockerRow();
   for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
     const el=cellEl('atk-grid',r,c);
     if(!el||MASK[r][c]!==1||G.players[pidx].fired[r][c]!==null) continue;
-    if(G.salvosLeft>0) el.classList.add('clickable'); else el.classList.remove('clickable');
+    el.classList.remove('c-blocked');
+    if(G.isMyTurn&&r===blockerRow){ el.classList.add('c-blocked'); el.classList.remove('clickable'); continue; }
+    if(G.isMyTurn&&G.salvosLeft>0) el.classList.add('clickable'); else el.classList.remove('clickable');
   }
 }
 
-function endTurn(){
-  const next=1-G.currentPidx, prevName=FLEETS[G.currentPidx].name;
-  G.currentPidx=next; G.salvosLeft=countAlive(next); playClick();
-  showPass(FLEETS[next].name,FLEETS[next].faction,
-    `${prevName} strike complete. Hand device to ${FLEETS[next].name} commander.`,
-    ()=>{ renderBattle(); showScreen('battle-screen'); }
-  );
+async function endTurn(){
+  stopTurnTimer();
+  if(G._aoeAbort){ G._aoeAbort.abort(); G._aoeAbort=null; }
+  G.activeWeapon=null; playClick();
+  G.isMyTurn=false;
+  G.turnCount++;
+  updateTurnIndicator();
+  updateClickability(G.myPidx);
+  const next=1-G.myPidx;
+  await sb.from('games').update({current_pidx:next,turn_count:G.turnCount}).eq('id',G.gameId);
+  // Opponent's onGameUpdate subscription will set their isMyTurn=true and reset salvos
+}
+
+// ═══════════════════════════════════════
+// WEAPON BAR
+// ═══════════════════════════════════════
+
+function renderWeaponBar(pidx){
+  const bar=document.getElementById('weapon-bar');
+  const faction=FLEETS[pidx].faction;
+  bar.innerHTML='';
+  G.weapons[pidx].forEach((wpn,i)=>{
+    const btn=document.createElement('button');
+    btn.id=`wpn-${i}`;
+    btn.className=`wpn-btn${faction==='irgc'?' irgc':''}${wpn.used?' used':''}${G.activeWeapon===i?' active':''}`;
+    btn.textContent=`⬡ ${wpn.name}${wpn.used?' [USED]':` — ${wpn.desc}`}`;
+    btn.onclick=()=>activateWeapon(i);
+    bar.appendChild(btn);
+  });
+}
+
+function activateWeapon(idx){
+  const pidx=G.myPidx;
+  if(G.weapons[pidx][idx].used) return;
+  playClick();
+  if(G._aoeAbort){ G._aoeAbort.abort(); G._aoeAbort=null; }
+  if(G.activeWeapon===idx){ G.activeWeapon=null; clearAoePreview(); }
+  else { G.activeWeapon=idx; clearAoePreview(); }
+  renderWeaponBar(pidx);
+  updateClickability(pidx);
+  const wpn=G.weapons[pidx][idx];
+  if(G.activeWeapon!==null){
+    const sEl=document.getElementById('battle-status');
+    sEl.textContent=wpn.key==='seadrone'
+      ? `${wpn.name} active — click any cell to reveal entire row, Shift+click to reveal column`
+      : `${wpn.name} active — click a target cell to deploy`;
+    sEl.className='';
+    if(wpn.key!=='seadrone'){
+      G._aoeAbort=new AbortController();
+      bindAoeHover(pidx,idx);
+    }
+  }
+}
+
+function bindAoeHover(pidx,wpnIdx){
+  const wpn=G.weapons[pidx][wpnIdx];
+  if(!G._aoeAbort) return;
+  const sig=G._aoeAbort.signal;
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+    const el=cellEl('atk-grid',r,c);
+    if(!el||MASK[r][c]!==1) continue;
+    el.addEventListener('mouseenter',()=>showAoePreview(r,c,wpn.key,pidx),{signal:sig});
+    el.addEventListener('mouseleave',clearAoePreview,{signal:sig});
+  }
+}
+
+function showAoePreview(cr,cc,key,pidx){
+  clearAoePreview();
+  const faction=FLEETS[pidx].faction;
+  let cells=[];
+  if(key==='tomahawk') cells=[[cr,cc],[cr,cc+1],[cr+1,cc],[cr+1,cc+1]];
+  else if(key==='recon') for(let dr=-1;dr<=2;dr++) for(let dc=-1;dc<=2;dc++) cells.push([cr+dr,cc+dc]);
+  else if(key==='swarm') for(let dr=-2;dr<=2;dr++) for(let dc=-2;dc<=2;dc++) cells.push([cr+dr,cc+dc]);
+  cells.forEach(([r,c])=>{
+    if(r>=0&&r<ROWS&&c>=0&&c<COLS&&MASK[r][c]===1){
+      const el=cellEl('atk-grid',r,c);
+      if(el){ el.classList.add('cell-aoe-preview'); if(faction==='irgc') el.classList.add('irgc'); }
+    }
+  });
+}
+
+function clearAoePreview(){
+  document.querySelectorAll('#atk-grid .cell-aoe-preview').forEach(el=>el.classList.remove('cell-aoe-preview','irgc'));
+}
+
+function executeWeapon(r,c){
+  const pidx=G.myPidx;
+  if(G.activeWeapon===null) return;
+  const wpnIdx=G.activeWeapon;
+  const wpn=G.weapons[pidx][wpnIdx];
+  if(wpn.used) return;
+  wpn.used=true; G.activeWeapon=null; clearAoePreview();
+  if(G._aoeAbort){ G._aoeAbort.abort(); G._aoeAbort=null; }
+  playClick();
+
+  if(wpn.key==='tomahawk'){
+    [[r,c],[r,c+1],[r+1,c],[r+1,c+1]].forEach(([tr,tc])=>{
+      if(tr>=0&&tr<ROWS&&tc>=0&&tc<COLS&&MASK[tr][tc]===1&&G.players[pidx].fired[tr][tc]===null) fireAt(tr,tc,true);
+    });
+    addLog(`[TOMAHAWK] ${COL_LABELS[c]}${r+1} — 2×2 area strike`,'sink','Cruise missile impact');
+    pushTicker('BREAKING: Tomahawk cruise missile strike reported in the Strait of Hormuz');
+  } else if(wpn.key==='recon'){
+    let revealed=0;
+    for(let dr=-1;dr<=2;dr++) for(let dc=-1;dc<=2;dc++){
+      const tr=r+dr,tc=c+dc;
+      if(tr>=0&&tr<ROWS&&tc>=0&&tc<COLS&&MASK[tr][tc]===1&&G.players[pidx].fired[tr][tc]===null){
+        const el=cellEl('atk-grid',tr,tc);
+        if(el){ el.classList.add('c-revealed'); revealed++; }
+      }
+    }
+    addLog(`[RECON DRONE] ${COL_LABELS[c]}${r+1} — ${revealed} cells revealed`,'miss','Intelligence gathered');
+  } else if(wpn.key==='swarm'){
+    const zone=[];
+    for(let dr=-2;dr<=2;dr++) for(let dc=-2;dc<=2;dc++){
+      const tr=r+dr,tc=c+dc;
+      if(tr>=0&&tr<ROWS&&tc>=0&&tc<COLS&&MASK[tr][tc]===1&&G.players[pidx].fired[tr][tc]===null) zone.push([tr,tc]);
+    }
+    const targets=zone.sort(()=>Math.random()-.5).slice(0,4);
+    targets.forEach(([tr,tc])=>fireAt(tr,tc,true));
+    addLog(`[SWARM ATTACK] ${COL_LABELS[c]}${r+1} — ${targets.length} boats deployed`,'sink','IRGC swarm launch');
+    pushTicker('IRGC swarm boat attack — multiple fast-attack craft engage target zone');
+  } else if(wpn.key==='seadrone'){
+    const mode=window._seaDroneShift?'col':'row';
+    if(mode==='row'){
+      for(let tc=0;tc<COLS;tc++){
+        if(MASK[r][tc]===1&&G.players[pidx].fired[r][tc]===null){ const el=cellEl('atk-grid',r,tc); if(el) el.classList.add('c-revealed'); }
+      }
+      addLog(`[SEA DRONE] Row ${r+1} — full row intelligence`,'miss','Drone recon sweep');
+    } else {
+      for(let tr=0;tr<ROWS;tr++){
+        if(MASK[tr][c]===1&&G.players[pidx].fired[tr][c]===null){ const el=cellEl('atk-grid',tr,c); if(el) el.classList.add('c-revealed'); }
+      }
+      addLog(`[SEA DRONE] Col ${COL_LABELS[c]} — full column intelligence`,'miss','Drone recon sweep');
+    }
+  }
+
+  renderWeaponBar(pidx);
+  // For recon/seadrone (no shots fired), auto-end turn if salvos already 0
+  if(G.salvosLeft<=0&&G.isMyTurn){
+    setTimeout(endTurn, 800);
+  }
+}
+
+// ═══════════════════════════════════════
+// INTEL REPORTS
+// ═══════════════════════════════════════
+
+function giveIntel(pidx){
+  const eidx=1-pidx;
+  const aliveShips=G.players[eidx].placed.filter(p=>!p.sunk);
+  if(!aliveShips.length) return;
+  // In multiplayer we don't have opponent's positions — skip intel
+  if(!aliveShips[0]?.cells?.length) return;
+  const pl=aliveShips[Math.floor(Math.random()*aliveShips.length)];
+  const cells=pl.cells;
+  const ship=FLEETS[eidx].ships[pl.shipIdx];
+  const minR=Math.min(...cells.map(c=>c.r)), maxR=Math.max(...cells.map(c=>c.r));
+  const minC=Math.min(...cells.map(c=>c.c)), maxC=Math.max(...cells.map(c=>c.c));
+  const rLbl=minR===maxR?`row ${minR+1}`:`rows ${minR+1}–${maxR+1}`;
+  const cLbl=minC===maxC?`col ${COL_LABELS[minC]}`:`cols ${COL_LABELS[minC]}–${COL_LABELS[maxC]}`;
+  const msgs=[
+    `SATELLITE INTERCEPT: ${ship.type} activity detected in ${cLbl}, ${rLbl}`,
+    `SIGINT REPORT: hostile vessel ${ship.name} last tracked in ${cLbl}, ${rLbl}`,
+    `NSA INTERCEPT: radar signature matching ${ship.type} in ${cLbl}, ${rLbl}`,
+    `HUMINT SOURCE: enemy naval unit reported in ${cLbl}, ${rLbl}`,
+  ];
+  showIntelModal(msgs[Math.floor(Math.random()*msgs.length)]);
+}
+
+function showIntelModal(text){
+  document.getElementById('intel-text').textContent=text;
+  document.getElementById('intel-modal').classList.add('active');
+  document.getElementById('intel-overlay').classList.add('active');
+  clearTimeout(window._intelTimeout);
+  window._intelTimeout=setTimeout(closeIntel,7000);
+}
+
+function closeIntel(){
+  document.getElementById('intel-modal').classList.remove('active');
+  document.getElementById('intel-overlay').classList.remove('active');
+}
+
+// ═══════════════════════════════════════
+// TURN TIMER
+// ═══════════════════════════════════════
+
+let _timerInterval=null, _timerSecs=45;
+
+function startTurnTimer(){
+  const wrap=document.getElementById('timer-bar-wrap');
+  const bar=document.getElementById('timer-bar');
+  const cd=document.getElementById('timer-countdown');
+  const total=G.turnSeconds||45;
+  if(!G.timerEnabled||total===0){ wrap.style.display='none'; cd.style.display='none'; return; }
+  wrap.style.display='block'; cd.style.display='block';
+  clearInterval(_timerInterval);
+  _timerSecs=total;
+  bar.className=''; bar.style.width='100%';
+  const m0=Math.floor(total/60),s0=total%60;
+  cd.className=''; cd.textContent=`${m0}:${s0<10?'0':''}${s0}`;
+  _timerInterval=setInterval(()=>{
+    _timerSecs--;
+    const pct=Math.max(0,(_timerSecs/total)*100);
+    bar.style.width=pct+'%';
+    const mins=Math.floor(_timerSecs/60), secs=_timerSecs%60;
+    cd.textContent=`${mins}:${secs<10?'0':''}${secs}`;
+    if(_timerSecs<=10){ bar.classList.add('warning'); cd.classList.add('warning'); }
+    if(_timerSecs<=0){ clearInterval(_timerInterval); autoFireRandom(); }
+  },1000);
+}
+
+function stopTurnTimer(){
+  clearInterval(_timerInterval);
+  const wrap=document.getElementById('timer-bar-wrap');
+  const cd=document.getElementById('timer-countdown');
+  if(wrap) wrap.style.display='none';
+  if(cd) cd.style.display='none';
+}
+
+function updateTimerBar(s){
+  const bar=document.getElementById('timer-bar');
+  const total=G.turnSeconds||45;
+  if(bar) bar.style.width=Math.max(0,(s/total)*100)+'%';
+}
+
+function autoFireRandom(){
+  if(!G.isMyTurn) return;
+  const pidx=G.myPidx;
+  // Cancel any armed weapon first — never auto-deploy a special weapon
+  if(G.activeWeapon!==null){
+    G.activeWeapon=null; clearAoePreview();
+    if(G._aoeAbort){ G._aoeAbort.abort(); G._aoeAbort=null; }
+    renderWeaponBar(pidx);
+  }
+  if(G.salvosLeft<=0) return;
+  const targets=[];
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+    if(MASK[r][c]===1&&G.players[pidx].fired[r][c]===null) targets.push([r,c]);
+  }
+  if(!targets.length) return;
+  const [r,c]=targets[Math.floor(Math.random()*targets.length)];
+  addLog(`[AUTO-FIRE] Timer expired — ${COL_LABELS[c]}${r+1}`,'miss','Random shot fired');
+  fireAt(r,c);
 }
 
 // ═══════════════════════════════════════
@@ -954,14 +1571,21 @@ function sinkMsg(pidx,name){
 // ═══════════════════════════════════════
 
 function showVictory(winnerIdx){
+  if(G.phase==='victory') return; // prevent double call
+  G.phase='victory';
+  stopTurnTimer();
+  if(G._sub){ G._sub.unsubscribe(); G._sub=null; }
   const faction=FLEETS[winnerIdx].faction;
   const titleEl=document.getElementById('victory-title');
   titleEl.textContent=`${FLEETS[winnerIdx].name} Victorious`;
   titleEl.className=faction;
-  const shots=G.players[winnerIdx].fired.flat().filter(x=>x!==null).length;
-  document.getElementById('victory-detail').textContent=`All enemy vessels destroyed. ${shots} strikes fired. The Strait of Hormuz is secured.`;
+  const isWinner=winnerIdx===G.myPidx;
+  const shots=G.players[G.myPidx].fired.flat().filter(x=>x!==null&&x!=='pending').length;
+  document.getElementById('victory-detail').textContent=isWinner
+    ?`All enemy vessels destroyed. ${shots} strikes fired. The Strait of Hormuz is secured.`
+    :`Your fleet was destroyed. ${shots} strikes fired. The enemy controls the Strait.`;
   pushTicker(`MISSION COMPLETE: ${FLEETS[winnerIdx].name} achieves total naval supremacy in the Strait of Hormuz`);
-  playVictory(); showScreen('victory-screen');
+  stopMusic(); playVictory(); showScreen('victory-screen');
   const screen=document.getElementById('victory-screen');
   document.querySelectorAll('.particle').forEach(p=>p.remove());
   const colors=['#4fc3f7','#f39c12','#c0392b','#27ae60','#fff'];
@@ -977,12 +1601,281 @@ function showVictory(winnerIdx){
 // GAME LIFECYCLE
 // ═══════════════════════════════════════
 
-function startGame(){ ensureAudio(); playClick(); initGame(); startSetup(0); }
+// Shift key tracking for Sea Drone row/col mode
+document.addEventListener('keydown',e=>{ if(e.key==='Shift') window._seaDroneShift=true; });
+document.addEventListener('keyup',e=>{ if(e.key==='Shift') window._seaDroneShift=false; });
+
+function goToTitle(){ ensureAudio(); playClick(); if(G._sub){G._sub.unsubscribe();G._sub=null;} initGame(); stopMusic(); showScreen('title-screen'); }
+function goToLobby(){ ensureAudio(); playClick(); initGame(); setMusicTheme('main'); document.getElementById('lobby-error').textContent=''; document.getElementById('lobby-status').textContent='Enter a code to join, or create a new mission.'; document.getElementById('lobby-code-big').style.display='none'; showScreen('lobby-screen'); }
 function resetGame(){
-  playClick(); initGame();
+  stopTurnTimer(); stopMusic(); closeIntel(); playClick();
+  if(G._sub){G._sub.unsubscribe();G._sub=null;}
+  initGame();
   document.querySelectorAll('.particle').forEach(p=>p.remove());
   document.getElementById('battle-log').innerHTML='';
   showScreen('title-screen');
+}
+
+// ═══════════════════════════════════════
+// MULTIPLAYER — LOBBY
+// ═══════════════════════════════════════
+
+function _randCode(){ return Math.random().toString(36).slice(2,6).toUpperCase(); }
+
+async function createGame(){
+  if(!sb){ alert('Supabase not configured — add your URL and key.'); return; }
+  playClick();
+  document.getElementById('lobby-status').textContent='Creating mission…';
+  document.getElementById('lobby-error').textContent='';
+  const code=_randCode();
+  const ts=parseInt(document.querySelector('input[name="gmode"]:checked')?.value??'45');
+  G.turnSeconds=isNaN(ts)?45:ts;
+  const {data,error}=await sb.from('games').insert({code,turn_seconds:G.turnSeconds}).select().single();
+  if(error){ document.getElementById('lobby-error').textContent='Error: '+error.message; document.getElementById('lobby-status').textContent=''; return; }
+  const {error:pe}=await sb.from('game_players').insert({game_id:data.id,pidx:0});
+  if(pe){ document.getElementById('lobby-error').textContent='Error: '+pe.message; return; }
+  G.gameId=data.id; G.gameCode=code; G.myPidx=0;
+  document.getElementById('lobby-code-big').textContent=code;
+  document.getElementById('lobby-code-big').style.display='block';
+  document.getElementById('lobby-status').textContent='Share this code with your opponent. Waiting for them to join…';
+  subscribeToGame(G.gameId);
+}
+
+async function joinGame(){
+  if(!sb){ alert('Supabase not configured — add your URL and key.'); return; }
+  playClick();
+  const code=document.getElementById('join-code').value.trim().toUpperCase();
+  if(code.length!==4){ document.getElementById('lobby-error').textContent='Enter a 4-character code.'; return; }
+  document.getElementById('lobby-status').textContent='Joining…';
+  document.getElementById('lobby-error').textContent='';
+  const {data:game,error}=await sb.from('games').select('*').eq('code',code).single();
+  if(error||!game){ document.getElementById('lobby-error').textContent='Mission not found.'; document.getElementById('lobby-status').textContent=''; return; }
+  if(game.status!=='waiting'){ document.getElementById('lobby-error').textContent='Mission already in progress.'; document.getElementById('lobby-status').textContent=''; return; }
+  const {error:pe}=await sb.from('game_players').insert({game_id:game.id,pidx:1});
+  if(pe){ document.getElementById('lobby-error').textContent='Error joining: '+pe.message; return; }
+  G.gameId=game.id; G.gameCode=code; G.myPidx=1;
+  G.turnSeconds=game.turn_seconds??45;
+  subscribeToGame(G.gameId);
+  await sb.from('games').update({status:'setup'}).eq('id',G.gameId);
+  // Start my own setup (P1)
+  startSetup(G.myPidx);
+}
+
+// ═══════════════════════════════════════
+// MULTIPLAYER — REALTIME SUBSCRIPTIONS
+// ═══════════════════════════════════════
+
+function subscribeToGame(gameId){
+  if(G._sub){ G._sub.unsubscribe(); G._sub=null; }
+  if(G._msgSub){ G._msgSub.unsubscribe(); G._msgSub=null; }
+  G._sub=sb.channel('game:'+gameId)
+    .on('postgres_changes',{event:'*',schema:'public',table:'games',filter:'id=eq.'+gameId},onGameUpdate)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'moves',filter:'game_id=eq.'+gameId},onNewMove)
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'moves',filter:'game_id=eq.'+gameId},onMoveUpdated)
+    .on('postgres_changes',{event:'*',schema:'public',table:'game_players',filter:'game_id=eq.'+gameId},onPlayerReady)
+    .subscribe(status=>{ const dot=document.getElementById('conn-dot'); if(dot) dot.className=status==='SUBSCRIBED'?'':'disconnected'; });
+  // Messages in a separate channel so it can't break the core game subscription
+  G._msgSub=sb.channel('msgs:'+gameId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'game_id=eq.'+gameId},onNewMessage)
+    .subscribe();
+}
+
+function onGameUpdate(payload){
+  const g=payload.new;
+  if(g.status==='setup' && (G.phase==='title'||G.phase==='lobby')){
+    // P0 sees opponent joined — start my setup
+    G.phase='setup';
+    startSetup(G.myPidx);
+    return;
+  }
+  if(g.status==='battle' && G.phase!=='battle'){
+    G.currentPidx=g.current_pidx; G.turnCount=g.turn_count||0;
+    _startBattleLocal();
+    return;
+  }
+  if(g.status==='done' && g.winner_pidx!=null){
+    showVictory(g.winner_pidx); return;
+  }
+  if(g.rematch_game_id && G.phase==='victory' && !G._rematchGameId){
+    G._rematchGameId=g.rematch_game_id;
+    document.getElementById('rematch-status').textContent='⚔ Opponent started a rematch — joining automatically…';
+    const rb=document.getElementById('rematch-btn');
+    rb.disabled=true; rb.textContent='↩ JOINING REMATCH…';
+    setTimeout(()=>_joinRematch(G._rematchGameId), 1800);
+  }
+  if(G.phase==='battle'){
+    G.currentPidx=g.current_pidx; G.turnCount=g.turn_count||0;
+    G.isMyTurn=(G.currentPidx===G.myPidx);
+    if(G.isMyTurn){ G.salvosLeft=countAlive(G.myPidx); setMusicTheme(G.myPidx===0?'us':'irgc'); }
+    else { setMusicTheme(G.currentPidx===0?'us':'irgc'); }
+    // endturn-btn removed — turns auto-end when salvos reach 0
+    updateTurnIndicator();
+    paintAttackGrid(G.myPidx);
+    updateClickability(G.myPidx);
+    renderBlockerRow();
+  }
+}
+
+function onNewMove(payload){
+  const move=payload.new;
+  if(move.pidx!==G.myPidx && move.result===null){
+    // Opponent shot at me — compute and respond
+    onOpponentShot(move);
+  } else if(move.pidx===G.myPidx && move.result!==null){
+    // Chain shot inserted with result already (mine chain from defender)
+    onMoveResultData(move);
+  }
+}
+
+function onMoveUpdated(payload){
+  const move=payload.new;
+  if(move.pidx===G.myPidx && move.result!==null){
+    onMoveResultData(move);
+  }
+}
+
+async function onPlayerReady(){
+  if(G.phase!=='setup') return;
+  const {data:players}=await sb.from('game_players').select('*').eq('game_id',G.gameId);
+  if(players&&players.length===2&&players.every(p=>p.setup_done)){
+    const {data:game}=await sb.from('games').select('status').eq('id',G.gameId).single();
+    if(game&&game.status==='setup'){
+      await sb.from('games').update({status:'battle',current_pidx:0,turn_count:0}).eq('id',G.gameId);
+    }
+  }
+}
+
+// ═══════════════════════════════════════
+// MULTIPLAYER — SHOT HANDLING
+// ═══════════════════════════════════════
+
+// Called on attacker's device when result arrives
+function onMoveResultData(move){
+  const key=move.id+'';
+  if(G._procMoves.has(key)) return; // deduplicate
+  G._procMoves.add(key);
+  if(G.players[G.myPidx].fired[move.r][move.c]===move.result) return; // already applied
+  G.players[G.myPidx].fired[move.r][move.c]=move.result;
+  const isHit=move.result==='hit';
+  // Animate attack cell
+  const atkEl=cellEl('atk-grid',move.r,move.c);
+  if(atkEl){
+    atkEl.classList.remove('c-pending','clickable');
+    atkEl.classList.add(isHit?'anim-hit':'anim-miss');
+    const ring=document.createElement('div'); ring.className=`ring ${isHit?'ring-hit':'ring-miss'}`; atkEl.appendChild(ring);
+    setTimeout(()=>{ atkEl.classList.remove(isHit?'anim-hit':'anim-miss'); atkEl.classList.add(isHit?'c-hit':'c-miss','attacked'); atkEl.textContent=isHit?'✕':'·'; ring.remove(); },isHit?650:550);
+  }
+  const sEl=document.getElementById('battle-status');
+  if(move.sunk_ship){
+    playSunk(); addLog(`[${FLEETS[G.myPidx].name}] ${COL_LABELS[move.c]}${move.r+1} — SUNK`,'sink',move.sunk_ship+' destroyed');
+    pushTicker(`CONFIRMED: ${move.sunk_ship} destroyed — vessel sunk in the Strait of Hormuz`);
+    sEl.style.animation='none'; void sEl.offsetWidth; sEl.style.animation='status-in .25s ease';
+    sEl.textContent=sinkMsg(G.myPidx,move.sunk_ship); sEl.className='s-sink';
+    G.streak++; showKillCam(move.sunk_ship,true);
+  } else if(isHit){
+    playHit(); addLog(`[${FLEETS[G.myPidx].name}] ${COL_LABELS[move.c]}${move.r+1} — HIT`,'hit');
+    sEl.style.animation='none'; void sEl.offsetWidth; sEl.style.animation='status-in .25s ease';
+    sEl.textContent=hitMsg(G.myPidx); sEl.className='s-hit';
+    G.streak++; if(G.streak>=2) showStreakBanner(G.streak);
+  } else {
+    playMiss(); addLog(`[${FLEETS[G.myPidx].name}] ${COL_LABELS[move.c]}${move.r+1} — MISS`,'miss');
+    sEl.style.animation='none'; void sEl.offsetWidth; sEl.style.animation='status-in .25s ease';
+    sEl.textContent=missMsg(G.myPidx); sEl.className='s-miss';
+    G.streak=0;
+  }
+  if(!move.mine_chain){ G.salvosLeft=Math.max(0,G.salvosLeft-1); updateSalvoBar(G.myPidx); }
+  updateClickability(G.myPidx);
+  if(G.salvosLeft<=0&&G.isMyTurn){
+    setTimeout(endTurn, 1200);
+  }
+}
+
+// Called on DEFENDER's device when opponent fires at them
+async function onOpponentShot(move){
+  const key='recv-'+move.id;
+  if(G._procMoves.has(key)) return;
+  G._procMoves.add(key);
+  if(G.players[G.myPidx].received[move.r][move.c]!==null) return;
+  const r=move.r,c=move.c;
+  const isHit=G.players[G.myPidx].grid[r][c]!==null;
+  G.players[G.myPidx].received[r][c]=isHit?'hit':'miss';
+  // Check sunk
+  let sunkShip=null;
+  if(isHit){
+    const pl=G.players[G.myPidx].placed.find(p=>p.cells.some(cell=>cell.r===r&&cell.c===c));
+    if(pl&&!pl.sunk&&pl.cells.every(({r:cr,c:cc})=>G.players[G.myPidx].received[cr][cc]==='hit')){
+      pl.sunk=true; sunkShip=FLEETS[G.myPidx].ships[pl.shipIdx];
+      pl.cells.forEach(({r:sr,c:sc})=>{const el=cellEl('def-grid',sr,sc);if(el){el.classList.add('anim-sunk');setTimeout(()=>{el.classList.remove('anim-sunk');el.classList.add('c-sunk');},550);}});
+      distressTankers('def-tankers');
+      showKillCam(sunkShip.name,false);
+    }
+  }
+  // Check mine
+  const mineIdx=G.mines[G.myPidx].findIndex(m=>m.r===r&&m.c===c);
+  if(mineIdx!==-1){
+    G.mines[G.myPidx].splice(mineIdx,1);
+    setTimeout(async()=>{
+      playMineDetonate(); addLog(`[MINE] ${COL_LABELS[c]}${r+1} — CHAIN EXPLOSION`,'sink','Mine detonated — 2×2 blast');
+      for(let dr=0;dr<=1;dr++) for(let dc=0;dc<=1;dc++){
+        if(dr===0&&dc===0) continue;
+        const nr=r+dr,nc=c+dc;
+        if(MASK[nr]?.[nc]===1&&G.players[G.myPidx].received[nr][nc]===null){
+          G.players[G.myPidx].received[nr][nc]=G.players[G.myPidx].grid[nr][nc]!==null?'hit':'miss';
+          const chainHit=G.players[G.myPidx].received[nr][nc]==='hit';
+          let chainSunk=null;
+          if(chainHit){const cpl=G.players[G.myPidx].placed.find(p=>p.cells.some(cell=>cell.r===nr&&cell.c===nc));if(cpl&&!cpl.sunk&&cpl.cells.every(({r:cr,c:cc})=>G.players[G.myPidx].received[cr][cc]==='hit')){cpl.sunk=true;chainSunk=FLEETS[G.myPidx].ships[cpl.shipIdx];}}
+          const {data:cm}=await sb.from('moves').insert({game_id:G.gameId,pidx:1-G.myPidx,r:nr,c:nc,mine_chain:true,result:chainHit?'hit':'miss',sunk_ship:chainSunk?.name??null}).select().single();
+        }
+      }
+      paintDefenseGrid(G.myPidx);
+      if(G.players[G.myPidx].placed.every(p=>p.sunk)) await _declareLoss();
+    },300);
+  }
+  // Respond with result
+  await sb.from('moves').update({result:isHit?'hit':'miss',sunk_ship:sunkShip?.name??null}).eq('id',move.id);
+  paintDefenseGrid(G.myPidx);
+  if(G.players[G.myPidx].placed.every(p=>p.sunk)) await _declareLoss();
+}
+
+async function _declareLoss(){
+  const {data:game}=await sb.from('games').select('status').eq('id',G.gameId).single();
+  if(game&&game.status==='battle'){
+    await sb.from('games').update({status:'done',winner_pidx:1-G.myPidx}).eq('id',G.gameId);
+  }
+}
+
+// ═══════════════════════════════════════
+// MULTIPLAYER — UI HELPERS
+// ═══════════════════════════════════════
+
+function updateTurnIndicator(){
+  const el=document.getElementById('turn-indicator');
+  if(!el) return;
+  if(G.isMyTurn){
+    el.className='my-turn'; el.innerHTML='<span id="conn-dot"></span>YOUR TURN — STRIKE';
+  } else {
+    const oppName=FLEETS[1-G.myPidx].name;
+    el.className='opp-turn'; el.innerHTML=`<span id="conn-dot"></span>STAND BY — ${oppName.toUpperCase()} STRIKING`;
+  }
+}
+
+async function submitSetup(){
+  const nameEl=document.getElementById('pass-name');
+  nameEl.textContent=FLEETS[G.myPidx].name; nameEl.className=FLEETS[G.myPidx].faction;
+  document.getElementById('pass-instr').textContent='Fleet deployed. Waiting for opponent to complete setup…';
+  document.getElementById('pass-btn').style.display='none';
+  showScreen('pass-screen');
+  await sb.from('game_players').update({setup_done:true}).eq('game_id',G.gameId).eq('pidx',G.myPidx);
+}
+
+function _startBattleLocal(){
+  G.phase='battle'; G.salvosLeft=countAlive(G.myPidx); G._procMoves=new Set();
+  G.isMyTurn=(G.currentPidx===G.myPidx);
+  G.timerEnabled=G.turnSeconds>0;
+  setMusicTheme(G.currentPidx===0?'us':'irgc');
+  renderBattle(); showScreen('battle-screen');
+  renderBlockerRow();
+  startTurnTimer();
 }
 
 // ═══════════════════════════════════════
@@ -1031,6 +1924,145 @@ initGame();
 renderTicker();
 initTitleTankers();
 showScreen('title-screen');
+
+// ═══════════════════════════════════════
+// CHAT
+// ═══════════════════════════════════════
+
+async function sendMessage(text){
+  if(!text){ const inp=document.getElementById('chat-input'); text=inp.value.trim(); inp.value=''; }
+  if(!text||!G.gameId) return;
+  playClick();
+  await sb.from('messages').insert({game_id:G.gameId,pidx:G.myPidx,text});
+}
+
+function onNewMessage(payload){
+  const {pidx,text}=payload.new;
+  const isMine=pidx===G.myPidx;
+  const label=isMine?'YOU':FLEETS[1-G.myPidx].name.split(' ').pop();
+  const log=document.getElementById('chat-log');
+  if(!log) return;
+  const div=document.createElement('div');
+  div.className='chat-msg '+(isMine?'mine':'theirs');
+  div.innerHTML=`<span class="chat-who">${label}:</span> ${text.replace(/</g,'&lt;')}`;
+  log.appendChild(div);
+  log.scrollTop=log.scrollHeight;
+}
+
+// ═══════════════════════════════════════
+// REMATCH
+// ═══════════════════════════════════════
+
+async function clickRematch(){
+  playClick();
+  const btn=document.getElementById('rematch-btn');
+  btn.disabled=true;
+  if(G._rematchGameId){
+    await _joinRematch(G._rematchGameId);
+  } else {
+    btn.textContent='⏳ STARTING REMATCH…';
+    document.getElementById('rematch-status').textContent='Creating new game — opponent will be notified automatically…';
+    await _createRematch();
+  }
+}
+
+async function _createRematch(){
+  const ts=G.turnSeconds; const myPidx=G.myPidx;
+  const code=_randCode();
+  const {data}=await sb.from('games').insert({code,turn_seconds:ts}).select().single();
+  await sb.from('game_players').insert({game_id:data.id,pidx:myPidx});
+  const oldSub=G._sub; const oldMsgSub=G._msgSub;
+  await sb.from('games').update({rematch_game_id:data.id}).eq('id',G.gameId);
+  if(oldSub) oldSub.unsubscribe();
+  if(oldMsgSub) oldMsgSub.unsubscribe();
+  initGame();
+  G.myPidx=myPidx; G.gameId=data.id; G.gameCode=code; G.turnSeconds=ts;
+  subscribeToGame(G.gameId);
+  document.getElementById('lobby-code-big').style.display='none';
+  document.getElementById('lobby-status').textContent='Rematch starting — waiting for opponent…';
+  document.getElementById('lobby-error').textContent='';
+  showScreen('lobby-screen');
+}
+
+async function _joinRematch(newGameId){
+  const {data:newGame}=await sb.from('games').select('*').eq('id',newGameId).single();
+  const ts=newGame?.turn_seconds??G.turnSeconds;
+  const {data:players}=await sb.from('game_players').select('pidx').eq('game_id',newGameId);
+  const takenPidx=(players||[]).map(p=>p.pidx);
+  const joinPidx=[0,1].find(p=>!takenPidx.includes(p))??1;
+  const oldSub=G._sub; const oldMsgSub2=G._msgSub;
+  if(oldSub) oldSub.unsubscribe();
+  if(oldMsgSub2) oldMsgSub2.unsubscribe();
+  await sb.from('game_players').insert({game_id:newGameId,pidx:joinPidx});
+  await sb.from('games').update({status:'setup'}).eq('id',newGameId);
+  initGame();
+  G.myPidx=joinPidx; G.gameId=newGameId; G.turnSeconds=ts;
+  subscribeToGame(G.gameId);
+  startSetup(G.myPidx);
+}
+
+// ═══════════════════════════════════════
+// STREAK BANNER + KILL CAM
+// ═══════════════════════════════════════
+
+function showStreakBanner(n){
+  const el=document.getElementById('streak-banner');
+  if(!el) return;
+  const labels=['','','DOUBLE STRIKE!','TRIPLE KILL!','QUAD HIT!'];
+  el.textContent=n>=5?`${n}× KILL STREAK!`:(labels[n]||`${n}× HIT STREAK!`);
+  el.className=n>=4?'mega':'';
+  el.style.opacity='1';
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>{ el.style.opacity='0'; },2400);
+}
+
+function showKillCam(shipName,isAttacker){
+  const el=document.getElementById('kill-cam');
+  if(!el) return;
+  el.className=isAttacker?'show sink':'show';
+  el.innerHTML=isAttacker
+    ?`<div class="kc-eyebrow">TARGET DESTROYED</div><div class="kc-ship">${shipName}</div><div class="kc-sub">⚓ SUNK ⚓</div>`
+    :`<div class="kc-eyebrow">VESSEL LOST</div><div class="kc-ship">${shipName}</div><div class="kc-sub">DESTROYED</div>`;
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>{ el.className=''; },3000);
+}
+
+// ═══════════════════════════════════════
+// TANKER BLOCKER (deterministic per turn)
+// ═══════════════════════════════════════
+
+function seededRand(seed){
+  const x=Math.sin(seed*9301+49297)*233280;
+  return x-Math.floor(x);
+}
+
+function getBlockerRow(){
+  if(!G.turnCount||G.turnCount<5||G.turnCount%5!==0) return null;
+  const waterRows=[];
+  for(let r=2;r<ROWS-2;r++){
+    if(MASK[r].filter(v=>v===1).length>=4) waterRows.push(r);
+  }
+  if(!waterRows.length) return null;
+  return waterRows[Math.floor(seededRand(G.turnCount)*waterRows.length)];
+}
+
+function renderBlockerRow(){
+  document.querySelectorAll('#atk-grid .c-blocked').forEach(el=>el.classList.remove('c-blocked'));
+  const row=getBlockerRow();
+  if(row===null) return;
+  for(let c=0;c<COLS;c++){
+    if(MASK[row][c]!==1) continue;
+    const el=cellEl('atk-grid',row,c);
+    if(el&&!el.classList.contains('attacked')) el.classList.add('c-blocked');
+  }
+  if(G.isMyTurn){
+    const sEl=document.getElementById('battle-status');
+    if(!sEl.className||sEl.className==='s-tanker'){
+      sEl.textContent=`⛽ TANKER CROSSING — Row ${row+1} blocked this turn`;
+      sEl.className='s-tanker';
+    }
+  }
+}
 </script>
 </body>
 </html>
